@@ -1,41 +1,29 @@
 import React from 'react';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  View,
-  TextInput,
-} from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Button, Text } from 'native-base';
 
 export default class LandingPage extends React.Component {
-
   pressHero = () => {
-    this.props.navigation.navigate('HeroSignup')
-  }
+    this.props.navigation.navigate('HeroSignup');
+  };
 
-  pressCivilian = () => {
-
-  }
+  pressCivilian = () => {};
 
   render() {
     return (
       <View>
-        <TouchableOpacity onPress={this.pressCivilian}>
+        <Button onPress={this.pressCivilian}>
           <Text>Civilian</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.pressHero}>
+        </Button>
+        <Button onPress={this.pressHero}>
           <Text>Hero</Text>
-        </TouchableOpacity>
+        </Button>
       </View>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-
-  },
-  text: {
-
-  }
-})
+  container: {},
+  text: {},
+});
