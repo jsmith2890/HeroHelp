@@ -1,5 +1,6 @@
 const User = require('./user')
 const Hero = require('./hero')
+const civilianProfile = require('./civilianProfile')
 
 /**
  * If we had any associations to make, this would be a great place to put them!
@@ -16,5 +17,7 @@ const Hero = require('./hero')
  */
 module.exports = {
   User,
-  Hero
+  Hero,
+  civilianProfile
+
 }
