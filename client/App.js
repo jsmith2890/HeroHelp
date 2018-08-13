@@ -1,31 +1,30 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
-import LandingPage from './components/landingPage'
-import HeroSignup from './components/hero-signup'
-import {Provider} from 'react-redux'
-import store from './store/'
-import UserHome from './components/userHome'
+import { Provider } from 'react-redux';
+import store from './store/';
+import {LandingPage, HeroSignUp, CitizenHome, HeroLogin} from './components'
 
 export default class App extends React.Component {
   render() {
-       return (
-        <Provider store={store}>
-          <RootNavigation />
-        </Provider>
-       )
+    return (
+      <Provider store={store}>
+        <RootNavigation />
+      </Provider>
+    );
   }
 }
 
 const RootNavigation = createStackNavigator(
   {
-    LandingPage: LandingPage,
-    HeroSignup: HeroSignup,
-    UserHome: UserHome
+    LandingPage,
+    HeroSignUp,
+    CitizenHome,
+    HeroLogin,
   },
   {
     initialRouteName: 'LandingPage',
-  }
+  },
 );
 
 const styles = StyleSheet.create({

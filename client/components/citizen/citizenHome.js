@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class UserHome extends React.Component {
+export default class CitzenHome extends React.Component {
   render() {
     return (
       <Container style={styles.container}>
