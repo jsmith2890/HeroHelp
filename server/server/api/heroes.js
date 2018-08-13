@@ -2,8 +2,7 @@ const router = require('express').Router()
 const {Hero} = require('../db/models')
 module.exports = router
 
-//api/hero
-
+//api/heroes
 router.post('/add', async (req, res, next) => {
   try {
     const newHero = await Hero.create({
