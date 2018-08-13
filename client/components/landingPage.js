@@ -8,7 +8,9 @@ export default class LandingPage extends React.Component {
     this.props.navigation.navigate('HeroSignup');
   };
 
-  pressCivilian = () => {};
+  pressCitizen = () => {
+    this.props.navigation.navigate('UserHome')
+  };
 
   render() {
     return (
@@ -20,11 +22,11 @@ export default class LandingPage extends React.Component {
           <Row size={1}>
             <Col style={{ paddingLeft: 50 }}>
               <Button
-                onPress={this.pressCivilian}
+                onPress={this.pressCitizen}
                 style={{ backgroundColor: '#002239' }}
                 large
               >
-                <Text>Civilian</Text>
+                <Text>Citizen</Text>
               </Button>
             </Col>
 
