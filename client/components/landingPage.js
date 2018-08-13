@@ -5,11 +5,11 @@ import { Col, Row, Grid } from 'react-native-easy-grid';
 
 export default class LandingPage extends React.Component {
   pressHero = () => {
-    this.props.navigation.navigate('HeroSignup');
+    this.props.navigation.navigate('HeroSignUp');
   };
 
   pressCitizen = () => {
-    this.props.navigation.navigate('UserHome')
+    this.props.navigation.navigate('CitizenHome')
   };
 
   render() {
