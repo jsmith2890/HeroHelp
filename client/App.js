@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import LandingPage from './components/landingPage'
 import HeroSignup from './components/hero-signup'
+import UserHome from './components/userHome'
 
 export default class App extends React.Component {
   render() {
@@ -23,7 +24,8 @@ export default class App extends React.Component {
 const RootNavigation = createStackNavigator(
   {
     LandingPage: LandingPage,
-    HeroSignup: HeroSignup
+    HeroSignup: HeroSignup,
+    UserHome: UserHome
   },
   {
     initialRouteName: 'LandingPage',
