@@ -12,7 +12,7 @@ export default class LandingPage extends React.Component {
 
   render() {
     return (
-      <Container>
+      <Container style={{ flex: 1}}>
         <Grid style={{ backgroundColor: '#0a4963' }}>
           <Row size={3} style={{ paddingTop: 80, paddingLeft: 10 }}>
             <Image source={require('./assets/logo.png')} />
@@ -43,3 +43,4 @@ export default class LandingPage extends React.Component {
     );
   }
 }
+
