@@ -2,6 +2,7 @@
 
 const db = require('../server/db')
 const {User, Citizen, Hero, Incident} = require('../server/db/models')
+const sampleUsers = require('./data/user.json')
 const sampleCitizens = require('./data/citizen.json')
 const sampleHeroes = require('./data/hero.json')
 const sampleIncidents = require('./data/incident.json')
@@ -11,18 +12,15 @@ async function seed() {
   console.log('db synced!')
 
   // Creating Users (for login)
-  const users = await Promise.all([
-    User.create({email: 'cody@email.com', password: '123'}),
-    User.create({email: 'murphy@email.com', password: '123'})
-  ])
-  console.log(`seeded ${users.length} users`)
+  await User.bulkCreate(sampleUsers)
+  console.log(`seeded ${sampleUsers.length} users`)
 
   // Create Citizens
   await Citizen.bulkCreate(sampleCitizens)
   console.log(`seeded ${sampleCitizens.length} citizens`)
 
   // Create Heroes
-  await Hero.bulkCreate(sampleCitizens)
+  await Hero.bulkCreate(sampleHeroes)
   console.log(`seeded ${sampleHeroes.length} heroes`)
 
   // Create Incidents
