@@ -5,6 +5,11 @@ const Hero = db.define('hero', {
   loginStatus: {
     type: Sequelize.ENUM('online','offline')
   },
+  socketHash: {
+    //generated string when login completes and saved with hero
+    //used to link socket to correct hero
+    type: Sequelize.STRING
+  },
   name: {
     type: Sequelize.STRING,
     allowNull: false,
