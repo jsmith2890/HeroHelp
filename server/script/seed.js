@@ -1,18 +1,33 @@
 'use strict'
 
 const db = require('../server/db')
-const {User} = require('../server/db/models')
+const {User, Citizen, Hero, Incident} = require('../server/db/models')
+const sampleUsers = require('./data/user.json')
+const sampleCitizens = require('./data/citizen.json')
+const sampleHeroes = require('./data/hero.json')
+const sampleIncidents = require('./data/incident.json')
 
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
-  const users = await Promise.all([
-    User.create({email: 'cody@email.com', password: '123'}),
-    User.create({email: 'murphy@email.com', password: '123'})
-  ])
+  // Creating Users (for login)
+  await User.bulkCreate(sampleUsers)
+  console.log(`seeded ${sampleUsers.length} users`)
 
-  console.log(`seeded ${users.length} users`)
+  // Create Citizens
+  await Citizen.bulkCreate(sampleCitizens)
+  console.log(`seeded ${sampleCitizens.length} citizens`)
+
+  // Create Heroes
+  await Hero.bulkCreate(sampleHeroes)
+  console.log(`seeded ${sampleHeroes.length} heroes`)
+
+  // Create Incidents
+  await Incident.bulkCreate(sampleIncidents)
+  console.log(`seeded ${sampleIncidents.length} incidents`)
+
+
   console.log(`seeded successfully`)
 }
 

@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1",
+    "userId": "1",
+    "loginStatus": "online",
+    "name": "Batman",
+    "imageUrl": "img/batman.jpeg",
+    "description": "The Dark Knight instills fear in the hearts of evil men.",
+    "presenceLat": "41.895367",
+    "presenceLon": "-87.638977",
+    "presenceStatus": "available",
+    "state": "IDLE"
+  },
+  {
+    "id": "2",
+    "userId": "2",
+    "loginStatus": "online",
+    "name": "Superman",
+    "imageUrl": "img/superman.jpeg",
+    "description": "The Man of Steel hails from the planet of Krypton.",
+    "presenceLat": "41.9062499",
+    "presenceLon": "-87.6515864",
+    "presenceStatus": "available",
+    "state": "IDLE"
+  },
+  {
+    "id": "3",
+    "userId": "3",
+    "loginStatus": "online",
+    "name": "Iron Man",
+    "imageUrl": "img/iron_man2.jpeg",
+    "description": "Tony Stark is an amazing, charitable, and handsome human specimen.",
+    "presenceLat": "41.9062499",
+    "presenceLon": "-87.6515864",
+    "presenceStatus": "available",
+    "state": "ENROUTE"
+  }
+]
