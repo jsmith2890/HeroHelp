@@ -1,6 +1,6 @@
 const User = require('./user')
 const Hero = require('./hero')
-const civilianProfile = require('./civilianProfile')
+const Citizen = require('./citizen')
 
 /**
  * If we had any associations to make, this would be a great place to put them!
@@ -18,6 +18,5 @@ const civilianProfile = require('./civilianProfile')
 module.exports = {
   User,
   Hero,
-  civilianProfile
-
+  Citizen,
 }
