@@ -5,6 +5,9 @@ import { Provider } from 'react-redux';
 import store from './store/';
 import {LandingPage, HeroSignUp, CitizenHome, HeroLogin} from './components'
 
+// Establishes socket connection
+import './socket';
+
 export default class App extends React.Component {
   render() {
     return (
