@@ -1,5 +1,7 @@
 const { registerCitizenHandlers } = require('./citizenHandlers')
 const { registerHeroHandlers } = require('./heroHandlers');
+
+const { newSocket,deleteSocket } = require('./socketMaps')
 /*
 Holds a map of citizenSocketIds to:
 {
@@ -29,7 +31,7 @@ Holds a map of socketIds to clientData:
   incident
 }
 */
-const socketIdMap = {}
+
 
 
 /*
@@ -78,15 +80,13 @@ module.exports = io => {
     // Each listener may have to check if the user is authenticated or not
 
 
-    // Save this socket to the socketIdMap
-    socketIdMap[serverSocket.id] = {
-      socket: serverSocket,
-    }
+    // Save this socket to the new socket map, pending further identification
+    newSocket(serverSocket)
 
     serverSocket.on('disconnect', () => {
       console.log(`Connection ${serverSocket.id} has disconnected.`)
       // Remove socket from the socketIdMap
-      delete socketIdMap[serverSocket.id]
+      deleteSocket(serverSocket);
     })
   })
 }
