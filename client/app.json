@@ -5,5 +5,11 @@
       "image": "./components/assets/splash.png",
       "backgroundColor": "#0a4963"
     }
+  },
+  "ios": {
+    "bundleIdentifier": "com.codingmechanic.mapcuny",
+    "config": {
+      "googleMapsApiKey": "AIzaSyDjGLBtfds1o5Dnv95UtKHNiNp45cN13S8"
+    }
   }
 }
