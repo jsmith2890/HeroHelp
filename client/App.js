@@ -4,6 +4,9 @@ import { createStackNavigator } from 'react-navigation';
 import LandingPage from './components/landingPage'
 import HeroSignup from './components/hero-signup'
 
+// Establishes socket connection
+import './socket';
+
 export default class App extends React.Component {
   render() {
     // return (
