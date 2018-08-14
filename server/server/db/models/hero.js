@@ -1,10 +1,9 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
 
-
 const Hero = db.define('hero', {
-  websocketId: {
-    type: Sequelize.INTEGER
+  loginStatus: {
+    type: Sequelize.ENUM('online','offline')
   },
   name: {
     type: Sequelize.STRING,
@@ -28,8 +27,11 @@ const Hero = db.define('hero', {
   presenceStatus: {
     type: Sequelize.ENUM('available', 'unavailable')
   },
-  incidentStatus: {
-    type: Sequelize.ENUM('none', 'dispatching', 'assigned')
+  state: {
+    type: Sequelize.ENUM('IDLE',
+                         'DECIDING_ON_DISPATCH',
+                         'ENROUTE',
+                         'ON_SITE')
   },
 })
 
