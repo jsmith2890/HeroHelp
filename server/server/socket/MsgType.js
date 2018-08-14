@@ -48,3 +48,17 @@ module.exports.IncidentState = {
   HERO_ON_SITE: 'HERO_ON_SITE', // (hero has made it on site)
   RESOLVED: 'RESOLVED', // (hero has resolved the incident)
 }
+
+module.exports.HeroState = {
+  IDLE: 'IDLE', // (will not receive a dispatch)
+  DECIDING_ON_DISPATCH: 'DECIDING_ON_DISPATCH', // (can accept or reject)
+  ENROUTE: 'ENROUTE', // (accepted dispatch and on the way)
+  ON_SITE: 'ON_SITE', // (made it on site)
+}
+
+module.exports.CitizenState = {
+  IDLE: 'IDLE', // (can push help button)
+  WAIT_FOR_HERO_DISPATCH: 'WAIT_FOR_HERO_DISPATCH', // (waiting for a succesful dispatch to a hero)
+  KNOWS_HERO_ENROUTE: 'KNOWS_HERO_ENROUTE', // (hero has accepted and is on the way)
+  KNOWS_HERO_ON_SITE: 'KNOWS_HERO_ON_SITE' // (hero has made it on site)
+}
