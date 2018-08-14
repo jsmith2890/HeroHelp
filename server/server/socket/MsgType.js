@@ -8,19 +8,18 @@ module.exports.NewSocketSends = {
 
 // ======== Server to New Socket Client ============
 // messages sent in response to new socket client requests
-// AS
-
-
+module.exports.ServerSendsToNewSocket = {
+  TELL_HERO: "TELL_HERO", //hero confirmed
+  TELL_CITIZEN: "TELL_CITIZEN", //citizenId
+}
 
 // =========== Citizen Client ===========
-
 // Msgs that Citizen will send to server
 module.exports.CitizenSends = {
   ASK_FOR_HERO_HELP: "ASK_FOR_HERO_HELP", // citizenId, lat, lon
 };
 
 // =========== Hero Client ===========
-
 module.exports.HeroSends = {
   ASK_TO_LOG_IN: "ASK_TO_LOG_IN",
   ASK_TO_REGISTER: "ASK_TO_REGISTER",
@@ -30,7 +29,6 @@ module.exports.HeroSends = {
 };
 
 // =========== Server To Citizen ===========
-
 // Msgs that server will send to client
 module.exports.ServerSendsToCitizen = {
   GIVE_CITIZEN_ID: "GIVE_CITIZEN_ID",
@@ -42,7 +40,6 @@ module.exports.ServerSendsToCitizen = {
 };
 
 // =========== Server To Hero ===========
-
 module.exports.ServerSendsToHero = {
   GIVE_HERO_ID: "GIVE_HERO_ID",
   ACK_RECEIVED_HEARTBEAT: "ACK_RECEIVED_HEARTBEAT", // incidentsArr[{lat, lon}]
