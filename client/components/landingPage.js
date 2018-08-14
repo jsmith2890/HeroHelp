@@ -5,7 +5,7 @@ import { Col, Row, Grid } from 'react-native-easy-grid';
 
 export default class LandingPage extends React.Component {
   pressHero = () => {
-    this.props.navigation.navigate('HeroSignUp');
+    this.props.navigation.navigate('HeroLogin');
   };
 
   pressCitizen = () => {
@@ -15,7 +15,7 @@ export default class LandingPage extends React.Component {
   render() {
     return (
       <Container style={{ flex: 1}}>
-        <Grid style={{ backgroundColor: '#0a4963' }}>
+        <Grid>
           <Row size={3} style={{ paddingTop: 80, paddingLeft: 10 }}>
             <Image source={require('./assets/logo.png')} />
           </Row>

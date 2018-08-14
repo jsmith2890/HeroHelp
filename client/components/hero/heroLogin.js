@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
-import { StyleSheet, View } from 'react-native';
-import { addNewHero } from '../../store';
+import React, { Component } from 'react';
+import { auth } from '../../store';
 import { connect } from 'react-redux';
+import { View } from 'react-native';
 import {
   Container,
   Content,
@@ -10,40 +10,49 @@ import {
   Input,
   Label,
   Button,
-  Text,
+  Text
 } from 'native-base';
 
 class HeroLogin extends Component {
   constructor() {
     super();
     this.state = {
-      value: '',
+      email: '',
+      password: '',
+      method: 'login',
     };
   }
 
   handleSubmit = event => {
     event.preventDefault();
-    console.log('this.state', this.state.value);
-    this.props.add(this.state.value);
+    const { email, password, method } = this.state;
+    this.props.login(email, password, method);
   };
 
   render() {
     return (
-      <Container style={{ backgroundColor: 'white' }}>
+      <Container >
         <Content>
           <View>
             <Form>
               <Item stackedLabel>
-                <Label>Name</Label>
+                <Label>Email</Label>
                 <Input
-                  autoFocus
                   autoCapitalize="none"
-                  onChangeText={inputVal => this.setState({ value: inputVal })}
-                  value={this.state.value}
+                  value={this.state.email}
+                  onChangeText={text => this.setState({ email: text })}
                 />
               </Item>
-              <Button block style={styles.button} onPress={this.handleSubmit}>
-                <Text>Submit</Text>
+              <Item stackedLabel>
+                <Label>Password</Label>
+                <Input
+                  secureTextEntry
+                  value={this.state.password}
+                  onChangeText={text => this.setState({ password: text })}
+                />
+              </Item>
+              <Button primary block onPress={this.handleSubmit}>
+                <Text>Login</Text>
               </Button>
             </Form>
           </View>
@@ -53,19 +62,13 @@ class HeroLogin extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  add: hero => dispatch(addNewHero(hero)),
-});
+const mapDispatchToProps = dispatch => {
+  return {
+    login: (email, password, method) => dispatch(auth(email, password, method)),
+  };
+};
 
 export default connect(
   null,
   mapDispatchToProps,
 )(HeroLogin);
-
-const styles = StyleSheet.create({
-  button: {
-    width: '80%',
-    marginTop: 10,
-    alignSelf: 'center',
-  },
-});
