@@ -12,7 +12,11 @@ async function seed() {
   console.log('db synced!')
 
   // Creating Users (for login)
-  await User.bulkCreate(sampleUsers)
+  //await User.bulkCreate(sampleUsers)
+  // create some users
+  await Promise.all(sampleUsers.map(user => {
+    User.create(user)
+  }))
   console.log(`seeded ${sampleUsers.length} users`)
 
   // Create Citizens

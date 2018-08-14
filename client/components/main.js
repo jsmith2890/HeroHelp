@@ -21,8 +21,8 @@ class Main extends Component {
   render() {
     const { isSignedIn } = this.state;
     if (!isSignedIn) return <View />;
-    const userType = this.props.user.id ? this.props.user.type : null;
-    const RootNav = createRootNavigator(this.props.isLoggedIn, userType);
+    //const userType = this.props.user.id ? this.props.user.type : null;
+    const RootNav = createRootNavigator(this.props.isLoggedIn);
 
     return <RootNav />;
   }
