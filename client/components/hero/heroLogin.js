@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { auth } from '../../store';
 import { connect } from 'react-redux';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import {
   Container,
   Content,
@@ -10,7 +10,7 @@ import {
   Input,
   Label,
   Button,
-  Text
+  Text,
 } from 'native-base';
 
 class HeroLogin extends Component {
@@ -29,9 +29,13 @@ class HeroLogin extends Component {
     this.props.login(email, password, method);
   };
 
+  pressSignUp = () => {
+    this.props.navigation.navigate('HeroSignUp');
+  };
+
   render() {
     return (
-      <Container >
+      <Container>
         <Content>
           <View>
             <Form>
@@ -51,16 +55,32 @@ class HeroLogin extends Component {
                   onChangeText={text => this.setState({ password: text })}
                 />
               </Item>
-              <Button primary block onPress={this.handleSubmit}>
+              <Button
+                onPress={this.handleSubmit}
+                primary
+                block
+                style={styles.button}
+              >
                 <Text>Login</Text>
               </Button>
             </Form>
           </View>
+          <Button onPress={this.pressSignUp} danger block style={styles.button}>
+            <Text>Sign Up</Text>
+          </Button>
         </Content>
       </Container>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  button: {
+    width: '80%',
+    marginTop: 10,
+    alignSelf: 'center',
+  },
+});
 
 const mapDispatchToProps = dispatch => {
   return {
