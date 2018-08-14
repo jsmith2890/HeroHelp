@@ -1,9 +1,9 @@
 // ========== New Socket Client ==========
 // messages that app will send to identify as citizen or hero
 module.exports.NewSocketSends = {
-  ASK_AS_HERO: "ASK_AS_HERO", //token passed to hero on 200 OK LOGIN
+  ASK_TO_BE_HERO: "ASK_TO_BE_HERO", //token passed to hero on 200 OK LOGIN
   REGISTER_AS_CITIZEN: "REGISTER_AS_CITIZEN", //new instance
-  ASK_AS_CITIZEN: "ASK_AS_CITIZEN", //token saved by app instance
+  ASK_TO_BE_CITIZEN: "ASK_TO_BE_CITIZEN", //token saved by app instance
 }
 
 // ======== Server to New Socket Client ============
