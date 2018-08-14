@@ -1,6 +1,7 @@
 const User = require('./user')
 const Hero = require('./hero')
 const Citizen = require('./citizen')
+const Incident = require('./incident')
 
 /**
  * If we had any associations to make, this would be a great place to put them!
@@ -8,6 +9,17 @@ const Citizen = require('./citizen')
  *
  *    BlogPost.belongsTo(User)
  */
+
+ Hero.hasOne(Incident);
+ Incident.belongsTo(Hero);
+
+ Hero.belongsTo(User);
+ User.hasOne(Hero);
+
+ Citizen.hasOne(Incident);
+ Incident.belongsTo(Citizen);
+
+
 
 /**
  * We'll export all of our models here, so that any time a module needs a model,
@@ -19,4 +31,5 @@ module.exports = {
   User,
   Hero,
   Citizen,
+  Incident,
 }

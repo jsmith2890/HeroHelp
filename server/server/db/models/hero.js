@@ -27,7 +27,7 @@ const Hero = db.define('hero', {
   presenceStatus: {
     type: Sequelize.ENUM('available', 'unavailable')
   },
-  heroState: {
+  state: {
     type: Sequelize.ENUM('IDLE',
                          'DECIDING_ON_DISPATCH',
                          'ENROUTE',
