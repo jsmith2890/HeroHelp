@@ -1,5 +1,6 @@
 const { registerCitizenHandlers } = require('./citizenHandlers')
 const { registerHeroHandlers } = require('./heroHandlers');
+const { registerNewConnectionHandlers } = require('./newConnectionHandlers');
 
 const { newSocket,deleteSocket } = require('./socketMaps')
 /*
@@ -67,6 +68,7 @@ module.exports = io => {
       `A socket connection to the server has been made: ${serverSocket.id}`
     )
 
+    registerNewConnectionHandlers(serverSocket)
     registerCitizenHandlers(serverSocket)
     registerHeroHandlers(serverSocket)
 
