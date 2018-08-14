@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { addNewHero } from '../../store';
 import { connect } from 'react-redux';
