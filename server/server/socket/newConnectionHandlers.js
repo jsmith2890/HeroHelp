@@ -21,7 +21,7 @@ module.exports.registerNewConnectionHandlers = socket => {
       //})
 
       //upgrade to hero
-      sendTellHero(this);
+      sendTellHero(socket);
 
     } catch (err) {
       console.error(err)
