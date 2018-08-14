@@ -21,9 +21,9 @@ const Hero = createStackNavigator({
   HeroDuty,
 });
 
-export const createRootNavigator = (signedIn = false, type = 'user') => {
+export const createRootNavigator = (signedIn = false) => {
   let initialRouteName = 'SignedOut';
-  if (signedIn && type === 'user') initialRouteName = 'HeroSignedIn';
+  if (signedIn ) initialRouteName = 'HeroSignedIn';
 
   return createSwitchNavigator(
     {

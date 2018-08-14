@@ -1,7 +1,7 @@
 [
-  {"id": "1", "email": "cody@email.com", "password": "123"},
-  {"id": "2", "email": "murphy1@email.com", "password": "123"},
-  {"id": "3", "email": "murphy2@email.com", "password": "123"},
-  {"id": "4", "email": "murphy3@email.com", "password": "123"},
-  {"id": "5", "email": "murphy4@email.com", "password": "123"}
+  {"email": "cody@email.com", "password": "123"},
+  {"email": "murphy1@email.com", "password": "123"},
+  {"email": "murphy2@email.com", "password": "123"},
+  {"email": "murphy3@email.com", "password": "123"},
+  {"email": "murphy4@email.com", "password": "123"}
 ]
