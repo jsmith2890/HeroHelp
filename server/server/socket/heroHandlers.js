@@ -5,26 +5,36 @@ const {sendDispatchToHero,sendAckHeartbeatToHero} = require('./heroSenders')
 const { getHeroIdFromSocket } = require('./socketMaps')
 
 const {Citizen,Hero,User,Incident} = require('../db/models')
+const Sequelize = require('sequelize')
+const Op = Sequelize.Op;
 
 const {setIncidentDistance} = require('./util')
 
 module.exports.registerHeroHandlers = socket => {
 
-  // availabilityStatus ("available", "unavailable")
   socket.on(HeroSends.GIVE_HEARTBEAT, async (msgBody) => {
+    console.log('received give_hb')
 
     let hero;
     const heroIncidentList=[];
+    let heroId;
     try {
       //get hero
-      const heroId = getHeroIdFromSocket(socket.id);
+      heroId = getHeroIdFromSocket(socket.id);
       hero = await Hero.findById(heroId);
 
       //update hero location/status in db
       await hero.update({lat:msgBody.lat,lon:msgBody.lon,presenceStatus:msgBody.status})
 
-      //find incidents
-      const incidents = await Incident.findAll();
+      //find incidents nearby not assigned to hero and not closed
+      const incidents = await Incident.findAll({ where: {
+          state: { [Op.ne]: 'RESOLVED'},
+          heroId: { [Op.or]: {
+            [Op.ne]: heroId,
+            [Op.eq]: null
+          }}
+        }
+      });
       incidents.forEach(incident=>setIncidentDistance(incident,msgBody.lat,msgBody.lon))
 
       incidents.sort((a,b)=>{

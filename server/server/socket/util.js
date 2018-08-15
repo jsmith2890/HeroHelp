@@ -2,6 +2,15 @@ const {Citizen,Hero,User,Incident,setIncidentDistance} = require('../db/models')
 
 //common utility functions
 
+//general purpose socket send
+module.exports.sendToClient = (socket, event, data) => {
+  socket.emit(event, data);
+}
+/////////////////////////////////////////////////////
+
+
+
+
 ///////////////////////////////////////////////////
 // figuring out incident distance
 function deg2rad(arg) {

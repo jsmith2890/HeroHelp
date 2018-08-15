@@ -2,10 +2,7 @@ const {
   ServerSendsToNewSocket,
 } = require('./MsgType');
 
-const sendToClient = (socket, event, data) => {
-  console.log("event",event,"data",data)
-  socket.emit(event, data);
-};
+const { sendToClient } = require('./util')
 
 // ========== Send data to Hero via socket ========
 
