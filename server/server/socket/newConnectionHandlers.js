@@ -41,20 +41,29 @@ module.exports.registerNewConnectionHandlers = socket => {
   })
 
   socket.on(NewSocketSends.ASK_TO_BE_CITIZEN, async (msgBody) => {
-    console.log('ASK_TO_BE_CITIZEN received');
+    console.log('ASK_TO_BE_CITIZEN received',msgBody);
     //find citizen by id -- if exists, great, if not, create one
     //note -- basically a somewhat less RESTful POST here ;-)
     let needNewCitizen = false;
-    let citizen;
-    try {
-      citizen = await Citizen.findById(msgBody.citizenId)
-      await citizen.update({state:'IDLE'})
-    } catch (err) {
+
+    if (msgBody.hasOwnProperty('citizenId')===false) {
       needNewCitizen = true;
     }
+
+    let citizen;
+    //note: try{} inside of if() statement because not a real error if not-found
+    if (needNewCitizen===false) {
+      try {
+        citizen = await Citizen.findById(msgBody.citizenId)
+        await citizen.update({state:'IDLE'})
+      } catch (err) {
+        needNewCitizen = true;
+      }
+    }
+
     try {
       if (needNewCitizen) {
-        citizen = Citizen.create({state:'IDLE'})
+        citizen = await Citizen.create({state:'IDLE'})
       }
     } catch (err) {
       //db failure -- drop cxn
@@ -62,9 +71,8 @@ module.exports.registerNewConnectionHandlers = socket => {
       socket.disconnect();
       deleteSocket(socket.id);
     }
-
     promoteSocketToCitizen(socket.id,citizen.id)
-    sendTellCitizen(socket);
+    sendTellCitizen(socket,citizen.id);
     registerCitizenHandlers(socket);
   })
 }

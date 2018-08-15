@@ -1,6 +1,6 @@
 [
-  { "id": "1", "state": "IDLE" },
-  { "id": "2", "state": "WAIT_FOR_HERO_DISPATCH" },
-  { "id": "3", "state": "KNOWS_HERO_ENROUTE" },
-  { "id": "4", "state": "KNOWS_HERO_ON_SITE" }
+  { "state": "IDLE" },
+  { "state": "WAIT_FOR_HERO_DISPATCH" },
+  { "state": "KNOWS_HERO_ENROUTE" },
+  { "state": "KNOWS_HERO_ON_SITE" }
 ]

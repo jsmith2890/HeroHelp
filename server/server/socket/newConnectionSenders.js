@@ -13,6 +13,6 @@ module.exports.sendTellHero = (socket) => {
   sendToClient(socket, ServerSendsToNewSocket.TELL_HERO, {});
 };
 
-module.exports.sendTellCitizen = (socket) => {
-  sendToClient(socket, ServerSendsToNewSocket.TELL_CITIZEN, {});
+module.exports.sendTellCitizen = (socket,id) => {
+  sendToClient(socket, ServerSendsToNewSocket.TELL_CITIZEN, {citizenId:id});
 };
