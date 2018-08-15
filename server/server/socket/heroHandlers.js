@@ -4,7 +4,9 @@ const {sendDispatchToHero,sendAckHeartbeatToHero} = require('./heroSenders')
 
 const { getHeroIdFromSocket } = require('./socketMaps')
 
-const {Citizen,Hero,User,Incident,setIncidentDistance} = require('../db/models')
+const {Citizen,Hero,User,Incident} = require('../db/models')
+
+const {setIncidentDistance} = require('./util')
 
 module.exports.registerHeroHandlers = socket => {
 
@@ -12,21 +14,38 @@ module.exports.registerHeroHandlers = socket => {
   socket.on(HeroSends.GIVE_HEARTBEAT, async (msgBody) => {
 
     let hero;
+    const heroIncidentList=[];
     try {
       //get hero
       const heroId = getHeroIdFromSocket(socket.id);
       hero = await Hero.findById(heroId);
 
       //update hero location/status in db
-      await hero.update({lat:msgBody.lat,lon:msgBody.lon,presenceStatus:status})
+      await hero.update({lat:msgBody.lat,lon:msgBody.lon,presenceStatus:msgBody.status})
 
       //find incidents
-      const incidents = Incident.findAll();
-      //incidents.forEach(incident=>setIncidentDistance(incident,msgBody.lat,msgBody.lon))
+      const incidents = await Incident.findAll();
+      incidents.forEach(incident=>setIncidentDistance(incident,msgBody.lat,msgBody.lon))
+
+      incidents.sort((a,b)=>{
+        if (a.distance<b.distance) {return -1}
+        if (a.distance>b.distance) {return 1}
+        return 0;
+      })
+
+      //generate output for hero's phone, just 10 closest incidents
+      let limit=incidents.length;
+      if (limit>10) {
+        limit=10;
+      }
+      for (let i=0;i<limit;i++) {
+        heroIncidentList.push({lat:incidents[i].lat,lon:incidents[i].lon})
+      }
+
     } catch (err) {
-
+      console.log(" Error processing GIVE_HEARTBEAT",err)
     }
-
+    sendAckHeartbeatToHero(socket,heroIncidentList);
 
 
 //       superhero-hb
