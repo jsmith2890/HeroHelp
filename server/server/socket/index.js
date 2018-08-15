@@ -3,37 +3,6 @@ const { registerHeroHandlers } = require('./heroHandlers');
 const { registerNewConnectionHandlers } = require('./newConnectionHandlers');
 
 const { newSocket,deleteSocket } = require('./socketMaps')
-/*
-Holds a map of citizenSocketIds to:
-{
-  socket,
-  citizenId,
-  incident
-}
-*/
-// const citizenSocketIdMap = {}
-
-/*
-Holds a map of heroSocketIds to:
-{
-  socket,
-  heroId,
-  incident
-}
-*/
-// const heroSocketIdMap = {}
-
-/*
-Holds a map of socketIds to clientData:
-{
-  socket,
-  role, ('citizen' or 'hero')
-  clientId,
-  incident
-}
-*/
-
-
 
 /*
 States for an Incident (Server tracks this):
@@ -68,19 +37,14 @@ module.exports = io => {
       `A socket connection to the server has been made: ${serverSocket.id}`
     )
 
-    registerNewConnectionHandlers(serverSocket)
-    registerCitizenHandlers(serverSocket)
-    registerHeroHandlers(serverSocket)
-
-    // const existingSocketData = socketIdMap[serverSocket.id]
-    // if (existingSocketData) {
-    //   console.error('Existing socket data with id:', serverSocket.id)
-    // }
-
     // We don't know who the client is exactly.
     // Need for client to either authenticate or ask to be given a clientID
     // Each listener may have to check if the user is authenticated or not
+    registerNewConnectionHandlers(serverSocket)
 
+    // We should register these based on what the client ends up being
+    registerCitizenHandlers(serverSocket)
+    registerHeroHandlers(serverSocket)
 
     // Save this socket to the new socket map, pending further identification
     newSocket(serverSocket)
