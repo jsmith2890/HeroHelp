@@ -1,5 +1,10 @@
 const { createSocket } = require('./helper');
-const { ServerSendsToCitizen, CitizenSends } = require('./MsgType');
+const {
+  NewSocketSends,
+  ServerSendsToCitizen,
+  ServerSendsToNewSocket,
+  CitizenSends,
+} = require('./MsgType');
 
 class Citizen {
   constructor(applicationId) {
@@ -15,6 +20,9 @@ class Citizen {
     this.socket.on(ServerSendsToCitizen.HERO_ENROUTE, evt =>
       this.recvHeroOnTheWay(evt)
     );
+    this.socket.on(ServerSendsToNewSocket.TELL_CITIZEN, evt =>
+      this.recvUpgradeAck(evt)
+    );
 
     this.lat = 41.9062499;
     this.lon = -87.6515864;
@@ -23,15 +31,24 @@ class Citizen {
 
   // ========= Handle Incoming Messages =========
 
+  recvUpgradeAck(evt) {
+    console.log('citizen ', this.socket.id, 'recvUpgradeAck ', evt)
+  }
+
   recvRequestHelpAck(evt) {
     console.log('citizen ', this.socket.id, ' recvRequestHelpAck ', evt);
-  };
+  }
 
   recvHeroOnTheWay(evt) {
     console.log('citizen', this.socket.id, ' recvHeroOnTheWay ', evt);
-  };
+  }
 
   // ========= Handle Outgoing Messages =========
+
+  sendUpgradeAsCitizen() {
+    console.log('citizen ', this.socket.id, ' sendUpgradeAsCitizen()')
+    this.socket.emit(NewSocketSends.ASK_TO_BE_CITIZEN, {citizenId: 3})
+  }
 
   sendRequestHelp() {
     console.log('citizen ', this.socket.id, 'sendRequestHelp()');
@@ -40,7 +57,7 @@ class Citizen {
       lat: this.lat,
       lon: this.lon,
     });
-  };
+  }
 }
 
 module.exports = Citizen;

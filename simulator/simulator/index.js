@@ -25,13 +25,13 @@ class ScenarioEngine {
 
   // Run the simulation
   run() {
-    // This function gets run on an interval.
     this.globalTimer = setInterval(this.globalTimerHandler, 200); //200ms ticks
   }
 
+  // This function gets run on an interval.
   globalTimerHandler() {
     // For each hero, run their tick function (which is just a heartbeat atm)
-    this.heroes.forEach(hero => hero.tick());
+    // this.heroes.forEach(hero => hero.tick());
     // For each scenario, run their timer function
     // this.scenarios.forEach(scenario => scenario.tick());
     this.tick();
@@ -46,8 +46,8 @@ class ScenarioEngine {
     }
 
     this.step++;
-    console.log();
-    console.log('Scenario Engine timer handler step =', this.step);
+    // console.log();
+    // console.log('Scenario Engine. Step =', this.step);
     if (this.step < this.actions.length) {
       this.executeStep();
     }
@@ -75,6 +75,9 @@ class ScenarioEngine {
         case HeroAction.ACCEPT_DISPATCH:
           currentHero.sendDispatchAccepted();
           break;
+        case HeroAction.ASK_TO_BE_HERO:
+          currentHero.sendUpgradeAsHero();
+          break;
         default:
           console.log('unknown hero action ', currentStep.action, ' ignored');
       }
@@ -87,6 +90,9 @@ class ScenarioEngine {
       switch (currentStep.action) {
         case CitizenAction.ASK_FOR_HERO_HELP:
           currentCitizen.sendRequestHelp();
+          break;
+        case CitizenAction.ASK_TO_BE_CITIZEN:
+          currentCitizen.sendUpgradeAsCitizen();
           break;
         default:
           console.log(

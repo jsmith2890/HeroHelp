@@ -1,6 +1,5 @@
 [
   {
-    "id": "1",
     "userId": "1",
     "loginStatus": "online",
     "name": "Batman",
@@ -12,7 +11,6 @@
     "state": "IDLE"
   },
   {
-    "id": "2",
     "userId": "2",
     "loginStatus": "online",
     "name": "Superman",
@@ -24,7 +22,6 @@
     "state": "IDLE"
   },
   {
-    "id": "3",
     "userId": "3",
     "loginStatus": "online",
     "name": "Iron Man",

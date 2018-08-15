@@ -43,8 +43,8 @@ module.exports = io => {
     registerNewConnectionHandlers(serverSocket)
 
     // We should register these based on what the client ends up being
-    registerCitizenHandlers(serverSocket)
-    registerHeroHandlers(serverSocket)
+    // registerCitizenHandlers(serverSocket)
+    // registerHeroHandlers(serverSocket)
 
     // Save this socket to the new socket map, pending further identification
     newSocket(serverSocket)

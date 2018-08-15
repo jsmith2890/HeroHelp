@@ -1,12 +1,23 @@
 const { createSocket } = require('./helper');
-const {ServerSendsToHero, HeroSends} = require('./MsgType')
+const {
+  NewSocketSends,
+  ServerSendsToHero,
+  ServerSendsToNewSocket,
+  HeroSends,
+} = require('./MsgType');
 
 class Hero {
   constructor(tickInterval) {
     this.socket = createSocket();
-    this.socket.on(ServerSendsToHero.ACK_RECEIVED_HEARTBEAT, evt => this.recvHbAck(evt));
-    this.socket.on(ServerSendsToHero.GIVE_DISPATCH, evt => this.recvDispatch(evt));
-    this.socket.on('TELL_HERO', evt => this.recvUpgradeAck(evt));
+    this.socket.on(ServerSendsToHero.ACK_RECEIVED_HEARTBEAT, evt =>
+      this.recvHbAck(evt)
+    );
+    this.socket.on(ServerSendsToHero.GIVE_DISPATCH, evt =>
+      this.recvDispatch(evt)
+    );
+    this.socket.on(ServerSendsToNewSocket.TELL_HERO, evt =>
+      this.recvUpgradeAck(evt)
+    );
 
     //hb timer
     this.tickInterval = tickInterval; //number of timer ticks between taking action
@@ -21,12 +32,12 @@ class Hero {
     this.incidentId = 0;
 
     // Bindings
-    this.toggleStatus = this.toggleStatus.bind(this)
-    this.tick = this.tick.bind(this)
-    this.recvHbAck = this.recvHbAck.bind(this)
-    this.recvDispatch = this.recvDispatch.bind(this)
-    this.sendDispatchAccepted = this.sendDispatchAccepted.bind(this)
-    this.sendHb = this.sendHb.bind(this)
+    this.toggleStatus = this.toggleStatus.bind(this);
+    this.tick = this.tick.bind(this);
+    this.recvHbAck = this.recvHbAck.bind(this);
+    this.recvDispatch = this.recvDispatch.bind(this);
+    this.sendDispatchAccepted = this.sendDispatchAccepted.bind(this);
+    this.sendHb = this.sendHb.bind(this);
   }
 
   // Toggle availability
@@ -38,7 +49,7 @@ class Hero {
       this.status = 'available';
     }
     this.sendHb();
-  };
+  }
 
   tick() {
     this.tickCount++;
@@ -48,26 +59,31 @@ class Hero {
     }
     console.log('hero ', this.socket.id, ' tick()');
     this.sendHb();
-  };
+  }
 
   // ========= Handle Incoming Messages =========
 
   recvUpgradeAck(evt) {
-    console.log('hero ', this.socket.id, 'recvUpgradeAck ', evt)
+    console.log('hero ', this.socket.id, 'recvUpgradeAck ', evt);
   }
 
   recvHbAck(evt) {
     console.log('hero ', this.socket.id, ' recvHbAck ', evt);
-  };
+  }
 
   recvDispatch(evt) {
     console.log('hero ', this.socket.id, ' recvDispatch ', evt);
     this.incidentLat = evt.lat;
     this.incidentLon = evt.lon;
     this.incidentId = evt.incidentId;
-  };
+  }
 
   // ========= Outgoing Messages =========
+
+  sendUpgradeAsHero() {
+    console.log('hero ', this.socket.id, ' sendUpgradeAsHero()')
+    this.socket.emit(NewSocketSends.ASK_TO_BE_HERO, {emailAddr: 'cody@email.com'})
+  }
 
   sendDispatchAccepted() {
     console.log('hero ', this.socket.id, ' sendDispatchAccepted ');
@@ -75,7 +91,7 @@ class Hero {
       incidentId: this.incidentId,
       status: 'accepted',
     });
-  };
+  }
 
   // Send Heartbeat
   sendHb() {
@@ -85,7 +101,7 @@ class Hero {
       lon: this.lon,
       status: this.status,
     });
-  };
+  }
 }
 
 module.exports = Hero;
