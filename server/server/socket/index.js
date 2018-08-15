@@ -69,8 +69,8 @@ module.exports = io => {
     )
 
     registerNewConnectionHandlers(serverSocket)
-    registerCitizenHandlers(serverSocket)
-    registerHeroHandlers(serverSocket)
+    // registerCitizenHandlers(serverSocket)
+    // registerHeroHandlers(serverSocket)
 
     // const existingSocketData = socketIdMap[serverSocket.id]
     // if (existingSocketData) {

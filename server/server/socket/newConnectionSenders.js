@@ -1,5 +1,3 @@
-const socketio = require('socket.io')
-
 const {
   ServerSendsToNewSocket,
 } = require('./MsgType');
@@ -13,4 +11,8 @@ const sendToClient = (socket, event, data) => {
 
 module.exports.sendTellHero = (socket) => {
   sendToClient(socket, ServerSendsToNewSocket.TELL_HERO, {});
+};
+
+module.exports.sendTellCitizen = (socket,id) => {
+  sendToClient(socket, ServerSendsToNewSocket.TELL_CITIZEN, {citizenId:id});
 };
