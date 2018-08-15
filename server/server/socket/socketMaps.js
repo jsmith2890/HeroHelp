@@ -6,6 +6,20 @@ const heroSocketMap = {}
 
 const citizenSocketMap = {}
 
+module.exports.getHeroIdFromSocket = socketId => {
+  if (heroSocketMap.hasOwnProperty(socketId)) {
+    return heroSocketMap[socketId].id;
+  }
+  throw new Error('hero socket not found: ',socketId)
+}
+
+module.exports.getCitizenIdFromSocket = socketId => {
+  if (citizenSocketMap.hasOwnProperty(socketId)) {
+    return citizenSocketMap[socketId].id;
+  }
+  throw new Error('citizen socket not found: ',socketId)
+}
+
 module.exports.newSocket = socket => {
   newSocketMap[socket.id] = {
     socket: socket,
