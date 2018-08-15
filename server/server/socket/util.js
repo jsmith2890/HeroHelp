@@ -36,3 +36,10 @@ function distanceTwoPoints(lat1,lon1,lat2,lon2) {
 module.exports.setIncidentDistance = (incident,lat,lon) => {
   incident.distance = distanceTwoPoints(incident.lat,incident.lon,lat,lon);
 }
+
+//caller passes incident and location they want to know distance to.
+//incident object is updated with a new key with the distance so
+//caller can sort a list of them, etc
+module.exports.setHeroDistance = (hero,lat,lon) => {
+  hero.distance = distanceTwoPoints(hero.presenceLat,hero.presenceLon,lat,lon);
+}
