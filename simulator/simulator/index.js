@@ -1,30 +1,8 @@
-// const chai = require('chai');
-// const expect = chai.expect;
-// const sinon = require('sinon');
-// const sinonChai = require('sinon-chai');
-// chai.use(sinonChai)
-// const Hero = require('./Hero')
-// const Citizen = require('./Citizen')
-
-// const heroes = [];
-
-// const citizens = [];
-
-// let scenarios = [];
-
-// This function gets run on an interval.
-// function globalTimerHandler() {
-//   // For each hero, run their timer function
-//   heroes.forEach(hero => hero.tick());
-//   // For each scenario, run their timer function
-//   scenarios.forEach(scenario => scenario.timerHandler());
-// }
-
-// let globalTimer = setInterval(globalTimerHandler, 200); //200ms ticks
+const { HeroAction, CitizenAction } = require('./Actions');
 
 class ScenarioEngine {
   // A scenario is a list of action objects
-  constructor(scenario, tickInterval, citizens, heroes) {
+  constructor(actions = [], tickInterval = 5, citizens = [], heroes = []) {
     // Entities
     this.citizens = citizens;
     this.heroes = heroes;
@@ -34,22 +12,33 @@ class ScenarioEngine {
     this.tickCount = 0;
 
     //local data
-    this.scenario = scenario;
+    this.actions = actions;
     this.step = -1;
     this.completed = false;
 
-    // This function gets run on an interval.
-    function globalTimerHandler() {
-      // For each hero, run their timer function
-      this.heroes.forEach(hero => hero.tick());
-      // For each scenario, run their timer function
-      this.scenarios.forEach(scenario => scenario.tick());
-    }
-
-    this.globalTimer = setInterval(globalTimerHandler, 200); //200ms ticks
+    // Bindings
+    this.run = this.run.bind(this);
+    this.tick = this.tick.bind(this);
+    this.executeStep = this.executeStep.bind(this);
+    this.globalTimerHandler = this.globalTimerHandler.bind(this);
   }
 
-  tick = () => {
+  // Run the simulation
+  run() {
+    // This function gets run on an interval.
+    this.globalTimer = setInterval(this.globalTimerHandler, 200); //200ms ticks
+  }
+
+  globalTimerHandler() {
+    // For each hero, run their tick function (which is just a heartbeat atm)
+    this.heroes.forEach(hero => hero.tick());
+    // For each scenario, run their timer function
+    // this.scenarios.forEach(scenario => scenario.tick());
+    this.tick();
+  }
+
+  // Run a tick of the scenario
+  tick() {
     this.tickCount++;
     // Only run logic every X number of ticks
     if (this.tickCount % this.tickInterval !== 0) {
@@ -57,26 +46,33 @@ class ScenarioEngine {
     }
 
     this.step++;
-    console.log('scenario engine timer handler step=', this.step);
-    if (this.step < this.scenario.length) {
+    console.log();
+    console.log('Scenario Engine timer handler step =', this.step);
+    if (this.step < this.actions.length) {
       this.executeStep();
-    } else {
-      console.log(' -- scenario has completed');
-      this.completed = true;
-      clearInterval(this.timer);
     }
-  };
+    // If we've finished all the actions, stop the simulator
+    else {
+      console.log(' ------- scenario has completed -------');
+      this.completed = true;
+      clearInterval(this.globalTimer); //this.timer);
+    }
+  }
 
-  executeStep = () => {
-    const currentStep = this.scenario[this.step];
-    console.log('execute step ', this.step, ' currentstep=', currentStep);
+  // Execute the next action in the list of actions
+  executeStep() {
+    const currentStep = this.actions[this.step];
+    console.log();
+    console.log('EXECUTING STEP ', this.step, ' currentstep=', currentStep);
+    // If have a hero action for this step
     if (currentStep.hasOwnProperty('hero')) {
+      // Get the hero at the specified index
       const currentHero = this.heroes[currentStep.hero];
       switch (currentStep.action) {
-        case 't':
+        case HeroAction.TOGGLE_AVAILABILITY:
           currentHero.toggleStatus();
           break;
-        case 'a':
+        case HeroAction.ACCEPT_DISPATCH:
           currentHero.sendDispatchAccepted();
           break;
         default:
@@ -84,10 +80,12 @@ class ScenarioEngine {
       }
       return;
     }
+    // If have a citizen action for this step
     if (currentStep.hasOwnProperty('citizen')) {
+      // Get the citizen at the specified index
       const currentCitizen = this.citizens[currentStep.citizen];
       switch (currentStep.action) {
-        case 'h':
+        case CitizenAction.ASK_FOR_HERO_HELP:
           currentCitizen.sendRequestHelp();
           break;
         default:
@@ -100,7 +98,7 @@ class ScenarioEngine {
       return;
     }
     console.log('sleep');
-  };
+  }
 }
 
 module.exports = ScenarioEngine;
