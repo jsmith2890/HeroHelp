@@ -7,8 +7,10 @@ module.exports.registerHeroHandlers = socket => {
   // availabilityStatus ("available", "unavailable")
   socket.on(HeroSends.GIVE_HEARTBEAT, (lat, lon, availabilityStatus) => {
     try {
+      console.log('GIVE_HEARTBEAT received. lat:', lat, 'lon:', lon, 'status:', availabilityStatus)
       // Save the heartbeat info for the hero (check if available)
       // Check if the hero is associated with an Incident and what's the status of that incident
+
       const incidentState = 'todo'
       const heroIsCloseToIncident = false
       if (incidentState === IncidentState.HERO_ENROUTE && heroIsCloseToIncident) {
@@ -38,6 +40,7 @@ module.exports.registerHeroHandlers = socket => {
 
   socket.on(HeroSends.ASK_RESOLVE_INCIDENT, (citizenId, lat, lon) => {
     try {
+      console.log('Received ASK_RESOLVE_INCIDENT msg from hero. citizenId:', citizenId, 'lat:', lat, 'lon:', lon)
       // handleAskForHeroHelp(socket, citizenId, lat, lon)
     } catch (err) {
       console.error(err)

@@ -21,6 +21,10 @@ module.exports.registerNewConnectionHandlers = socket => {
         {email: msgBody.emailAddr}
       })
 
+      if (!user) {
+        throw new Error('Unknown email:', msgBody.emailAddr)
+      }
+
       const hero = await Hero.findOne({where:
         {userId: user.id}
       })
