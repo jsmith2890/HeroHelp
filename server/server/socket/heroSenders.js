@@ -4,9 +4,7 @@ const {
   ServerSendsToHero,
 } = require('./MsgType');
 
-const sendToClient = (socket, event, data) => {
-  socket.emit(event, data);
-};
+const { sendToClient } = require('./util')
 
 // ========== Send data to Hero via socket ========
 
