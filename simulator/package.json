@@ -6,6 +6,7 @@
   "scripts": {
     "start-dev": "NODE_ENV='development' npm run start-simulator",
     "start-simulator": "nodemon simulator -e html,js,scss --ignore public --ignore client",
+    "start-scenario": "node scenarios",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
