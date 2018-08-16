@@ -1,7 +1,13 @@
-const {CitizenSends, IncidentState} = require('./MsgType')
+const {
+  CitizenSends,
+  IncidentState,
+  CitizenState,
+  HeroState
+} = require('./MsgType')
 const {sendAckHelpRequestToCitizen} = require('./citizenSenders')
+const {sendDispatchToHero} = require('./heroSenders')
 const {queueIncidentDispatch} = require('./internalEventHandlers')
-const {getCitizenIdFromSocket} = require('./socketMaps')
+const {getCitizenIdFromSocket, getSocketFromHeroId} = require('./socketMaps')
 
 const {Citizen, Hero, User, Incident} = require('../db/models')
 const Sequelize = require('sequelize')
@@ -20,7 +26,7 @@ module.exports.registerCitizenHandlers = socket => {
       //check if citizen is already linked to an incident
       incident = await Incident.findOne({
         where: {
-          state: {[Op.ne]: 'RESOLVED'},
+          state: {[Op.ne]: IncidentState.RESOLVED},
           citizenId
         }
       })
@@ -39,11 +45,38 @@ module.exports.registerCitizenHandlers = socket => {
         incident = await Incident.create({
           citizenId,
           lat,
-          lon
+          lon,
+          state: IncidentState.CREATED
         })
       }
       queueIncidentDispatch(incident.id)
+
+      // Update entities in DB
+      const citizen = await Citizen.findById(citizenId)
+      await citizen.update({state: CitizenState.WAIT_FOR_HERO_DISPATCH})
+
+      // Notify Citizen
       sendAckHelpRequestToCitizen(socket)
+
+      // ***** START Temporary Dispatch code for testing ONLY. ****
+      // Dispatch to heroId 1
+      const heroIdTest = 1
+      // Update entities in DB
+      await incident.update({
+        heroId: heroIdTest,
+        state: IncidentState.WAITING_FOR_HERO_DECISION
+      })
+      const hero = await Hero.findById(heroIdTest)
+      await hero.update({state: HeroState.DECIDING_ON_DISPATCH})
+
+      // Send dispatch msg to hero
+      // ***********Socket.emit not working
+      const heroSocket = getSocketFromHeroId(heroIdTest)
+      heroSocket.emit("GIVE_DISPATCH")
+      console.log('heroSocket:', heroSocket)
+      const timeout = 30 // seconds
+      sendDispatchToHero(heroSocket, lat, lon, incident.id, timeout)
+      // ******   END *************
     } catch (err) {
       console.log('unable to create incident', err)
       //citizen won't get response if can't create incident

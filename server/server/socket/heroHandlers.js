@@ -23,14 +23,20 @@ const {setIncidentDistance, distanceTwoPoints} = require('./util')
 // Utility function
 async function getHeroIncidentCitizen(heroSocketId) {
   const heroId = getHeroIdFromSocket(heroSocketId)
+  console.log('heroId from map:', heroId)
   const hero = await Hero.findById(heroId)
+  console.log('hero from DB:', hero)
   const incident = await Incident.findOne({
     where: {
       state: {[Op.ne]: IncidentState.RESOLVED},
       heroId: hero.id
     }
   })
-  const citizen = await Citizen.findOne(incident.citizenId)
+  console.log('incident from DB:', incident)
+  if (!incident) {
+    throw new Error('No open incident with heroId:', heroId)
+  }
+  const citizen = await Citizen.findById(incident.citizenId)
   return [hero, incident, citizen]
 }
 
@@ -164,7 +170,7 @@ module.exports.registerHeroHandlers = socket => {
         throw new Error('Not implemented yet')
       }
       // Update Entities involved with incident (Citizen, Incident, Hero)
-      const [hero, incident, citizen] = getHeroIncidentCitizen(socket.id)
+      const [hero, incident, citizen] = await getHeroIncidentCitizen(socket.id)
       await hero.update({state: HeroState.ENROUTE})
       await incident.update({state: IncidentState.HERO_ENROUTE})
       await citizen.update({state: CitizenState.KNOWS_HERO_ENROUTE})

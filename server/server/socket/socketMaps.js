@@ -16,6 +16,19 @@ module.exports.getHeroIdFromSocket = socketId => {
   throw new Error('hero socket not found: ',socketId)
 }
 
+module.exports.getSocketFromHeroId = heroId => {
+  // May need a better implementation*****Maybe a heroId to Socket map
+  const foundEntry = Object.entries(heroSocketMap).find((entry) => {
+    const [, socket] = entry
+    return socket.id === heroId
+  })
+  if (foundEntry) {
+    const [, socket] = foundEntry
+    return socket
+  }
+  throw new Error('Hero socket not found. heroId: ', heroId)
+}
+
 module.exports.getCitizenIdFromSocket = socketId => {
   if (citizenSocketMap.hasOwnProperty(socketId)) {
     return citizenSocketMap[socketId].id;

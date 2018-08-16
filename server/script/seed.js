@@ -11,12 +11,15 @@ async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
-  // Creating Users (for login)
+  // Creating Users (for login). Can't use bulkCreate for Users or
+  // else it won't create salts
   //await User.bulkCreate(sampleUsers)
   // create some users
-  await Promise.all(sampleUsers.map(user => {
-    User.create(user)
-  }))
+  // Using await Promise.all sometimes will yield diff order of ids
+  for (let i = 0; i < sampleUsers.length; i++) {
+    const user = sampleUsers[i]
+    await User.create(user)
+  }
   console.log(`seeded ${sampleUsers.length} users`)
 
   // Create Citizens

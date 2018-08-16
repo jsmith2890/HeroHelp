@@ -47,7 +47,7 @@ function createScenario() {
       action: HeroAction.TELL_DISPATCH_DECISION,
       data: {
         incidentId: 1,
-        decision: 'accepted',
+        decision: 'accept',
       },
     },
   ];

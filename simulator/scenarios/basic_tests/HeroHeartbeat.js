@@ -21,8 +21,8 @@ function createScenario() {
       hero: 0,
       action: HeroAction.GIVE_HEARTBEAT,
       data: {
-        lat: 41.895367,
-        lon: -87.638977,
+        lat: 5,//41.895367,
+        lon: 5,//-87.638977,
         availabilityStatus: 'available',
       },
     },
