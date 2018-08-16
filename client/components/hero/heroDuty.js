@@ -7,7 +7,7 @@ import ToggleSwitch from 'toggle-switch-react-native';
 export default class HeroDuty extends React.Component {
 
   state = {
-    isOnToggleSwitch: true,
+    isOnToggleSwitch: false,
   };
 
   render() {

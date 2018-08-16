@@ -1,5 +1,6 @@
 import io from 'socket.io-client';
 import { AsyncStorage } from 'react-native';
+import { Constants, Location, Permissions } from 'expo';
 import { ENV_PATH } from '../secrets';
 import {
   ServerSendsToNewSocket,
@@ -40,12 +41,30 @@ console.log('Creating a socket connection to server:', ENV_PATH);
 
 const socket = io(ENV_PATH);
 
+
+//special function on interval to send geoloation and available/unavailable
+//status to server.
+let heartbeatTimer={}
+export const giveHeartbeat = async () => {
+  try {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    //assume they say yes
+    let location = await Location.getCurrentPositionAsync({});
+    socket.emit(HeroSends.GIVE_HEARTBEAT, {lat: location.coords.latitude, lon: location.coords.longitude, status:"available" });
+  } catch (error) {
+    console.error('Ask To Be Hero didnt send', error);
+  }
+};
+
 socket.on('connect', () => {
   console.log('websocket Connected!');
 
-  //New Socket establish connection
+  //New Socket establish connection and start heartbeating geolocation
   socket.on(ServerSendsToNewSocket.TELL_HERO, () => {
     console.log('received tell_hero');
+
+    heartbeatTimer=setInterval(giveHeartbeat,5000)
+
   });
 
   //New Socket establish connection
@@ -60,8 +79,9 @@ socket.on('connect', () => {
 
   //Hero
 
-  socket.on(ServerSendsToHero.ACK_RECEIVED_HEARTBEAT, ({ incidentsArr }) => {
-    store.dispatch(incidentsInArea(incidentsArr));
+  socket.on(ServerSendsToHero.ACK_RECEIVED_HEARTBEAT, ({ incidents }) => {
+    console.log('received ack hb',incidents);
+    store.dispatch(incidentsInArea(incidents));
   });
 
   socket.on(
@@ -151,6 +171,7 @@ export const askToBeHero = ({ email }) => {
     console.error('Ask To Be Hero didnt send', error);
   }
 };
+
 export const isAvailable = ({ lat, lon, availabilityStatus }) => {
   try {
     socket.emit(HeroSends.GIVE_HEARTBEAT, { lat, lon, availabilityStatus });

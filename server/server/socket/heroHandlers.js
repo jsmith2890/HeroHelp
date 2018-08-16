@@ -114,10 +114,10 @@ async function processIfHeroOnSite(socket, hero, lat, lon) {
 
 module.exports.registerHeroHandlers = socket => {
   socket.on(HeroSends.GIVE_HEARTBEAT, async msgBody => {
-    console.log('GIVE_HEARTBEAT received.')
+    console.log('GIVE_HEARTBEAT received. ',msgBody)
     const {lat, lon, status} = msgBody
 
-    const heroIncidentList = []
+    let heroIncidentList = []
     try {
       //get hero
       const heroId = getHeroIdFromSocket(socket.id)
@@ -131,7 +131,7 @@ module.exports.registerHeroHandlers = socket => {
       })
 
       //find incidents nearby not assigned to hero and not closed
-      heroIncidentList.concat(getNearbyIncidents(heroId, lat, lon, 10))
+      heroIncidentList=await getNearbyIncidents(heroId, lat, lon, 10)
 
       // Check if hero is ENROUTE and close enough to the incident site
       processIfHeroOnSite(socket, hero, lat, lon)
