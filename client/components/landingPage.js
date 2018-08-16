@@ -1,20 +1,33 @@
 import React from 'react';
-import { Image } from 'react-native';
+import { AsyncStorage, Image } from 'react-native';
 import { Button, Text, Container } from 'native-base';
 import { Col, Row, Grid } from 'react-native-easy-grid';
+import { askToBeCitizen } from '../socket';
 
 export default class LandingPage extends React.Component {
   pressHero = () => {
     this.props.navigation.navigate('HeroLogin');
   };
 
-  pressCitizen = () => {
+  pressCitizen = async () => {
+    const body = {}
+    try {
+      let citizenId = await AsyncStorage.getItem('CITIZENID');
+      console.log("got citizenId of", citizenId);
+      if (citizenId !== null) {
+        body.citizenId = +citizenId
+      }
+    } catch (err) {
+      console.error("error fetching citizenid from storage", err)
+    }
+    askToBeCitizen(body);
+
     this.props.navigation.navigate('CitizenHome')
   };
 
   render() {
     return (
-      <Container style={{ flex: 1}}>
+      <Container style={{ flex: 1 }}>
         <Grid>
           <Row size={3} style={{ paddingTop: 80, paddingLeft: 10 }}>
             <Image source={require('./assets/logo.png')} />
