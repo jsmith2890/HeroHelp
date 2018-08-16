@@ -45,7 +45,7 @@ export const addNewHero = hero => async dispatch => {
 };
 
 // REDUCER
-export default function(state = defaultState, action) {
+export default function (state = defaultState, action) {
   switch (action.type) {
     case GOT_NEW_HERO:
       return {
@@ -73,12 +73,12 @@ export default function(state = defaultState, action) {
         ...state,
         status: action.status,
       };
-      case STATUS_ENROUTE:
+    case STATUS_ENROUTE:
       return {
         ...state,
         status: action.status,
       };
-      case STATUS_ONSITE:
+    case STATUS_ONSITE:
       return {
         ...state,
         status: action.status,
