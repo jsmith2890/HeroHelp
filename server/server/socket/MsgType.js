@@ -2,7 +2,6 @@
 // messages that app will send to identify as citizen or hero
 module.exports.NewSocketSends = {
   ASK_TO_BE_HERO: "ASK_TO_BE_HERO", //token passed to hero on 200 OK LOGIN
-  REGISTER_AS_CITIZEN: "REGISTER_AS_CITIZEN", //new instance
   ASK_TO_BE_CITIZEN: "ASK_TO_BE_CITIZEN", //token saved by app instance
 }
 
@@ -21,8 +20,6 @@ module.exports.CitizenSends = {
 
 // =========== Hero Client ===========
 module.exports.HeroSends = {
-  ASK_TO_LOG_IN: "ASK_TO_LOG_IN",
-  ASK_TO_REGISTER: "ASK_TO_REGISTER",
   GIVE_HEARTBEAT: "GIVE_HEARTBEAT", // lat, lon, availabilityStatus ('available', 'unavailable')
   TELL_DISPATCH_DECISION: "TELL_DISPATCH_DECISION", // incidentId, decision ('accepted', 'declined')
   ASK_RESOLVE_INCIDENT: "ASK_RESOLVE_INCIDENT" // incidentId
@@ -31,7 +28,6 @@ module.exports.HeroSends = {
 // =========== Server To Citizen ===========
 // Msgs that server will send to client
 module.exports.ServerSendsToCitizen = {
-  GIVE_CITIZEN_ID: "GIVE_CITIZEN_ID",
   ACK_RECEIVED_HELP_REQUEST: "ACK_RECEIVED_HELP_REQUEST", // No payload
   HERO_ENROUTE: "HERO_ENROUTE", // lat, lon, heroImage, heroName
   HERO_ON_SITE: "HERO_ON_SITE", // lat, lon
@@ -41,14 +37,13 @@ module.exports.ServerSendsToCitizen = {
 
 // =========== Server To Hero ===========
 module.exports.ServerSendsToHero = {
-  GIVE_HERO_ID: "GIVE_HERO_ID",
   ACK_RECEIVED_HEARTBEAT: "ACK_RECEIVED_HEARTBEAT", // incidentsArr[{lat, lon}]
   GIVE_DISPATCH: "GIVE_DISPATCH", // lat, lon, incidentId, timeout(sec), incidentInfo
   HERO_ON_SITE: "HERO_ON_SITE", // lat, lon
   CANCEL_DISPATCH: "CANCEL_DISPATCH", // incidentId
   ACK_DISPATCH_DECISION: "ACK_DISPATCH_DECISION", // lat, lon, incidentId
   ACK_RESOLVE_INCIDENT: "ACK_RESOLVE_INCIDENT", // No payload
-  GIVE_ERROR: "GIVE_ERROR",
+  // GIVE_ERROR: "GIVE_ERROR",
 };
 
 // ========= Incident States =========

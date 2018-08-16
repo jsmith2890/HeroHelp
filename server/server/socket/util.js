@@ -29,6 +29,7 @@ function distanceTwoPoints(lat1,lon1,lat2,lon2) {
   var d = R * c / 1000; // Distance in km
   return d;
 }
+module.exports.distanceTwoPoints = distanceTwoPoints
 
 //caller passes incident and location they want to know distance to.
 //incident object is updated with a new key with the distance so

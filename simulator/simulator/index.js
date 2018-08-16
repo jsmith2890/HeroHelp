@@ -68,42 +68,49 @@ class ScenarioEngine {
     if (currentStep.hasOwnProperty('hero')) {
       // Get the hero at the specified index
       const currentHero = this.heroes[currentStep.hero];
-      switch (currentStep.action) {
-        case HeroAction.TOGGLE_AVAILABILITY:
-          currentHero.toggleStatus();
-          break;
-        case HeroAction.ACCEPT_DISPATCH:
-          currentHero.sendDispatchAccepted();
-          break;
-        case HeroAction.ASK_TO_BE_HERO:
-          currentHero.sendUpgradeAsHero();
-          break;
-        default:
-          console.log('unknown hero action ', currentStep.action, ' ignored');
-      }
+      this.executeHeroStep(currentHero, currentStep);
       return;
     }
     // If have a citizen action for this step
     if (currentStep.hasOwnProperty('citizen')) {
       // Get the citizen at the specified index
       const currentCitizen = this.citizens[currentStep.citizen];
-      switch (currentStep.action) {
-        case CitizenAction.ASK_FOR_HERO_HELP:
-          currentCitizen.sendRequestHelp();
-          break;
-        case CitizenAction.ASK_TO_BE_CITIZEN:
-          currentCitizen.sendUpgradeAsCitizen();
-          break;
-        default:
-          console.log(
-            'unknown citizen action ',
-            currentStep.action,
-            ' ignored'
-          );
-      }
+      this.executeCitizenStep(currentCitizen, currentStep);
       return;
     }
     console.log('sleep');
+  }
+
+  executeHeroStep(currentHero, currentStep) {
+    switch (currentStep.action) {
+      case HeroAction.TOGGLE_AVAILABILITY:
+        currentHero.toggleStatus(currentStep.data);
+        break;
+      case HeroAction.TELL_DISPATCH_DECISION:
+        currentHero.sendDispatchDecision(currentStep.data);
+        break;
+      case HeroAction.ASK_TO_BE_HERO:
+        currentHero.sendUpgradeAsHero(currentStep.data);
+        break;
+      case HeroAction.GIVE_HEARTBEAT:
+        currentHero.sendHb(currentStep.data)
+        break;
+      default:
+        console.log('unknown hero action ', currentStep.action, ' ignored');
+    }
+  }
+
+  executeCitizenStep(currentCitizen, currentStep) {
+    switch (currentStep.action) {
+      case CitizenAction.ASK_FOR_HERO_HELP:
+        currentCitizen.sendRequestHelp(currentStep.data);
+        break;
+      case CitizenAction.ASK_TO_BE_CITIZEN:
+        currentCitizen.sendUpgradeAsCitizen(currentStep.data);
+        break;
+      default:
+        console.log('unknown citizen action ', currentStep.action, ' ignored');
+    }
   }
 }
 
