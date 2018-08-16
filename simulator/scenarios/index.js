@@ -13,9 +13,9 @@ function scenarioRunner() {
   // AskToBeHero_Invalid().run()
   // AskToBeHero_Valid().run()
   // AskToBeCitizen_Valid().run()
-  // AskForHeroHelp().run()  // TODO
-  // HeroHeartbeat().run(); // TODO
-  HeroTellDispatchDecision().run(); // TODO
+  AskForHeroHelp().run()  // works?
+  // HeroHeartbeat().run(); // mostly works. Need to send status back
+  // HeroTellDispatchDecision().run(); // dispatch not working
   // HeroOnSite().run(); // TODO
   // HeroResolveIncident().run();  // TODO
 }

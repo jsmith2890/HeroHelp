@@ -37,15 +37,15 @@ class Citizen {
   // ========= Handle Incoming Messages =========
 
   recvUpgradeAck(evt) {
-    console.log('citizen ', this.socket.id, 'recvUpgradeAck ', evt);
+    console.log('citizen ', this.socket.id, 'TELL_CITIZEN recvUpgradeAck ', evt);
   }
 
   recvRequestHelpAck(evt) {
-    console.log('citizen ', this.socket.id, ' recvRequestHelpAck ', evt);
+    console.log('citizen ', this.socket.id, 'ACK_RECEIVED_HELP_REQUEST recvRequestHelpAck ', evt);
   }
 
   recvHeroOnTheWay(evt) {
-    console.log('citizen', this.socket.id, ' recvHeroOnTheWay ', evt);
+    console.log('citizen', this.socket.id, 'HERO_ENROUTE recvHeroOnTheWay ', evt);
   }
 
   // ========= Handle Outgoing Messages =========

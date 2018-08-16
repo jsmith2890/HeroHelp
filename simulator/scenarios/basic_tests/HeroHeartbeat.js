@@ -28,6 +28,19 @@ function createScenario() {
     },
   ];
 
+  /*
+  Expected Results
+
+  Client:
+    Hero receives TELL_HERO (no payload)
+    Hero receives ACK_RECEIVED_HEARTBEAT (array of nearby [lat, lon] incidents, status)
+
+  Server:
+    Hero ASK_TO_BE_HERO received
+    Hero GIVE_HEARTBEAT received
+    Database updated with latest heartbeat data
+  */
+
   const tickInterval = 5;
   return new ScenarioEngine(actions, tickInterval, citizens, heroes);
 }

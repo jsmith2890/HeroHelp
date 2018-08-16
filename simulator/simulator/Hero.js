@@ -82,30 +82,30 @@ class Hero {
   // ========= Handle Incoming Messages =========
 
   recvUpgradeAck(evt) {
-    console.log('hero ', this.socket.id, 'recvUpgradeAck ', evt);
+    console.log('hero ', this.socket.id, 'TELL_HERO recvUpgradeAck ', evt);
   }
 
   recvHbAck(evt) {
-    console.log('hero ', this.socket.id, ' recvHbAck ', evt);
+    console.log('hero ', this.socket.id, 'ACK_RECEIVED_HEARTBEAT recvHbAck ', evt);
   }
 
   recvDispatch(evt) {
-    console.log('hero ', this.socket.id, ' recvDispatch ', evt);
+    console.log('hero ', this.socket.id, 'GIVE_DISPATCH recvDispatch ', evt);
     this.incidentLat = evt.lat;
     this.incidentLon = evt.lon;
     this.incidentId = evt.incidentId;
   }
 
   recvHeroOnSite(evt) {
-    console.log('hero ', this.socket.id, ' recvHeroOnSite ', evt);
+    console.log('hero ', this.socket.id, 'HERO_ON_SITE recvHeroOnSite ', evt);
   }
 
   recvAckDispatchDecision(evt) {
-    console.log('hero ', this.socket.id, ' recvAckDispatchDecision ', evt);
+    console.log('hero ', this.socket.id, 'ACK_DISPATCH_DECISION recvAckDispatchDecision ', evt);
   }
 
   recvAckResolveIncident(evt) {
-    console.log('hero ', this.socket.id, ' recvAckResolveIncident ', evt);
+    console.log('hero ', this.socket.id, 'ACK_RESOLVE_INCIDENT recvAckResolveIncident ', evt);
   }
 
   // ========= Outgoing Messages =========

@@ -51,6 +51,26 @@ function createScenario() {
       },
     },
   ];
+    /*
+  Expected Results
+
+  Client:
+    Hero receives TELL_HERO (no payload)
+    Hero receives ACK_RECEIVED_HEARTBEAT (lat, lon, status)
+    Citizen receives TELL_CITIZEN (no payload)
+    Citizen receives ACK_RECEIVED_HELP_REQUEST (no payload)
+    Hero receives GIVE_DISPATCH (no payload)  <== doesn't work atm
+    Hero receives ACK_DISPATCH_DECISION (lat, lon, incidentId)
+
+  Server:
+    Hero ASK_TO_BE_HERO received
+    Hero GIVE_HEARTBEAT received
+    Database updated with latest heartbeat data
+    Citizen ASK_TO_BE_CITIZEN received
+    Citizen ASK_HERO_FOR_HELP received
+    Create incident and dispatch it to Hero
+    Hero TELL_DISPATCH_DECISION received
+  */
 
   const tickInterval = 5;
   return new ScenarioEngine(actions, tickInterval, citizens, heroes);
