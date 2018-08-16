@@ -22,7 +22,10 @@ export const heroArrived = hero => ({ type: HERO_HERE, hero });
 export const incidentComplete = () => ({ type: INCIDENT_RESOLVED });
 export const statusIdle = status => ({ type: STATUS_IDLE, status });
 export const statusWait = status => ({ type: STATUS_WAIT_FOR_HERO, status });
-export const statusEnroute = status => ({ type: STATUS_HERO_ENROUTE, status });
+export const statusEnrouteCitizen = status => ({
+  type: STATUS_HERO_ENROUTE,
+  status,
+});
 export const statusOnSite = status => ({ type: STATUS_HERO_ONSITE, status });
 
 // REDUCER
@@ -38,7 +41,6 @@ export default function(state = defaultState, action) {
         ...state,
         hero: action.hero,
       };
-    // This needs attention!!!
     case INCIDENT_RESOLVED:
       return {
         hero: {},
