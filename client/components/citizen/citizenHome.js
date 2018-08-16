@@ -21,17 +21,20 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#FFF',
     fontWeight: 'bold',
-    fontSize: 100
+    fontSize: 100,
+    
 
 
   }
 });
 
 export default class CitzenHome extends React.Component {
+
+ 
   render() {
     return (
       <Container style={styles.container}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity disabled={true} style={styles.button}>
           <Text style={styles.buttonText}>Help!</Text>
         </TouchableOpacity>
       </Container>
