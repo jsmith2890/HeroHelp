@@ -44,7 +44,7 @@ module.exports.ServerSendsToHero = {
   //GIVE_HERO_ID: "GIVE_HERO_ID",
   ACK_RECEIVED_HEARTBEAT: 'ACK_RECEIVED_HEARTBEAT', // incidentsArr[{lat, lon}]
   GIVE_DISPATCH: 'GIVE_DISPATCH', // lat, lon, incidentId, timeout(sec), incidentInfo
-  HERO_ON_SITE: 'HERO_ON_SITE', // lat, lon
+  HERO_ON_SITE: 'HERO_ON_SITE', //nothing -- just notification to allow client to render CLOSE button
   CANCEL_DISPATCH: 'CANCEL_DISPATCH', // incidentId
   ACK_DISPATCH_DECISION: 'ACK_DISPATCH_DECISION', // lat, lon, incidentId
   ACK_RESOLVE_INCIDENT: 'ACK_RESOLVE_INCIDENT', // No payload

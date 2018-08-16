@@ -1,6 +1,7 @@
 import io from 'socket.io-client';
 import { ENV_PATH } from '../secrets';
 import {
+  ServerSendsToNewSocket,
   NewSocketSends,
   ServerSendsToCitizen,
   ServerSendsToHero,
@@ -41,8 +42,13 @@ const socket = io(ENV_PATH);
 socket.on('connect', () => {
   console.log('websocket Connected!');
 
+  //New Socket establish connection
+  socket.on(
+    ServerSendsToNewSocket.TELL_HERO, () => { console.log('received tell_hero') }
+  )
+
   //Hero
-  
+
   socket.on(
     (ServerSendsToHero.ACK_RECEIVED_HEARTBEAT = ({ incidentsArr }) => {
       store.dispatch(incidentsInArea(incidentsArr));
@@ -157,6 +163,13 @@ socket.on('connect', () => {
 });
 
 //Hero
+export const askToBeHero = ({ email }) => {
+  try {
+    socket.emit(NewSocketSends.ASK_TO_BE_HERO, { emailAddr: email });
+  } catch (error) {
+    console.error('Ask To Be Hero didnt send', error);
+  }
+}
 export const isAvailable = ({ lat, lon, availabilityStatus }) => {
   try {
     socket.emit(HeroSends.GIVE_HEARTBEAT, { lat, lon, availabilityStatus });

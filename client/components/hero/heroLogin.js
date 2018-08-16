@@ -29,9 +29,9 @@ class HeroLogin extends Component {
     this.props.login(email, password, method);
   };
 
-  pressSignUp = () => {
-    this.props.navigation.navigate('HeroSignUp');
-  };
+  // pressSignUp = () => {
+  //   this.props.navigation.navigate('HeroSignUp');
+  // };
 
   render() {
     return (
@@ -65,9 +65,9 @@ class HeroLogin extends Component {
               </Button>
             </Form>
           </View>
-          <Button onPress={this.pressSignUp} danger block style={styles.button}>
+          {/* <Button onPress={this.pressSignUp} danger block style={styles.button}>
             <Text>Sign Up</Text>
-          </Button>
+          </Button> */}
         </Content>
       </Container>
     );
