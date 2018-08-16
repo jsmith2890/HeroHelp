@@ -15,3 +15,15 @@ module.exports.sendAckHeartbeatToHero = (socket,incidents) => {
 module.exports.sendDispatchToHero = (socket, incidentData) => {
   sendToClient(socket, ServerSendsToHero.GIVE_DISPATCH, incidentData);
 };
+
+module.exports.sendAckDispatchDecisionToHero = (socket, incidentLat, incidentLon, incidentId) => {
+  sendToClient(socket, ServerSendsToHero.ACK_DISPATCH_DECISION, {incidentLat, incidentLon, incidentId});
+};
+
+module.exports.sendHeroOnSiteToHero = (socket, lat, lon) => {
+  sendToClient(socket, ServerSendsToHero.HERO_ON_SITE, { lat, lon });
+};
+
+module.exports.sendAckResolveIncidentToHero = (socket) => {
+  sendToClient(socket, ServerSendsToHero.ACK_RESOLVE_INCIDENT, {});
+};

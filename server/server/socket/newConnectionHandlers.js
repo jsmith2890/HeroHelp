@@ -1,82 +1,84 @@
-const {NewSocketSends, IncidentState} = require('./MsgType')
+const {NewSocketSends, IncidentState, CitizenState} = require('./MsgType')
 // const {  } = require('./citizenSenders');
-const {sendTellHero,sendTellCitizen} = require('./newConnectionSenders')
+const {sendTellHero, sendTellCitizen} = require('./newConnectionSenders')
 
-const {Citizen,Hero,User} = require('../db/models')
+const {Citizen, Hero, User} = require('../db/models')
 
-const {deleteSocket,promoteSocketToHero,promoteSocketToCitizen} = require ('./socketMaps')
+const {
+  deleteSocket,
+  promoteSocketToHero,
+  promoteSocketToCitizen
+} = require('./socketMaps')
 
-const { registerCitizenHandlers } = require('./citizenHandlers')
-const { registerHeroHandlers } = require('./heroHandlers');
+const {registerCitizenHandlers} = require('./citizenHandlers')
+const {registerHeroHandlers} = require('./heroHandlers')
 
 // Handle incoming messages from Citizens
 module.exports.registerNewConnectionHandlers = socket => {
-
-  socket.on(NewSocketSends.ASK_TO_BE_HERO, async (msgBody) => {
+  socket.on(NewSocketSends.ASK_TO_BE_HERO, async msgBody => {
     console.log('ASK_TO_BE_HERO received')
     try {
-
       //find hero by email, then find the hero entry in db and mark 'online'
-      const user = await User.findOne({where:
-        {email: msgBody.emailAddr}
+      const user = await User.findOne({
+        where: {email: msgBody.emailAddr}
       })
 
       if (!user) {
         throw new Error('Unknown email:', msgBody.emailAddr)
       }
 
-      const hero = await Hero.findOne({where:
-        {userId: user.id}
+      const hero = await Hero.findOne({
+        where: {userId: user.id}
       })
 
       await hero.update({loginStatus: 'online'})
 
       //upgrade to hero
-      promoteSocketToHero(socket.id,hero.id)
-      sendTellHero(socket);
-      registerHeroHandlers(socket);
-
+      promoteSocketToHero(socket.id, hero.id)
+      sendTellHero(socket)
+      registerHeroHandlers(socket)
     } catch (err) {
       //auth failed -- drop cxn
       console.log('ASK_TO_BE_HERO error encountered - dropping cxn', err)
       socket.disconnect()
-      deleteSocket(socket.id);
+      deleteSocket(socket.id)
     }
   })
 
-  socket.on(NewSocketSends.ASK_TO_BE_CITIZEN, async (msgBody) => {
-    console.log('ASK_TO_BE_CITIZEN received',msgBody);
+  socket.on(NewSocketSends.ASK_TO_BE_CITIZEN, async msgBody => {
+    console.log('ASK_TO_BE_CITIZEN received', msgBody)
     //find citizen by id -- if exists, great, if not, create one
     //note -- basically a somewhat less RESTful POST here ;-)
-    let needNewCitizen = false;
+    const {citizenId} = msgBody
+    let needNewCitizen = false
 
-    if (msgBody.hasOwnProperty('citizenId')===false) {
-      needNewCitizen = true;
+    if (!citizenId) {
+      needNewCitizen = true
     }
 
-    let citizen;
+    let citizen
     //note: try{} inside of if() statement because not a real error if not-found
-    if (needNewCitizen===false) {
+    if (!needNewCitizen) {
       try {
-        citizen = await Citizen.findById(msgBody.citizenId)
-        await citizen.update({state:'IDLE'})
+        citizen = await Citizen.findById(citizenId)
+        await citizen.update({state: CitizenState.IDLE})
       } catch (err) {
-        needNewCitizen = true;
+        needNewCitizen = true
       }
     }
 
     try {
       if (needNewCitizen) {
-        citizen = await Citizen.create({state:'IDLE'})
+        citizen = await Citizen.create({state: CitizenState.IDLE})
       }
     } catch (err) {
       //db failure -- drop cxn
       console.log('ASK_TO_BE_CITIZEN error encountered - dropping cxn', err)
-      socket.disconnect();
-      deleteSocket(socket.id);
+      socket.disconnect()
+      deleteSocket(socket.id)
     }
-    promoteSocketToCitizen(socket.id,citizen.id)
-    sendTellCitizen(socket,citizen.id);
-    registerCitizenHandlers(socket);
+    promoteSocketToCitizen(socket.id, citizen.id)
+    sendTellCitizen(socket, citizen.id)
+    registerCitizenHandlers(socket)
   })
 }

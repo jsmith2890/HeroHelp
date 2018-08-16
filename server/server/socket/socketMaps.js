@@ -1,9 +1,12 @@
 const {Citizen,Hero,User} = require('../db/models')
 
+// socketId => socket
 const newSocketMap = {}
 
+// socketId => socket with id = heroId
 const heroSocketMap = {}
 
+// socketId => socket with id = citizenId
 const citizenSocketMap = {}
 
 module.exports.getHeroIdFromSocket = socketId => {
@@ -20,6 +23,19 @@ module.exports.getCitizenIdFromSocket = socketId => {
   throw new Error('citizen socket not found: ',socketId)
 }
 
+module.exports.getSocketFromCitizenId = citizenId => {
+  // May need a better implementation*****Maybe a citizenId to Socket map
+  const foundEntry = Object.entries(citizenSocketMap).find((entry) => {
+    const [, socket] = entry
+    return socket.id === citizenId
+  })
+  if (foundEntry) {
+    const [, socket] = foundEntry
+    return socket
+  }
+  throw new Error('citizen socket not found. citizenId: ', citizenId)
+}
+
 module.exports.newSocket = socket => {
   newSocketMap[socket.id] = {
     socket: socket,
@@ -29,7 +45,7 @@ module.exports.newSocket = socket => {
 module.exports.deleteSocket = async (socket) => {
   if (newSocketMap.hasOwnProperty(socket.id)) {
     delete newSocketMap[socket.id];
-    dumpSockets('after deleteSocket - newSocketMap');
+    printSockets('after deleteSocket - newSocketMap');
     return;
   }
   if (heroSocketMap.hasOwnProperty(socket.id)) {
@@ -43,7 +59,7 @@ module.exports.deleteSocket = async (socket) => {
     }
 
     delete heroSocketMap[socket.id];
-    dumpSockets('after deleteSocket - hero');
+    printSockets('after deleteSocket - hero');
     return;
   }
   if (citizenSocketMap.hasOwnProperty(socket.id)) {
@@ -57,7 +73,7 @@ module.exports.deleteSocket = async (socket) => {
     }
 
     delete citizenSocketMap[socket.id];
-    dumpSockets('after deleteSocket - citizen')
+    printSockets('after deleteSocket - citizen')
   }
 }
 
@@ -70,7 +86,7 @@ module.exports.promoteSocketToHero = (socketId,heroId) => {
   } else {
     throw new Error('promoteSocketToHero: socket id ',socketId,' not found')
   }
-  dumpSockets('after promoteSocketToHero');
+  printSockets('after promoteSocketToHero');
 }
 
 module.exports.promoteSocketToCitizen = (socketId,citizenId) => {
@@ -81,10 +97,10 @@ module.exports.promoteSocketToCitizen = (socketId,citizenId) => {
   } else {
     throw new Error('promoteSocketToCitizen: socket id ',socketId,' not found')
   }
-  dumpSockets('after promoteSocketToCitizen')
+  printSockets('after promoteSocketToCitizen')
 }
 
-function dumpSockets(desc) {
+function printSockets(desc) {
   console.log(desc)
   console.log('-newSocketMap: ',Object.keys(newSocketMap));
   console.log('-heroSocketMap: ',Object.keys(heroSocketMap));
