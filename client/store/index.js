@@ -20,4 +20,4 @@ const store = createStore(reducer, middleware);
 export default store;
 export * from './heroes';
 export * from './user';
-export * from './citizen';
+export * from './citizens';

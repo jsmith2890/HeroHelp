@@ -26,7 +26,7 @@ export const statusEnrouteCitizen = status => ({
   type: STATUS_HERO_ENROUTE,
   status,
 });
-export const statusOnSite = status => ({ type: STATUS_HERO_ONSITE, status });
+export const statusOnSiteCitizen = status => ({ type: STATUS_HERO_ONSITE, status });
 
 // REDUCER
 export default function(state = defaultState, action) {

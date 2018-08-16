@@ -32,7 +32,7 @@ export const incidentsInArea = incidents => ({
 });
 export const statusDeciding = status => ({ type: STATUS_DECIDING, status });
 export const statusEnrouteHero = status => ({ type: STATUS_ENROUTE, status });
-export const statusOnSite = status => ({ type: STATUS_ONSITE, status });
+export const statusOnSiteHero = status => ({ type: STATUS_ONSITE, status });
 
 // THUNK CREATOR
 export const addNewHero = hero => async dispatch => {

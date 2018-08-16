@@ -16,17 +16,15 @@ import {
   incidentsInArea,
   statusEnrouteHero,
   statusDeciding,
-  statusOnSite,
+  statusOnSiteHero,
 } from '../store/heroes';
 import {
   heroAssigned,
   heroArrived,
   incidentComplete,
   statusEnrouteCitizen,
-  statusIdle,
-  statusOnSite,
+  statusOnSiteCitizen,
   statusWait,
-  statusEnrouteCitizen,
 } from '../store/citizens';
 
 // Verify that the Server websocket address is defined
@@ -104,7 +102,7 @@ socket.on('connect', () => {
   );
   socket.on(
     (HeroState.ON_SITE = status => {
-      store.dispatch(statusOnSite(status));
+      store.dispatch(statusOnSiteHero(status));
     }),
   );
 
@@ -153,7 +151,7 @@ socket.on('connect', () => {
   );
   socket.on(
     (CitizenState.KNOWS_HERO_ON_SITE = status => {
-      store.dispatch(statusOnSite(status));
+      store.dispatch(statusOnSiteCitizen(status));
     }),
   );
 });
