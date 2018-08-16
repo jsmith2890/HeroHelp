@@ -1,4 +1,5 @@
 import io from 'socket.io-client';
+import { AsyncStorage } from 'react-native';
 import { ENV_PATH } from '../secrets';
 import {
   ServerSendsToNewSocket,
@@ -45,6 +46,16 @@ socket.on('connect', () => {
   //New Socket establish connection
   socket.on(ServerSendsToNewSocket.TELL_HERO, () => {
     console.log('received tell_hero');
+  });
+
+  //New Socket establish connection
+  socket.on(ServerSendsToNewSocket.TELL_CITIZEN, async ({ citizenId }) => {
+    console.log('received tell_citizen ', citizenId);
+    try {
+      await AsyncStorage.setItem('CITIZENID', citizenId.toString())
+    } catch (err) {
+      console.log('error saving citizenId', err)
+    }
   });
 
   //Hero
@@ -165,9 +176,17 @@ export const resolveIncident = ({ incidentId }) => {
 };
 
 //Citizen
-export const pushHelp = ({ citizenId, lat, lon }) => {
+export const askToBeCitizen = (body) => {
   try {
-    socket.emit(CitizenSends.ASK_FOR_HERO_HELP, { citizenId, lat, lon });
+    socket.emit(NewSocketSends.ASK_TO_BE_CITIZEN, body);
+  } catch (error) {
+    console.error('Ask To Be Citizen didnt send', error);
+  }
+};
+
+export const pushHelp = ({ lat, lon }) => {
+  try {
+    socket.emit(CitizenSends.ASK_FOR_HERO_HELP, { lat, lon });
   } catch (error) {
     console.error('Didnt ask for help', error);
   }

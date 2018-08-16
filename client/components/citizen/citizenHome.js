@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View, TextInput } from 'react-native';
 import { Text, Container } from 'native-base';
+import { pushHelp } from '../../socket'
 
 const styles = StyleSheet.create({
  container: {
@@ -22,7 +23,7 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontWeight: 'bold',
     fontSize: 100,
-    
+
 
 
   }
@@ -30,11 +31,14 @@ const styles = StyleSheet.create({
 
 export default class CitzenHome extends React.Component {
 
- 
+  pressHelpHandler = () => {
+    pushHelp(49,-87);
+  }
+
   render() {
     return (
       <Container style={styles.container}>
-        <TouchableOpacity disabled={true} style={styles.button}>
+        <TouchableOpacity onPress={this.pressHelpHandler} style={styles.button}>
           <Text style={styles.buttonText}>Help!</Text>
         </TouchableOpacity>
       </Container>
