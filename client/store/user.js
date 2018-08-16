@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { ENV_PATH } from '../secrets';
 
+import { askToBeHero } from '../socket';
+
 const GET_USER = 'GET_USER';
 const REMOVE_USER = 'REMOVE_USER';
 
@@ -31,6 +33,10 @@ export const auth = (email, password, method) => async dispatch => {
   }
 
   try {
+    if (res.data && res.data.email) {
+      //upgrade socket
+      askToBeHero(res.data);
+    }
     dispatch(getUser(res.data));
   } catch (dispatchOrHistoryErr) {
     console.error(dispatchOrHistoryErr);
