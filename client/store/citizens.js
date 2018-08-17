@@ -2,68 +2,43 @@ import { ENV_PATH } from '../secrets';
 
 //Action Types
 
-const HERO_ASSIGNED = 'HERO_ASSIGNED';
-const HERO_HERE = 'HERO_HERE';
-const INCIDENT_RESOLVED = 'INCIDENT_RESOLVED';
-const STATUS_IDLE = 'STATUS_IDLE';
-const STATUS_WAIT_FOR_HERO = 'STATUS_WAIT_FOR_HERO';
-const STATUS_HERO_ENROUTE = 'STATUS_HERO_ENROUTE';
-const STATUS_HERO_ONSITE = 'STATUS_HERO_ONSITE';
+const HERO_ENROUTE = 'HERO_ENROUTE';
+const HERO_ARRIVED = 'HERO_ARRIVED'
+const STATUS_CITIZEN = 'STATUS_CITIZEN';
 
 // INITIAL STATE
 const defaultState = {
-  hero: {},
+  //INCIDENT LOCATION WILL BE KEPT IN COMPONENT PROPS AND
+  //WON'T BE CHANGED BY CITIZEN MOVEMENT AFTER HELP REQUESTED
+  hero: {}, //lat, lon, heroImage, heroName -- last received location of hero
   status: 'IDLE',
 };
 
 // ACTION CREATORS
-export const heroAssigned = hero => ({ type: HERO_ASSIGNED, hero });
-export const heroArrived = hero => ({ type: HERO_HERE, hero });
-export const incidentComplete = () => ({ type: INCIDENT_RESOLVED });
-export const statusIdle = status => ({ type: STATUS_IDLE, status });
-export const statusWait = status => ({ type: STATUS_WAIT_FOR_HERO, status });
-export const statusEnrouteCitizen = status => ({
-  type: STATUS_HERO_ENROUTE,
-  status,
-});
-export const statusOnSiteCitizen = status => ({ type: STATUS_HERO_ONSITE, status });
+export const heroArrived = (lat, lon, status) => ({ type: HERO_ARRIVED, lat, lon, status });
+export const statusCitizen = status => ({ type: STATUS_CITIZEN, status });
+export const heroEnroute = (lat, lon, heroImage, heroName, status) => ({ type: HERO_ENROUTE, lat, lon, heroImage, heroName, status });
 
 // REDUCER
-export default function(state = defaultState, action) {
+export default function (state = defaultState, action) {
   switch (action.type) {
-    case HERO_ASSIGNED:
+    case HERO_ENROUTE:
       return {
         ...state,
-        hero: action.hero,
+        hero: { lat: action.lat, lon: action.lon, heroImage: action.heroImage, heroName: action.heroName },
+        status: action.status
       };
-    case HERO_HERE:
+    case HERO_ARRIVED:
       return {
         ...state,
-        hero: action.hero,
+        hero: { ...state.hero, lat: action.lat, lon: action.lon },
+        status: action.status
       };
-    case INCIDENT_RESOLVED:
+    case STATUS_CITIZEN:
+      //NOTE - STATUS_CITIZEN CAN ONLY BE USED FOR NO ASSIGNED HERO CHANGES
       return {
+        ...state,
         hero: {},
-        status: 'IDLE',
-      };
-    case STATUS_IDLE:
-      return {
-        ...state,
-        status: action.status,
-      };
-    case STATUS_WAIT_FOR_HERO:
-      return {
-        ...state,
-        status: action.status,
-      };
-    case STATUS_HERO_ENROUTE:
-      return {
-        ...state,
-        status: action.status,
-      };
-    case STATUS_HERO_ONSITE:
-      return {
-        ...state,
         status: action.status,
       };
     default:

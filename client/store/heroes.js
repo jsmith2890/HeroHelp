@@ -2,37 +2,27 @@ import axios from 'axios';
 import { ENV_PATH } from '../secrets';
 
 // ACTION TYPES
-const GOT_NEW_HERO = 'GOT_NEW_HERO';
+const GOT_NEW_HERO = 'GOT_NEW_HERO'; //after login
 const GOT_INCIDENT = 'GOT_INCIDENT';
-const ARRIVED_AT_INCIDENT = 'ARRIVED_AT_INCIDENT';
 const SURROUNDING_INCIDENTS = 'SURROUNDING_INCIDENTS';
-const STATUS_DECIDING = 'STATUS_DECIDING';
-const STATUS_ENROUTE = 'STATUS_ENROUTE';
-const STATUS_ONSITE = 'STATUS_ONSITE';
+const STATUS_HERO = 'STATUS_HERO';
 
 // INITIAL STATE
 const defaultState = {
-  heroes: [],
-  hero: {},
-  incident: {},
-  incidents: [],
+  hero: {}, //email addr, etc
+  incident: {}, //lat, lon
+  incidents: [], //{lat,lon}
   status: 'IDLE',
 };
 
 // ACTION CREATORS
 const gotNewHero = hero => ({ type: GOT_NEW_HERO, hero });
-export const gotNewIncident = incident => ({ type: GOT_INCIDENT, incident });
-export const changeIncidentStatus = incidentId => ({
-  type: ARRIVED_AT_INCIDENT,
-  incidentId,
-});
+export const gotNewIncident = (lat, lon, status) => ({ type: GOT_INCIDENT, lat, lon, status });
 export const incidentsInArea = incidents => ({
   type: SURROUNDING_INCIDENTS,
   incidents,
 });
-export const statusDeciding = status => ({ type: STATUS_DECIDING, status });
-export const statusEnrouteHero = status => ({ type: STATUS_ENROUTE, status });
-export const statusOnSiteHero = status => ({ type: STATUS_ONSITE, status });
+export const statusHero = status => ({ type: STATUS_HERO, status });
 
 // THUNK CREATOR
 export const addNewHero = hero => async dispatch => {
@@ -55,30 +45,15 @@ export default function (state = defaultState, action) {
     case GOT_INCIDENT:
       return {
         ...state,
-        incident: action.incident,
+        incident: { lat: action.lat, lon: action.lon },
+        status: action.status
       };
-
-    case ARRIVED_AT_INCIDENT:
+    case SURROUNDING_INCIDENTS: //no status update needed
       return {
         ...state,
-        incident: action.incidentId,
+        incidents: action.incidents
       };
-    case SURROUNDING_INCIDENTS:
-      return {
-        ...state,
-        incidents: action.incidents,
-      };
-    case STATUS_DECIDING:
-      return {
-        ...state,
-        status: action.status,
-      };
-    case STATUS_ENROUTE:
-      return {
-        ...state,
-        status: action.status,
-      };
-    case STATUS_ONSITE:
+    case STATUS_HERO: //simple status updates, socket module will provide value
       return {
         ...state,
         status: action.status,

@@ -15,19 +15,13 @@ import {
 import store from '../store';
 import {
   gotNewIncident,
-  changeIncidentStatus,
+  statusHero,
   incidentsInArea,
-  statusEnrouteHero,
-  statusDeciding,
-  statusOnSiteHero,
 } from '../store/heroes';
 import {
-  heroAssigned,
+  heroEnroute,
   heroArrived,
-  incidentComplete,
-  statusEnrouteCitizen,
-  statusOnSiteCitizen,
-  statusWait,
+  statusCitizen,
 } from '../store/citizens';
 
 // Verify that the Server websocket address is defined
@@ -41,16 +35,17 @@ console.log('Creating a socket connection to server:', ENV_PATH);
 
 const socket = io(ENV_PATH);
 
+let availability = false; //button to set available/unavailable
 
 //special function on interval to send geoloation and available/unavailable
 //status to server.
-let heartbeatTimer={}
+let heartbeatTimer = {}
 export const giveHeartbeat = async () => {
   try {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     //assume they say yes
     let location = await Location.getCurrentPositionAsync({});
-    socket.emit(HeroSends.GIVE_HEARTBEAT, {lat: location.coords.latitude, lon: location.coords.longitude, status:"available" });
+    socket.emit(HeroSends.GIVE_HEARTBEAT, { lat: location.coords.latitude, lon: location.coords.longitude, status: (availability ? 'available' : 'unavailable')});
   } catch (error) {
     console.error('Ask To Be Hero didnt send', error);
   }
@@ -58,12 +53,12 @@ export const giveHeartbeat = async () => {
 
 socket.on('connect', () => {
   console.log('websocket Connected!');
-
+  //////////////////////////////////////////////////////////////////
   //New Socket establish connection and start heartbeating geolocation
   socket.on(ServerSendsToNewSocket.TELL_HERO, () => {
     console.log('received tell_hero');
 
-    heartbeatTimer=setInterval(giveHeartbeat,5000)
+    heartbeatTimer = setInterval(giveHeartbeat, 5000)
 
   });
 
@@ -76,93 +71,62 @@ socket.on('connect', () => {
       console.log('error saving citizenId', err)
     }
   });
-
+  /////////////////////////////////////////////////////////////
   //Hero
-
+  //no state change
   socket.on(ServerSendsToHero.ACK_RECEIVED_HEARTBEAT, ({ incidents }) => {
-    console.log('received ack hb',incidents);
+    console.log('received ack hb', incidents);
     store.dispatch(incidentsInArea(incidents));
   });
 
+  //hero is taking this, MVP has no accept or reject=> state: ENROUTE
   socket.on(
     ServerSendsToHero.GIVE_DISPATCH,
-    ({ lat, lon, incidentId, timeout, incidentInfo }) => {
+    ({ lat, lon }) => {
       store.dispatch(
-        gotNewIncident(lat, lon, incidentId, timeout, incidentInfo),
+        gotNewIncident(lat, lon, HeroState.ENROUTE),
       );
     },
   );
 
-  socket.on(ServerSendsToHero.HERO_ON_SITE, ({ incidentId }) => {
-    store.dispatch(changeIncidentStatus(incidentId));
+  //=>state: ON_SITE
+  socket.on(ServerSendsToHero.HERO_ON_SITE, ()=> {
+    store.dispatch(statusHero(HeroState.ON_SITE));
   });
 
-  // socket.on(
-  //   ServerSendsToHero.ACK_DISPATCH_DECISION,
-  //   ({ lat, lon, incidentId }) => {
-  //     store.dispatch(functionName(lat, lon, incidentId));
-  //   },
-  // );
-
-  // socket.on(ServerSendsToHero.ACK_RESOLVE_INCIDENT, data => {
-  //   store.dispatch(functionName(data));
-  // });
-
-  // socket.on(
-  //   (ServerSendsToHero.GIVE_ERROR = data => {
-  //     store.dispatch(functionName(data));
-  //   }),
-  // );
-
-  // Hero Status
-
-  socket.on(HeroState.DECIDING_ON_DISPATCH, status => {
-    store.dispatch(statusDeciding(status));
+  //=>state: IDLE
+  socket.on(ServerSendsToHero.ACK_RESOLVE_INCIDENT, ()=> {
+    store.dispatch(statusHero(HeroState.IDLE));
   });
 
-  socket.on(HeroState.ENROUTE, status => {
-    store.dispatch(statusEnrouteHero(status));
-  });
-
-  socket.on(HeroState.ON_SITE, status => {
-    store.dispatch(statusOnSiteHero(status));
-  });
-
+  //////////////////////////////////////////////////////////
   //Citizen
 
-  // socket.on(ServerSendsToCitizen.ACK_RECEIVED_HELP_REQUEST, () => {
-  //   store.dispatch(changeIncidentStatus());
-  // });
+  //=> state: WAIT_FOR_HERO_DISPATCH
+  socket.on(ServerSendsToCitizen.ACK_RECEIVED_HELP_REQUEST, () => {
+    store.dispatch(statusCitizen(CitizenState.WAIT_FOR_HERO_DISPATCH));
+  });
 
+  //=> state: KNOWS_HERO_ENROUTE
   socket.on(
     ServerSendsToCitizen.HERO_ENROUTE,
     ({ lat, lon, heroImage, heroName }) => {
-      store.dispatch(heroAssigned(lat, lon, heroImage, heroName));
+      store.dispatch(heroEnroute(lat, lon, heroImage, heroName, CitizenState.HERO_ENROUTE));
     },
   );
 
-  // citizen status
+  //=> state: KNOWS_HERO_ON_SITE
   socket.on(ServerSendsToCitizen.HERO_ON_SITE, ({ lat, lon }) => {
-    store.dispatch(heroArrived(lat, lon));
+    store.dispatch(heroArrived(lat, lon, CitizenState.KNOWS_HERO_ON_SITE));
   });
 
+  //=> state: IDLE
   socket.on(ServerSendsToCitizen.INCIDENT_RESOLVED, () => {
-    store.dispatch(incidentComplete());
+    store.dispatch(statusCitizen(CitizenState.IDLE));
   });
+})
 
-  socket.on(CitizenState.WAIT_FOR_HERO_DISPATCH, status => {
-    store.dispatch(statusWait(status));
-  });
-
-  socket.on(CitizenState.KNOWS_HERO_ENROUTE, status => {
-    store.dispatch(statusEnrouteCitizen(status));
-  });
-
-  socket.on(CitizenState.KNOWS_HERO_ON_SITE, status => {
-    store.dispatch(statusOnSiteCitizen(status));
-  });
-});
-
+////////////////////////////////////////////////////////////////
 //Hero
 export const askToBeHero = ({ email }) => {
   try {
@@ -172,30 +136,20 @@ export const askToBeHero = ({ email }) => {
   }
 };
 
-export const isAvailable = ({ lat, lon, availabilityStatus }) => {
-  try {
-    socket.emit(HeroSends.GIVE_HEARTBEAT, { lat, lon, availabilityStatus });
-  } catch (error) {
-    console.error('Availability didnt send', error);
-  }
+export const isAvailable = (availabilityStatus) => {
+  availability = availabilityStatus
+  giveHeartbeat()
 };
 
-export const sendDecision = ({ incidentId, decision }) => {
+export const resolveIncident = () => {
   try {
-    socket.emit(HeroSends.TELL_DISPATCH_DECISION, { incidentId, decision });
-  } catch (error) {
-    console.error('Decision didnt send', error);
-  }
-};
-
-export const resolveIncident = ({ incidentId }) => {
-  try {
-    socket.emit(HeroSends.ASK_RESOLVE_INCIDENT, { incidentId });
+    socket.emit(HeroSends.ASK_RESOLVE_INCIDENT, {});
   } catch (error) {
     console.error('Incident didnt resolve', error);
   }
 };
 
+///////////////////////////////////////////////////////////////////
 //Citizen
 export const askToBeCitizen = (body) => {
   try {
@@ -212,13 +166,5 @@ export const pushHelp = ({ lat, lon }) => {
     console.error('Didnt ask for help', error);
   }
 };
-
-// Dispatch to the appropriate handler
-// socket.on(ClientListensFor.SERVER_UPDATE, serverMsg => {
-//   console.log('Received socket msg from server:', serverMsg);
-//   const data = serverMsg.data;
-
-//   }
-// });
 
 export default socket;
