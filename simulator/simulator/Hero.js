@@ -11,6 +11,7 @@ class Hero {
     // Bindings
     this.toggleStatus = this.toggleStatus.bind(this);
     this.tick = this.tick.bind(this);
+    this.shutdown = this.shutdown.bind(this);
     this.recvHbAck = this.recvHbAck.bind(this);
     this.recvDispatch = this.recvDispatch.bind(this);
     this.recvHeroOnSite = this.recvHeroOnSite.bind(this);
@@ -79,6 +80,10 @@ class Hero {
     this.sendHb();
   }
 
+  shutdown() {
+    this.socket.disconnect(true)
+  }
+
   // ========= Handle Incoming Messages =========
 
   recvUpgradeAck(evt) {
@@ -118,7 +123,7 @@ class Hero {
   sendDispatchDecision(
     data = {
       incidentId: this.incidentId,
-      decision: 'accepted',
+      decision: 'accept',
     }
   ) {
     console.log('hero ', this.socket.id, ' sendDispatchDecision ');

@@ -2,14 +2,38 @@ const Hero = require('../../simulator/Hero');
 const Citizen = require('../../simulator/Citizen');
 const ScenarioEngine = require('../../simulator');
 const { HeroAction, CitizenAction } = require('../../simulator/Actions');
+const { clearDBAndCloseConn } = require('../../db/setups');
+const {ServerSendsToNewSocket, ServerSendsToCitizen} = require('../../simulator/MsgType')
+const EventEmitter = require('events')
 
-function createScenario() {
+const eventEmitter = new EventEmitter()
+const results = []
+
+const setupDB = async () => {
+  // Clear the db
+  await clearDBAndCloseConn();
+}
+
+const registerListeners = () => {
+
+  eventEmitter.on(ServerSendsToNewSocket.TELL_CITIZEN, data => {
+    results.push(ServerSendsToNewSocket.TELL_CITIZEN)
+  });
+  eventEmitter.on(ServerSendsToCitizen.ACK_RECEIVED_HELP_REQUEST, data => {
+    results.push(ServerSendsToCitizen.ACK_RECEIVED_HELP_REQUEST)
+  });
+};
+
+const createScenario = async () => {
+  await setupDB();
+  registerListeners()
+
   const heroes = [];
-  console.log(`==== Created ${heroes.length} Heroes ====`);
+  console.log(`==== Created ${heroes.length} Hero Clients ====`);
 
-  // Create a citizen
-  const citizens = [new Citizen(1023)];
-  console.log(`==== Created ${citizens.length} Citizens ====`);
+  // Create a citizen client
+  const citizens = [new Citizen(1023, eventEmitter)];
+  console.log(`==== Created ${citizens.length} Citizen Clients ====`);
 
   const actions = [
     {
@@ -36,8 +60,24 @@ function createScenario() {
     Create incident but no hero to dispatch to
   */
 
+  // Maybe pass in an event subscriber fn (accepts an event emitter and
+  // subscribes to events. Events will put their result in single results // object. Tests can check if all results match or are correct)
   const tickInterval = 5;
-  return new ScenarioEngine(actions, tickInterval, citizens, heroes);
+  return new ScenarioEngine(
+    actions,
+    tickInterval,
+    citizens,
+    heroes,
+    registerListeners
+  );
 }
 
-module.exports = createScenario;
+const runScenarioAndTest = async () => {
+  await (await createScenario()).run()
+  // Check client results
+  console.log('results:', results)
+  // Check database state
+  // Can't currently check server state
+}
+
+module.exports = {createScenario, runScenarioAndTest};
