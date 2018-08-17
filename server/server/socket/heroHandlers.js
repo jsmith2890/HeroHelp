@@ -109,13 +109,15 @@ async function processIfHeroOnSite(socket, hero, lat, lon) {
     sendHeroOnSiteToHero(socket)
     const citizenSocket = getSocketFromCitizenId(incident.citizenId)
     sendHeroOnSiteToCitizen(citizenSocket, lat, lon)
+    return true
   }
+  return false
 }
 
 module.exports.registerHeroHandlers = socket => {
   socket.on(HeroSends.GIVE_HEARTBEAT, async msgBody => {
-    console.log('GIVE_HEARTBEAT received. ',msgBody)
-    const {lat, lon, status} = msgBody
+    console.log('GIVE_HEARTBEAT received. ', msgBody)
+    const {lat, lon, availabilityStatus} = msgBody
 
     let heroIncidentList = []
     try {
@@ -127,14 +129,26 @@ module.exports.registerHeroHandlers = socket => {
       await hero.update({
         presenceLat: lat,
         presenceLon: lon,
-        presenceStatus: status
+        presenceStatus: availabilityStatus
       })
 
       //find incidents nearby not assigned to hero and not closed
-      heroIncidentList=await getNearbyIncidents(heroId, lat, lon, 10)
+      heroIncidentList = await getNearbyIncidents(heroId, lat, lon, 10)
 
       // Check if hero is ENROUTE and close enough to the incident site
-      processIfHeroOnSite(socket, hero, lat, lon)
+      const isOnSite = await processIfHeroOnSite(socket, hero, lat, lon)
+
+      if (!isOnSite && hero.state === HeroState.ENROUTE) {
+        const [, , citizen] = getHeroIncidentCitizen(socket.id)
+        const citizenSocket = getSocketFromCitizenId(citizen.id)
+        sendHeroEnrouteToCitizen(
+          citizenSocket,
+          lat,
+          lon,
+          hero.imageUrl,
+          hero.name
+        )
+      }
     } catch (err) {
       console.log(' Error processing GIVE_HEARTBEAT', err)
     }

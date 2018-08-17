@@ -33,7 +33,7 @@ module.exports.sendAckDispatchDecisionToHero = (
   })
 }
 
-module.exports.sendHeroOnSiteToHero = (socket) => {
+module.exports.sendHeroOnSiteToHero = socket => {
   sendToClient(socket, ServerSendsToHero.HERO_ON_SITE, {})
 }
 
