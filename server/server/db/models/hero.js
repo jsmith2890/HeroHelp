@@ -29,7 +29,6 @@ const Hero = db.define('hero', {
   },
   state: {
     type: Sequelize.ENUM('IDLE',
-                         'DECIDING_ON_DISPATCH',
                          'ENROUTE',
                          'ON_SITE')
   },

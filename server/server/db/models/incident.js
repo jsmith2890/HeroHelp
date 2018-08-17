@@ -3,8 +3,7 @@ const db = require('../db')
 
 const Incident = db.define('incident', {
   state: {
-    type: Sequelize.ENUM('CREATED',
-                         'WAITING_FOR_HERO_DECISION',
+    type: Sequelize.ENUM('WAITING_FOR_DISPATCH',
                          'HERO_ENROUTE',
                          'HERO_ON_SITE',
                          'RESOLVED')
