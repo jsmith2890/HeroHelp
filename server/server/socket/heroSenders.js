@@ -33,8 +33,8 @@ module.exports.sendAckDispatchDecisionToHero = (
   })
 }
 
-module.exports.sendHeroOnSiteToHero = (socket, lat, lon) => {
-  sendToClient(socket, ServerSendsToHero.HERO_ON_SITE, {lat, lon})
+module.exports.sendHeroOnSiteToHero = (socket) => {
+  sendToClient(socket, ServerSendsToHero.HERO_ON_SITE, {})
 }
 
 module.exports.sendAckResolveIncidentToHero = socket => {

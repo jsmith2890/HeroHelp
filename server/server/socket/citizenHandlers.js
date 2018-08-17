@@ -46,7 +46,7 @@ module.exports.registerCitizenHandlers = socket => {
           citizenId,
           lat,
           lon,
-          state: IncidentState.CREATED
+          state: IncidentState.WAITING_FOR_DISPATCH
         })
       }
       queueIncidentDispatch(incident.id)
@@ -58,25 +58,25 @@ module.exports.registerCitizenHandlers = socket => {
       // Notify Citizen
       sendAckHelpRequestToCitizen(socket)
 
-      // ***** START Temporary Dispatch code for testing ONLY. ****
-      // Dispatch to heroId 1
-      const heroIdTest = 1
-      // Update entities in DB
-      await incident.update({
-        heroId: heroIdTest,
-        state: IncidentState.WAITING_FOR_HERO_DECISION
-      })
-      const hero = await Hero.findById(heroIdTest)
-      await hero.update({state: HeroState.DECIDING_ON_DISPATCH})
+      // // ***** START Temporary Dispatch code for testing ONLY. ****
+      // // Dispatch to heroId 1
+      // const heroIdTest = 1
+      // // Update entities in DB
+      // await incident.update({
+      //   heroId: heroIdTest,
+      //   state: IncidentState.WAITING_FOR_HERO_DECISION
+      // })
+      // const hero = await Hero.findById(heroIdTest)
+      // await hero.update({state: HeroState.DECIDING_ON_DISPATCH})
 
-      // Send dispatch msg to hero
-      // ***********Socket.emit not working
-      const heroSocket = getSocketFromHeroId(heroIdTest)
-      heroSocket.emit("GIVE_DISPATCH")
-      console.log('heroSocket:', heroSocket)
-      const timeout = 30 // seconds
-      sendDispatchToHero(heroSocket, lat, lon, incident.id, timeout)
-      // ******   END *************
+      // // Send dispatch msg to hero
+      // // ***********Socket.emit not working
+      // const heroSocket = getSocketFromHeroId(heroIdTest)
+      // heroSocket.emit("GIVE_DISPATCH")
+      // console.log('heroSocket:', heroSocket)
+      // const timeout = 30 // seconds
+      // sendDispatchToHero(heroSocket, lat, lon, incident.id, timeout)
+      // // ******   END *************
     } catch (err) {
       console.log('unable to create incident', err)
       //citizen won't get response if can't create incident
