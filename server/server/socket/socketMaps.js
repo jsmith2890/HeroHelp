@@ -1,12 +1,8 @@
 const {Citizen,Hero,User} = require('../db/models')
 
-// socketId => socket
-const newSocketMap = {}
-
-// socketId => socket with id = heroId
+//socket maps, mapping with key socketid and {socket, owner.id (hero or citizen)}
+const newSocketMap = {} //no owner yet, pending assignment to citizen or hero
 const heroSocketMap = {}
-
-// socketId => socket with id = citizenId
 const citizenSocketMap = {}
 
 module.exports.getHeroIdFromSocket = socketId => {
@@ -66,6 +62,7 @@ module.exports.deleteSocket = async (socket) => {
     try {
       const hero = await Hero.findById(heroSocketMap[socket.id].id);
       await hero.update({loginStatus: 'offline', presenceStatus: 'unavailable', state: 'IDLE'})
+      //TODO:  IDLE may not be best, should handle login after dropped cxn, also, how to handle the situation where superhero got offed on the way over and need to redispatch.....?????
     } catch (err) {
       console.log('error marking hero offline:', err)
       //fall through and at least try to clean up map
@@ -80,6 +77,7 @@ module.exports.deleteSocket = async (socket) => {
     try {
       const citizen = await Citizen.findById(citizenSocketMap[socket.id].id);
       await citizen.update({state: 'IDLE'})
+      //TODO:  This doesn't take into account reconnection
     } catch (err) {
       console.log('error marking citizen IDLE:', err)
       //fall through and at least try to clean up map
