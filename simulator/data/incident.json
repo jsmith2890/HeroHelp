@@ -1,19 +1,19 @@
 [
   {
-    "heroId": "3",
     "state": "HERO_ENROUTE",
     "lat": "41.9062499",
     "lon": "-87.6515864",
-    "citizenId": "3"
+    "citizenId": "3",
+    "heroId": "3"
   },
   {
-    "state": "CREATED",
+    "state": "WAITING_FOR_DISPATCH",
     "lat": "42.1",
     "lon": "-87.7",
     "citizenId": "1"
   },
   {
-    "state": "CREATED",
+    "state": "WAITING_FOR_DISPATCH",
     "lat": "42.0",
     "lon": "-87.7",
     "citizenId": "2"

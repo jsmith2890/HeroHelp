@@ -87,7 +87,7 @@ class Citizen {
 
   // ========= Handle Outgoing Messages =========
 
-  sendAskToBeCitizen(data = { citizenId: 3 }) {
+  sendAskToBeCitizen(data = {}) {
     console.log('citizen ', this.socket.id, ' sendUpgradeAsCitizen()');
     this.socket.emit(NewSocketSends.ASK_TO_BE_CITIZEN, data);
   }

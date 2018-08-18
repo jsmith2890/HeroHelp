@@ -23,16 +23,16 @@ const {setIncidentDistance, distanceTwoPoints} = require('./util')
 // Utility function
 async function getHeroIncidentCitizen(heroSocketId) {
   const heroId = getHeroIdFromSocket(heroSocketId)
-  console.log('heroId from map:', heroId)
+  // console.log('heroId from map:', heroId)
   const hero = await Hero.findById(heroId)
-  console.log('hero from DB:', hero)
+  // console.log('hero from DB:', hero)
   const incident = await Incident.findOne({
     where: {
       state: {[Op.ne]: IncidentState.RESOLVED},
       heroId: hero.id
     }
   })
-  console.log('incident from DB:', incident)
+  // console.log('incident from DB:', incident)
   if (!incident) {
     throw new Error('No open incident with heroId:', heroId)
   }
@@ -94,17 +94,23 @@ async function processIfHeroOnSite(socket, hero, lat, lon) {
   })
   const dist = distanceTwoPoints(lat, lon, incident.lat, incident.lon)
   console.log(
-    `Hero on site? Hero Pos: [${lat}, ${lon}]. Incident Pos [${incident.lat}, ${
+    `Hero is ENROUTE. Hero Pos: [${lat}, ${lon}]. Incident Pos [${incident.lat}, ${
       incident.lon
     }]`
   )
   if (dist <= distanceForOnSite) {
+    console.log('Hero is on site. Updating DB.')
     // Update entities to reflect Hero is on site
-    await hero.update({state: HeroState.ON_SITE})
+    console.log(hero)
+    await hero.reload();
+    await hero.update({name: 'asdf3', presenceStatus: 'available', state: 'ENROUTE'},)
+    console.log(incident)
     await incident.update({state: IncidentState.HERO_ON_SITE})
     const citizen = await Citizen.findById(incident.citizenId)
-    await citizen.update({state: CitizenState.KNOWS_HERO_ON_SITE})
+    console.log(citizen)
+    await citizen.update({state: 'KNOWS_HERO_ON_SITE'})
 
+    console.log('Hero is on site. Notifying hero and citizen.')
     // Notify hero and citizen
     sendHeroOnSiteToHero(socket)
     const citizenSocket = getSocketFromCitizenId(incident.citizenId)
@@ -139,7 +145,7 @@ module.exports.registerHeroHandlers = socket => {
       const isOnSite = await processIfHeroOnSite(socket, hero, lat, lon)
 
       if (!isOnSite && hero.state === HeroState.ENROUTE) {
-        const [, , citizen] = getHeroIncidentCitizen(socket.id)
+        const [, , citizen] = await getHeroIncidentCitizen(socket.id)
         const citizenSocket = getSocketFromCitizenId(citizen.id)
         sendHeroEnrouteToCitizen(
           citizenSocket,

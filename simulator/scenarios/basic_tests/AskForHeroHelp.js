@@ -15,7 +15,6 @@ const {
 
 const setupDB = async () => {
   // Clear the db
-  // await clearDBAndCloseConn();
   await clearDB();
 };
 
@@ -29,8 +28,8 @@ const setupDB = async () => {
 //   });
 // };
 
-const createScenario = async () => {
-  await setupDB();
+const createScenario = () => {
+
   // registerListeners()
 
   const heroes = [];
@@ -46,7 +45,6 @@ const createScenario = async () => {
       // Need to ask to be a citizen for server to register citizen msg handlers
       citizen: 0,
       action: CitizenAction.ASK_TO_BE_CITIZEN,
-      data: { citizenId: 1 },
     },
     {
       citizen: 0,
@@ -74,7 +72,8 @@ const createScenario = async () => {
 
 const runScenario = async () => {
   try {
-    (await createScenario()).run();
+    await setupDB();
+    createScenario().run();
   } finally {
     db.close();
   }

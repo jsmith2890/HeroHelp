@@ -7,7 +7,7 @@ const {
 } = require('./MsgType');
 
 class Hero {
-  constructor(tickInterval) {
+  constructor(tickInterval = 5) {
     // Bindings
     this.toggleStatus = this.toggleStatus.bind(this);
     this.tick = this.tick.bind(this);

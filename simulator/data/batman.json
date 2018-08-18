@@ -1,13 +1,11 @@
-[
-  {
-    "userId": "1",
-    "loginStatus": "offline",
-    "name": "Batman",
-    "imageUrl": "img/batman.jpeg",
-    "description": "The Dark Knight instills fear in the hearts of evil men.",
-    "presenceLat": "41.895367",
-    "presenceLon": "-87.638977",
-    "presenceStatus": "unavailable",
-    "state": "IDLE"
-  }
-]
+{
+  "userId": "1",
+  "loginStatus": "offline",
+  "name": "Batman",
+  "imageUrl": "img/batman.jpeg",
+  "description": "The Dark Knight instills fear in the hearts of evil men.",
+  "presenceLat": "41.895367",
+  "presenceLon": "-87.638977",
+  "presenceStatus": "unavailable",
+  "state": "IDLE"
+}
