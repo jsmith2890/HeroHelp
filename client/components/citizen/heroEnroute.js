@@ -1,12 +1,22 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Container } from 'native-base';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 
-export default class CitizenMap extends React.Component {
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
 
+  map: {
+    height: '95%',
+    width: '90%',
+  },
+});
+
+export default class HeroEnroute extends React.Component {
   render() {
-
     return (
       <View style={styles.container}>
         <MapView
@@ -24,18 +34,3 @@ export default class CitizenMap extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-
-  map: {
-    height: '95%',
-    width: '90%',
-  },
-
-});
-

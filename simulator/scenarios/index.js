@@ -16,12 +16,12 @@ const AlertToOnSite = require('./basic_tests/AlertToOnSite')
 async function scenarioRunner() {
 
   // ====== Up-to-date tests ===========
-  // await AskForHeroHelp(); // works
-  // await AskAndDispatchHero() // works
+   //await AskForHeroHelp(); // works
+   await AskAndDispatchHero() // works
   // await HeroHeartbeat(); // works
   // await HeroEnroute_Far() // works
   // await HeroEnroute_MovesThere() // works
-  await AlertToOnSite()
+  //await AlertToOnSite()
 
   // ====== Tests that need updating to work =========
   // AskToBeHero_Invalid().run()
