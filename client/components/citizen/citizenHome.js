@@ -4,6 +4,7 @@ import { Text, Container } from 'native-base';
 import { pushHelp } from '../../socket'
 import { Location, Permissions } from 'expo';
 import { connect } from 'react-redux'
+import CitizenMap from './citizenMap'
 
 const styles = StyleSheet.create({
   container: {
@@ -39,13 +40,20 @@ class CitizenHome extends React.Component {
 
   render() {
     return (
-      <Container style={styles.container}>
-        <TouchableOpacity onPress={this.pressHelpHandler} style={styles.button} disabled={this.props.status !== 'IDLE'}>
-          <Text style={styles.buttonText}>Help!</Text>
-        </TouchableOpacity>
-        {this.props.status === 'WAIT_FOR_HERO_DISPATCH' &&
-        <Text>waiting for hero</Text>}
-      </Container>
+      <CitizenMap />
+      // <View>
+        /* {this.props.status === 'KNOWS_HERO_ENROUTE' &&
+          <CitizenMap />
+        }
+        {this.props.status !== 'KNOWS_HERO_ENROUTE' &&
+          <Container style={styles.container}>
+            <TouchableOpacity onPress={this.pressHelpHandler} style={styles.button} disabled={this.props.status !== 'IDLE'}>
+              <Text style={styles.buttonText}>Help!</Text>
+            </TouchableOpacity>
+            {this.props.status === 'WAIT_FOR_HERO_DISPATCH' &&
+              <Text>waiting for hero</Text>}
+          </Container>} */
+      // </View>
     );
   }
 }
