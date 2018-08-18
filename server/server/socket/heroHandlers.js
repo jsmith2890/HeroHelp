@@ -142,6 +142,7 @@ module.exports.registerHeroHandlers = socket => {
       console.log('isOnSite:', isOnSite)
       if (!isOnSite && hero.state === HeroState.ENROUTE) {
         const [, , citizen] = await getHeroIncidentCitizen(socket.id)
+        // ****Does not take into account that citizen may have been disconnected while incident is in progress
         const citizenSocket = getSocketFromCitizenId(citizen.id)
         sendHeroEnrouteToCitizen(
           citizenSocket,
