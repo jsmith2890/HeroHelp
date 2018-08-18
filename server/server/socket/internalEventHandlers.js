@@ -4,6 +4,7 @@ const Sequelize = require('sequelize')
 const {sendHeroEnrouteToCitizen} = require('./citizenSenders')
 const {sendDispatchToHero} = require('./heroSenders')
 const {getSocketFromHeroId,getSocketFromCitizenId} = require('./socketMaps')
+const {IncidentState,HeroState,CitizenState} = require('./MsgType.js')
 
 module.exports.queueIncidentDispatch = (incidentId,timeout /*ms*/) => {
   setTimeout(()=>{doDispatch(incidentId)},timeout)
@@ -33,13 +34,16 @@ async function doDispatch (incidentId) {
   } catch (err) {
     console.error('dispatch - error getting heros or incident from db', err);
     module.exports.queueIncidentDispatch(incidentId,1000);
+    return
   }
 
   //if no heros, then lets just queue up another event giving
   //the rest of the world a chance to catch up and hopefully
   //there's an event coming soon from a hero becoming available
   if (availableHeros.length===0) {
+    console.log('no available heros - sleep(1000)')
     module.exports.queueIncidentDispatch(incidentId,1000);
+    return
   }
 
   //ok - we have everything we need - let's assign the hero
@@ -57,17 +61,18 @@ async function doDispatch (incidentId) {
   const hero=availableHeros[0];
 
   //first hero is closest, assign to incident, use transaction
-  let transaction;
+  //let transaction;
   try {
-    transaction = await Sequelize.transaction();
-    await incident.update({heroId:hero.id},{transaction})
-    await hero.update({state:'ENROUTE'},{transaction})
-    await citizen.update({state:'KNOWS_HERO_ENROUTE'},{transaction})
-    await transaction.commit();
+    //transaction = await Sequelize.transaction();
+    await incident.update({heroId:hero.id, state:IncidentState.HERO_ENROUTE},/*{transaction}*/)
+    await hero.update({state:HeroState.ENROUTE},/*{transaction}*/)
+    await citizen.update({state:CitizenState.KNOWS_HERO_ENROUTE},/*{transaction}*/)
+    //await transaction.commit();
   } catch (err) {
-    await transaction.rollback();
+    //await transaction.rollback();
     //try again later......
     module.exports.queueIncidentDispatch(incidentId,1000);
+    return
   }
 
   //database succeeded -- now send out to hero and citizen
@@ -75,6 +80,8 @@ async function doDispatch (incidentId) {
 
   sendHeroEnrouteToCitizen(getSocketFromCitizenId(citizen.id), hero.presenceLat, hero.presenceLon, hero.imageUrl,hero.name);
 
+  console.log('hero:',hero)
+  console.log('-->sending dispatch')
   sendDispatchToHero(getSocketFromHeroId(hero.id),incident.lat,incident.lon)
 
 }
