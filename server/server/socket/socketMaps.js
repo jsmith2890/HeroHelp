@@ -1,9 +1,12 @@
 const {Citizen, Hero, User} = require('../db/models')
 
 //socket maps, mapping with key socketid and {socket, owner.id (hero or citizen)}
+//and vice-versa, but don't need that for new sockets
 const newSocketMap = {} //no owner yet, pending assignment to citizen or hero
 const heroSocketMap = {}
 const citizenSocketMap = {}
+const socketHeroMap = {}
+const socketCitizenMap = {}
 
 module.exports.getHeroIdFromSocket = socketId => {
   if (heroSocketMap.hasOwnProperty(socketId)) {
@@ -13,16 +16,12 @@ module.exports.getHeroIdFromSocket = socketId => {
 }
 
 module.exports.getSocketFromHeroId = heroId => {
-  // May need a better implementation*****Maybe a heroId to Socket map
-  const foundEntry = Object.entries(heroSocketMap).find(entry => {
-    const [, val] = entry
-    return val.id === heroId
-  })
-  if (foundEntry) {
-    const [, {socket}] = foundEntry
-    return socket
+  console.log('getSocketFromHeroId',heroId)
+  if (socketHeroMap.hasOwnProperty(heroId)) {
+    const entry = socketHeroMap[heroId];
+    return entry.socket
   }
-  throw new Error('Hero socket not found. heroId: ', heroId)
+  throw new Error('socket for hero not found: ',heroId)
 }
 
 module.exports.getCitizenIdFromSocket = socketId => {
@@ -33,16 +32,12 @@ module.exports.getCitizenIdFromSocket = socketId => {
 }
 
 module.exports.getSocketFromCitizenId = citizenId => {
-  // May need a better implementation*****Maybe a citizenId to Socket map
-  const foundEntry = Object.entries(citizenSocketMap).find(entry => {
-    const [, val] = entry
-    return val.id === citizenId
-  })
-  if (foundEntry) {
-    const [, {socket}] = foundEntry
-    return socket
+  console.log('get socket from citizen',citizenId)
+  if (socketCitizenMap.hasOwnProperty(citizenId)) {
+    const entry = socketCitizenMap[citizenId];
+    return entry.socket
   }
-  throw new Error('citizen socket not found. citizenId: ', citizenId)
+  throw new Error('socket for citizen not found: ',citizenId)
 }
 
 module.exports.newSocket = socket => {
@@ -59,8 +54,9 @@ module.exports.deleteSocket = async socket => {
   }
   if (heroSocketMap.hasOwnProperty(socket.id)) {
     //mark hero unavailable/offline
+    let hero;
     try {
-      const hero = await Hero.findById(heroSocketMap[socket.id].id)
+      hero = await Hero.findById(heroSocketMap[socket.id].id)
       await hero.update({
         loginStatus: 'offline',
         presenceStatus: 'unavailable',
@@ -73,13 +69,15 @@ module.exports.deleteSocket = async socket => {
     }
 
     delete heroSocketMap[socket.id]
+    delete socketHeroMap[hero.id]
     printSockets('after deleteSocket - hero')
     return
   }
+  let citizen;
   if (citizenSocketMap.hasOwnProperty(socket.id)) {
     //mark citizen IDLE
     try {
-      const citizen = await Citizen.findById(citizenSocketMap[socket.id].id)
+      citizen = await Citizen.findById(citizenSocketMap[socket.id].id)
       await citizen.update({state: 'IDLE'})
       //TODO:  This doesn't take into account reconnection
     } catch (err) {
@@ -88,6 +86,7 @@ module.exports.deleteSocket = async socket => {
     }
 
     delete citizenSocketMap[socket.id]
+    delete socketCitizenMap[citizen.id]
     printSockets('after deleteSocket - citizen')
   }
 }
@@ -97,6 +96,7 @@ module.exports.promoteSocketToHero = (socketId, heroId) => {
   if (newSocketMap.hasOwnProperty(socketId)) {
     heroSocketMap[socketId] = newSocketMap[socketId]
     heroSocketMap[socketId].id = heroId
+    socketHeroMap[heroId]=newSocketMap[socketId]
     delete newSocketMap[socketId]
   } else {
     throw new Error('promoteSocketToHero: socket id ', socketId, ' not found')
@@ -108,6 +108,7 @@ module.exports.promoteSocketToCitizen = (socketId, citizenId) => {
   if (newSocketMap.hasOwnProperty(socketId)) {
     citizenSocketMap[socketId] = newSocketMap[socketId]
     citizenSocketMap[socketId].id = citizenId
+    socketCitizenMap[citizenId] = newSocketMap[socketId]
     delete newSocketMap[socketId]
   } else {
     throw new Error(
@@ -124,4 +125,6 @@ function printSockets(desc) {
   console.log('-newSocketMap: ', Object.keys(newSocketMap))
   console.log('-heroSocketMap: ', Object.keys(heroSocketMap))
   console.log('-citizenSocketMap: ', Object.keys(citizenSocketMap))
+  console.log('-socketHeroMap: ', Object.keys(socketHeroMap))
+  console.log('-socketCitizenMap: ', Object.keys(socketCitizenMap))
 }

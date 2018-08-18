@@ -123,7 +123,7 @@ async function processIfHeroOnSite(socket, hero, lat, lon) {
 module.exports.registerHeroHandlers = socket => {
   socket.on(HeroSends.GIVE_HEARTBEAT, async msgBody => {
     console.log('GIVE_HEARTBEAT received. ', msgBody)
-    const {lat, lon, availabilityStatus} = msgBody
+    const {lat, lon, status} = msgBody
 
     let heroIncidentList = []
     try {
@@ -135,7 +135,7 @@ module.exports.registerHeroHandlers = socket => {
       await hero.update({
         presenceLat: lat,
         presenceLon: lon,
-        presenceStatus: availabilityStatus
+        presenceStatus: status
       })
 
       //find incidents nearby not assigned to hero and not closed
