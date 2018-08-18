@@ -1,19 +1,23 @@
+const Citizen = require('../../simulator/Citizen');
 const Hero = require('../../simulator/Hero');
 const ScenarioEngine = require('../../simulator');
-const { HeroAction } = require('../../simulator/Actions');
+const { CitizenAction, HeroAction } = require('../../simulator/Actions');
 const { db } = require('../../db');
-const {
-  clearDB,
-  seedUsers,
-  seedBatman,
-  seedIncidents,
-  seedOneCitizenOneHero
-} = require('../../db/setups');
+const { clearDB, seedEnroute_HeroFar } = require('../../db/setups');
+const { moveHeroToIncident } = require('../ActionCreator');
+
+const heroLoc = { lat: 80, lon: 80 };
+const incidentLoc = { lat: 20, lon: 20 };
 
 const setupDB = async () => {
   // Clear the db
   await clearDB();
-  await seedOneCitizenOneHero();
+  await seedEnroute_HeroFar(
+    heroLoc.lat,
+    heroLoc.lon,
+    incidentLoc.lat,
+    incidentLoc.lon
+  );
 };
 
 const createScenario = () => {
@@ -21,7 +25,7 @@ const createScenario = () => {
   console.log(`==== Created ${heroes.length} Heroes ====`);
 
   // Create a citizen
-  const citizens = [];
+  const citizens = [new Citizen(1)];
   console.log(`==== Created ${citizens.length} Citizens ====`);
 
   const actions = [
@@ -32,14 +36,19 @@ const createScenario = () => {
       data: { emailAddr: 'cody0@email.com' },
     },
     {
-      hero: 0,
-      action: HeroAction.GIVE_HEARTBEAT,
-      data: {
-        lat: 5, //41.895367,
-        lon: 5, //-87.638977,
-        availabilityStatus: 'available',
-      },
+      // Need to ask to be a citizen for server to register citizen msg handlers
+      citizen: 0,
+      action: CitizenAction.ASK_TO_BE_CITIZEN,
+      data: { citizenId: 1 }
     },
+    ...moveHeroToIncident(
+      heroLoc.lat,
+      heroLoc.lon,
+      incidentLoc.lat,
+      incidentLoc.lon,
+      3,
+      { heroNum: 0, status: 'unavailable' }
+    ),
   ];
 
   /*

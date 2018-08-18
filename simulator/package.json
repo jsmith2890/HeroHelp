@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "cleardb": "node db/cleardb.js",
     "start-dev": "NODE_ENV='development' npm run start-simulator",
     "start-simulator": "nodemon simulator -e html,js,scss --ignore public --ignore client",
     "start-scenario": "node scenarios",

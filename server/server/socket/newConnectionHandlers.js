@@ -69,6 +69,7 @@ module.exports.registerNewConnectionHandlers = socket => {
 
     try {
       if (needNewCitizen) {
+        console.log('creating new citizen')
         citizen = await Citizen.create({state: CitizenState.IDLE})
       }
     } catch (err) {

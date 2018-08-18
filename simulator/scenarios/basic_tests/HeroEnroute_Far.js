@@ -1,19 +1,14 @@
+const Citizen = require('../../simulator/Citizen');
 const Hero = require('../../simulator/Hero');
 const ScenarioEngine = require('../../simulator');
-const { HeroAction } = require('../../simulator/Actions');
+const { CitizenAction, HeroAction } = require('../../simulator/Actions');
 const { db } = require('../../db');
-const {
-  clearDB,
-  seedUsers,
-  seedBatman,
-  seedIncidents,
-  seedOneCitizenOneHero
-} = require('../../db/setups');
+const { clearDB, seedEnroute_HeroFar } = require('../../db/setups');
 
 const setupDB = async () => {
   // Clear the db
   await clearDB();
-  await seedOneCitizenOneHero();
+  await seedEnroute_HeroFar();
 };
 
 const createScenario = () => {
@@ -35,9 +30,27 @@ const createScenario = () => {
       hero: 0,
       action: HeroAction.GIVE_HEARTBEAT,
       data: {
-        lat: 5, //41.895367,
-        lon: 5, //-87.638977,
-        availabilityStatus: 'available',
+        lat: 80.00001, // Hero is very far from incident location
+        lon: 80.00001,
+        status: 'available',
+      },
+    },
+    {
+      hero: 0,
+      action: HeroAction.GIVE_HEARTBEAT,
+      data: {
+        lat: 80.00001, // Hero is very far from incident location
+        lon: 80.00001,
+        status: 'available',
+      },
+    },
+    {
+      hero: 0,
+      action: HeroAction.GIVE_HEARTBEAT,
+      data: {
+        lat: 80.00001, // Hero is very far from incident location
+        lon: 80.00001,
+        status: 'available',
       },
     },
   ];
