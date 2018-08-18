@@ -1,7 +1,7 @@
 const { HeroAction } = require('../simulator/Actions');
 
 // Create a list of actions that will move the hero to the incident
-module.exports.moveHeroToIncident = (
+module.exports.moveHeroToLocation = (
   startLat,
   startLon,
   targetLat,

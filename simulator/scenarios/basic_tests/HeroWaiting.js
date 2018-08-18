@@ -20,7 +20,7 @@ const createScenario = () => {
   console.log(`==== Created ${heroes.length} Heroes ====`);
 
   // Create a citizen
-  const citizens = [new Citizen(1)];
+  const citizens = [];
   console.log(`==== Created ${citizens.length} Citizens ====`);
 
   const actions = [
@@ -31,12 +31,6 @@ const createScenario = () => {
       data: { emailAddr: 'cody0@email.com' },
     },
     {
-      // Need to ask to be a citizen for server to register citizen msg handlers
-      citizen: 0,
-      action: CitizenAction.ASK_TO_BE_CITIZEN,
-      data: { citizenId: 1 }
-    },
-    {
       hero: 0,
       action: HeroAction.GIVE_HEARTBEAT,
       data: {
@@ -45,11 +39,14 @@ const createScenario = () => {
         availabilityStatus: 'available',
       },
     },
-    {
-      citizen: 0,
-      action: CitizenAction.ASK_FOR_HERO_HELP,
-      data: { lat: 20, lon: 20 }
-    }
+    ...moveHeroToLocation(
+      heroLoc.lat,
+      heroLoc.lon,
+      incidentLoc.lat,
+      incidentLoc.lon,
+      300,
+      { heroNum: 0, status: 'available' }
+    )
   ];
 
   /*
