@@ -111,7 +111,7 @@ socket.on('connect', () => {
   socket.on(
     ServerSendsToCitizen.HERO_ENROUTE,
     ({ lat, lon, heroImage, heroName }) => {
-      store.dispatch(heroEnroute(lat, lon, heroImage, heroName, CitizenState.HERO_ENROUTE));
+      store.dispatch(heroEnroute(lat, lon, heroImage, heroName, CitizenState.KNOWS_HERO_ENROUTE));
     },
   );
 
