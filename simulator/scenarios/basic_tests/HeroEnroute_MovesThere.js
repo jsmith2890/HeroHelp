@@ -4,7 +4,7 @@ const ScenarioEngine = require('../../simulator');
 const { CitizenAction, HeroAction } = require('../../simulator/Actions');
 const { db } = require('../../db');
 const { clearDB, seedEnroute_HeroFar } = require('../../db/setups');
-const { moveHeroToIncident } = require('../ActionCreator');
+const { moveHeroToLocation } = require('../ActionCreator');
 
 const heroLoc = { lat: 80, lon: 80 };
 const incidentLoc = { lat: 20, lon: 20 };
@@ -41,7 +41,7 @@ const createScenario = () => {
       action: CitizenAction.ASK_TO_BE_CITIZEN,
       data: { citizenId: 1 }
     },
-    ...moveHeroToIncident(
+    ...moveHeroToLocation(
       heroLoc.lat,
       heroLoc.lon,
       incidentLoc.lat,
