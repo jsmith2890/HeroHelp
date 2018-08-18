@@ -101,14 +101,10 @@ async function processIfHeroOnSite(socket, hero, lat, lon) {
   if (dist <= distanceForOnSite) {
     console.log('Hero is on site. Updating DB.')
     // Update entities to reflect Hero is on site
-    console.log(hero)
-    await hero.reload();
-    await hero.update({name: 'asdf3', presenceStatus: 'available', state: 'ENROUTE'},)
-    console.log(incident)
+    await hero.update({state: HeroState.ON_SITE})
     await incident.update({state: IncidentState.HERO_ON_SITE})
     const citizen = await Citizen.findById(incident.citizenId)
-    console.log(citizen)
-    await citizen.update({state: 'KNOWS_HERO_ON_SITE'})
+    await citizen.update({state: CitizenState.KNOWS_HERO_ON_SITE})
 
     console.log('Hero is on site. Notifying hero and citizen.')
     // Notify hero and citizen
@@ -143,9 +139,10 @@ module.exports.registerHeroHandlers = socket => {
 
       // Check if hero is ENROUTE and close enough to the incident site
       const isOnSite = await processIfHeroOnSite(socket, hero, lat, lon)
-
+      console.log('isOnSite:', isOnSite)
       if (!isOnSite && hero.state === HeroState.ENROUTE) {
         const [, , citizen] = await getHeroIncidentCitizen(socket.id)
+        // ****Does not take into account that citizen may have been disconnected while incident is in progress
         const citizenSocket = getSocketFromCitizenId(citizen.id)
         sendHeroEnrouteToCitizen(
           citizenSocket,
@@ -155,6 +152,7 @@ module.exports.registerHeroHandlers = socket => {
           hero.name
         )
       }
+      // process.exit(1);
     } catch (err) {
       console.log(' Error processing GIVE_HEARTBEAT', err)
     }

@@ -72,14 +72,18 @@ class ScenarioEngine {
       // console.log('Clearing globalTimer handle:', this.globalTimer)
       clearInterval(this.globalTimer);
       // Shutdown clients after some time
-      setTimeout(() => {
-        this.heroes.forEach(hero => {
-          hero.shutdown();
-        });
-        this.citizens.forEach(citizen => {
-          citizen.shutdown();
-        });
-      }, 5000);
+      console.log('*Leaving sockets open b/c disconnecting them will trigger DB updates, giving possibly unexpected results when you check the DB.')
+      // *May actually need to leave the socket open for certain tests
+      // b/c sockets disconnecting from the server trigger DB updates
+      // to the server
+      // setTimeout(() => {
+      //   this.heroes.forEach(hero => {
+      //     hero.shutdown();
+      //   });
+      //   this.citizens.forEach(citizen => {
+      //     citizen.shutdown();
+      //   });
+      // }, 5000);
     }
   }
 
