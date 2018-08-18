@@ -7,15 +7,14 @@ const {sendToClient} = require('./util')
 // ========== Send data to Hero via socket ========
 
 module.exports.sendAckHeartbeatToHero = (socket, incidents) => {
-  sendToClient(socket, ServerSendsToHero.ACK_RECEIVED_HEARTBEAT, incidents)
+  console.log(JSON.stringify({incidents}))
+  sendToClient(socket, ServerSendsToHero.ACK_RECEIVED_HEARTBEAT, {incidents})
 }
 
-module.exports.sendDispatchToHero = (socket, lat, lon, incidentId, timeout) => {
+module.exports.sendDispatchToHero = (socket, lat, lon) => {
   sendToClient(socket, ServerSendsToHero.GIVE_DISPATCH, {
     lat,
-    lon,
-    incidentId,
-    timeout
+    lon
   })
 }
 
@@ -32,8 +31,8 @@ module.exports.sendAckDispatchDecisionToHero = (
   })
 }
 
-module.exports.sendHeroOnSiteToHero = (socket, lat, lon) => {
-  sendToClient(socket, ServerSendsToHero.HERO_ON_SITE, {lat, lon})
+module.exports.sendHeroOnSiteToHero = (socket) => {
+  sendToClient(socket, ServerSendsToHero.HERO_ON_SITE, {})
 }
 
 module.exports.sendAckResolveIncidentToHero = socket => {

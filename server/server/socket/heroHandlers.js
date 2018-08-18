@@ -92,7 +92,7 @@ async function processIfHeroOnSite(socket, hero, lat, lon) {
       heroId: hero.id
     }
   })
-  const dist = Math.abs(distanceTwoPoints(lat, lon, incident.lat, incident.lon))
+  const dist = distanceTwoPoints(lat, lon, incident.lat, incident.lon)
   console.log(
     `Hero on site? Hero Pos: [${lat}, ${lon}]. Incident Pos [${incident.lat}, ${
       incident.lon
@@ -106,18 +106,20 @@ async function processIfHeroOnSite(socket, hero, lat, lon) {
     await citizen.update({state: CitizenState.KNOWS_HERO_ON_SITE})
 
     // Notify hero and citizen
-    sendHeroOnSiteToHero(socket, lat, lon)
+    sendHeroOnSiteToHero(socket)
     const citizenSocket = getSocketFromCitizenId(incident.citizenId)
     sendHeroOnSiteToCitizen(citizenSocket, lat, lon)
+    return true
   }
+  return false
 }
 
 module.exports.registerHeroHandlers = socket => {
   socket.on(HeroSends.GIVE_HEARTBEAT, async msgBody => {
-    console.log('GIVE_HEARTBEAT received.')
-    const {lat, lon, status} = msgBody
+    console.log('GIVE_HEARTBEAT received. ', msgBody)
+    const {lat, lon, availabilityStatus} = msgBody
 
-    const heroIncidentList = []
+    let heroIncidentList = []
     try {
       //get hero
       const heroId = getHeroIdFromSocket(socket.id)
@@ -127,73 +129,81 @@ module.exports.registerHeroHandlers = socket => {
       await hero.update({
         presenceLat: lat,
         presenceLon: lon,
-        presenceStatus: status
+        presenceStatus: availabilityStatus
       })
 
       //find incidents nearby not assigned to hero and not closed
-      heroIncidentList.concat(getNearbyIncidents(heroId, lat, lon, 10))
+      heroIncidentList = await getNearbyIncidents(heroId, lat, lon, 10)
 
       // Check if hero is ENROUTE and close enough to the incident site
-      processIfHeroOnSite(socket, hero, lat, lon)
+      const isOnSite = await processIfHeroOnSite(socket, hero, lat, lon)
+
+      if (!isOnSite && hero.state === HeroState.ENROUTE) {
+        const [, , citizen] = getHeroIncidentCitizen(socket.id)
+        const citizenSocket = getSocketFromCitizenId(citizen.id)
+        sendHeroEnrouteToCitizen(
+          citizenSocket,
+          lat,
+          lon,
+          hero.imageUrl,
+          hero.name
+        )
+      }
     } catch (err) {
       console.log(' Error processing GIVE_HEARTBEAT', err)
     }
     sendAckHeartbeatToHero(socket, heroIncidentList)
 
-    //       superhero-hb
-    // -set location and status in db
-    // -if superhero is not servicing an incident (dispatch/en-route/on-site)
-    // --send superhero-hb-ack with 10 nearest active incidents to display
-    // -if superhero is dispatched or assigned in db
-    // --send superhero-hb-ack with current incident
+    // if superhero assigned
     // --if not on-site and within epsilon distance of incident
     // ---transition superhero to arrived in db
     // ---send 'superhero-arriving' to subscribed civilians
     // ---send ‘on-site’ to superhero
     // --else
-    // ---send 'superhero-on-the-way' with new location to subscribed civilians
+    // ---send 'superhero-on-the-way' with new location to subscribed civilian
   })
 
+  //USE THIS TO RECONCILE DISPATCH CAPABILITY
   // decision ("accepted", "declined")
-  socket.on(HeroSends.TELL_DISPATCH_DECISION, async (incidentId, decision) => {
-    try {
-      console.log(
-        'Received TELL_DISPATCH_DECISION msg from hero. incidentId:',
-        incidentId,
-        'decision:',
-        decision
-      )
-      if (decision !== 'reject' && decision !== 'accept') {
-        throw new Error('Unknown decision:', decision)
-      }
-      if (decision === 'reject') {
-        throw new Error('Not implemented yet')
-      }
-      // Update Entities involved with incident (Citizen, Incident, Hero)
-      const [hero, incident, citizen] = await getHeroIncidentCitizen(socket.id)
-      await hero.update({state: HeroState.ENROUTE})
-      await incident.update({state: IncidentState.HERO_ENROUTE})
-      await citizen.update({state: CitizenState.KNOWS_HERO_ENROUTE})
+  // socket.on(HeroSends.TELL_DISPATCH_DECISION, async (incidentId, decision) => {
+  //   try {
+  //     console.log(
+  //       'Received TELL_DISPATCH_DECISION msg from hero. incidentId:',
+  //       incidentId,
+  //       'decision:',
+  //       decision
+  //     )
+  //     if (decision !== 'reject' && decision !== 'accept') {
+  //       throw new Error('Unknown decision:', decision)
+  //     }
+  //     if (decision === 'reject') {
+  //       throw new Error('Not implemented yet')
+  //     }
+  //     // Update Entities involved with incident (Citizen, Incident, Hero)
+  //     const [hero, incident, citizen] = await getHeroIncidentCitizen(socket.id)
+  //     await hero.update({state: HeroState.ENROUTE})
+  //     await incident.update({state: IncidentState.HERO_ENROUTE})
+  //     await citizen.update({state: CitizenState.KNOWS_HERO_ENROUTE})
 
-      // Notify Hero and Citizen
-      sendAckDispatchDecisionToHero(
-        socket,
-        incident.lat,
-        incident.lon,
-        incident.id
-      )
-      const citizenSocket = getSocketFromCitizenId(incident.citizenId)
-      sendHeroEnrouteToCitizen(
-        citizenSocket,
-        hero.presenceLat,
-        hero.presenceLon,
-        hero.imageUrl,
-        hero.name
-      )
-    } catch (err) {
-      console.error(err)
-    }
-  })
+  //     // Notify Hero and Citizen
+  //     sendAckDispatchDecisionToHero(
+  //       socket,
+  //       incident.lat,
+  //       incident.lon,
+  //       incident.id
+  //     )
+  //     const citizenSocket = getSocketFromCitizenId(incident.citizenId)
+  //     sendHeroEnrouteToCitizen(
+  //       citizenSocket,
+  //       hero.presenceLat,
+  //       hero.presenceLon,
+  //       hero.imageUrl,
+  //       hero.name
+  //     )
+  //   } catch (err) {
+  //     console.error(err)
+  //   }
+  // })
 
   socket.on(HeroSends.ASK_RESOLVE_INCIDENT, async incidentId => {
     try {
@@ -209,6 +219,7 @@ module.exports.registerHeroHandlers = socket => {
 
       // Notify Hero and Citizen
       sendAckResolveIncidentToHero(socket)
+      //TODO:  FIX THIS!!!!!!!
       const citizenSocket = getSocketFromCitizenId(incident.citizenId)
       sendIncidentResolvedToCitizen(citizenSocket)
     } catch (err) {

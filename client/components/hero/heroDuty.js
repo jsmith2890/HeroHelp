@@ -3,11 +3,12 @@ import { StyleSheet, View } from 'react-native';
 import { Button, Container } from 'native-base';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import ToggleSwitch from 'toggle-switch-react-native';
+import { isAvailable } from '../../socket'
 
 export default class HeroDuty extends React.Component {
 
   state = {
-    isOnToggleSwitch: true,
+    isOnToggleSwitch: false,
   };
 
   render() {
@@ -22,6 +23,7 @@ export default class HeroDuty extends React.Component {
             labelStyle={{ color: 'black', fontWeight: '900' }}
             size="large"
             onToggle={isOnToggleSwitch => {
+              isAvailable( isOnToggleSwitch );
               this.setState({ isOnToggleSwitch });
             }}
           />

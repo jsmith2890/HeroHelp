@@ -15,16 +15,16 @@ const {registerHeroHandlers} = require('./heroHandlers')
 
 // Handle incoming messages from Citizens
 module.exports.registerNewConnectionHandlers = socket => {
-  socket.on(NewSocketSends.ASK_TO_BE_HERO, async msgBody => {
+  socket.on(NewSocketSends.ASK_TO_BE_HERO, async ({emailAddr})=> {
     console.log('ASK_TO_BE_HERO received')
     try {
       //find hero by email, then find the hero entry in db and mark 'online'
       const user = await User.findOne({
-        where: {email: msgBody.emailAddr}
+        where: {email: emailAddr}
       })
 
       if (!user) {
-        throw new Error('Unknown email:', msgBody.emailAddr)
+        throw new Error('Unknown email:', emailAddr)
       }
 
       const hero = await Hero.findOne({
@@ -35,8 +35,9 @@ module.exports.registerNewConnectionHandlers = socket => {
 
       //upgrade to hero
       promoteSocketToHero(socket.id, hero.id)
-      sendTellHero(socket)
       registerHeroHandlers(socket)
+      sendTellHero(socket)
+
     } catch (err) {
       //auth failed -- drop cxn
       console.log('ASK_TO_BE_HERO error encountered - dropping cxn', err)
@@ -45,11 +46,10 @@ module.exports.registerNewConnectionHandlers = socket => {
     }
   })
 
-  socket.on(NewSocketSends.ASK_TO_BE_CITIZEN, async msgBody => {
-    console.log('ASK_TO_BE_CITIZEN received', msgBody)
+  socket.on(NewSocketSends.ASK_TO_BE_CITIZEN, async ({citizenId}) => {
+    console.log('ASK_TO_BE_CITIZEN received', citizenId)
     //find citizen by id -- if exists, great, if not, create one
     //note -- basically a somewhat less RESTful POST here ;-)
-    const {citizenId} = msgBody
     let needNewCitizen = false
 
     if (!citizenId) {
@@ -61,7 +61,7 @@ module.exports.registerNewConnectionHandlers = socket => {
     if (!needNewCitizen) {
       try {
         citizen = await Citizen.findById(citizenId)
-        await citizen.update({state: CitizenState.IDLE})
+        //could be reconnecting so if citizen already dealing with incident, leave state
       } catch (err) {
         needNewCitizen = true
       }
@@ -78,7 +78,7 @@ module.exports.registerNewConnectionHandlers = socket => {
       deleteSocket(socket.id)
     }
     promoteSocketToCitizen(socket.id, citizen.id)
-    sendTellCitizen(socket, citizen.id)
     registerCitizenHandlers(socket)
+    sendTellCitizen(socket, citizen.id)
   })
 }
