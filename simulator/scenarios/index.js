@@ -18,18 +18,14 @@ async function scenarioRunner() {
 
   // ====== Up-to-date tests ===========
    //await AskForHeroHelp(); // works
-   await AskAndDispatchHero() // works
+  // await AskAndDispatchHero() // works
   // await HeroHeartbeat(); // works
   // await HeroEnroute_Far() // works
   // await HeroEnroute_MovesThere() // works
-<<<<<<< HEAD
-  //await AlertToOnSite()
-=======
   // await AlertToOnSite()
 
   // ======== For testing Citizen app =========
   await HeroWaiting()
->>>>>>> master
 
   // ====== Tests that need updating to work =========
   // AskToBeHero_Invalid().run()
