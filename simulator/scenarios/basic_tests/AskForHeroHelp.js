@@ -2,38 +2,44 @@ const Hero = require('../../simulator/Hero');
 const Citizen = require('../../simulator/Citizen');
 const ScenarioEngine = require('../../simulator');
 const { HeroAction, CitizenAction } = require('../../simulator/Actions');
-const { clearDBAndCloseConn } = require('../../db/setups');
-const {ServerSendsToNewSocket, ServerSendsToCitizen} = require('../../simulator/MsgType')
-const EventEmitter = require('events')
+const { clearDB } = require('../../db/setups');
+const { db } = require('../../db');
+const {
+  ServerSendsToNewSocket,
+  ServerSendsToCitizen,
+} = require('../../simulator/MsgType');
+// const EventEmitter = require('events')
 
-const eventEmitter = new EventEmitter()
-const results = []
+// const eventEmitter = new EventEmitter()
+// const results = []
 
 const setupDB = async () => {
   // Clear the db
-  await clearDBAndCloseConn();
-}
-
-const registerListeners = () => {
-
-  eventEmitter.on(ServerSendsToNewSocket.TELL_CITIZEN, data => {
-    results.push(ServerSendsToNewSocket.TELL_CITIZEN)
-  });
-  eventEmitter.on(ServerSendsToCitizen.ACK_RECEIVED_HELP_REQUEST, data => {
-    results.push(ServerSendsToCitizen.ACK_RECEIVED_HELP_REQUEST)
-  });
+  // await clearDBAndCloseConn();
+  await clearDB();
 };
+
+// const registerListeners = () => {
+
+//   eventEmitter.on(ServerSendsToNewSocket.TELL_CITIZEN, data => {
+//     results.push(ServerSendsToNewSocket.TELL_CITIZEN)
+//   });
+//   eventEmitter.on(ServerSendsToCitizen.ACK_RECEIVED_HELP_REQUEST, data => {
+//     results.push(ServerSendsToCitizen.ACK_RECEIVED_HELP_REQUEST)
+//   });
+// };
 
 const createScenario = async () => {
   await setupDB();
-  registerListeners()
+  // registerListeners()
 
   const heroes = [];
-  console.log(`==== Created ${heroes.length} Hero Clients ====`);
+  console.log(`==== Created ${heroes.length} Hero Client(s) ====`);
 
   // Create a citizen client
-  const citizens = [new Citizen(1023, eventEmitter)];
-  console.log(`==== Created ${citizens.length} Citizen Clients ====`);
+  // const citizens = [new Citizen(1023, eventEmitter)];
+  const citizens = [new Citizen(1023)];
+  console.log(`==== Created ${citizens.length} Citizen Client(s) ====`);
 
   const actions = [
     {
@@ -63,21 +69,24 @@ const createScenario = async () => {
   // Maybe pass in an event subscriber fn (accepts an event emitter and
   // subscribes to events. Events will put their result in single results // object. Tests can check if all results match or are correct)
   const tickInterval = 5;
-  return new ScenarioEngine(
-    actions,
-    tickInterval,
-    citizens,
-    heroes,
-    registerListeners
-  );
-}
+  return new ScenarioEngine(actions, tickInterval, citizens, heroes);
+};
 
-const runScenarioAndTest = async () => {
-  await (await createScenario()).run()
-  // Check client results
-  console.log('results:', results)
-  // Check database state
-  // Can't currently check server state
-}
+const runScenario = async () => {
+  try {
+    (await createScenario()).run();
+  } finally {
+    db.close();
+  }
+};
 
-module.exports = {createScenario, runScenarioAndTest};
+// const runScenarioAndTest = async () => {
+//   await (await createScenario()).run()
+//   // Check client results
+//   console.log('results:', results)
+//   // Check database state
+//   // Can't currently check server state
+// }
+
+// module.exports = {createScenario, runScenarioAndTest};
+module.exports = runScenario;

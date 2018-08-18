@@ -7,8 +7,8 @@ class ScenarioEngine {
     actions = [],
     tickInterval = 5,
     citizens = [],
-    heroes = [],
-    registerListeners = () => {}
+    heroes = []
+    // registerListeners = () => {}
   ) {
     // Entities
     this.citizens = citizens;
@@ -23,9 +23,9 @@ class ScenarioEngine {
     this.step = -1;
     this.completed = false;
 
-    this.eventEmitter = new EventEmitter();
-    registerListeners(this.eventEmitter);
-    this.eventEmitter.emit('TEST', 'payload');
+    // this.eventEmitter = new EventEmitter();
+    // registerListeners(this.eventEmitter);
+    // this.eventEmitter.emit('TEST', 'payload');
 
     // Bindings
     this.run = this.run.bind(this);
@@ -107,17 +107,17 @@ class ScenarioEngine {
 
   executeHeroStep(currentHero, currentStep) {
     switch (currentStep.action) {
-      case HeroAction.TOGGLE_AVAILABILITY:
-        currentHero.toggleStatus(currentStep.data);
-        break;
-      case HeroAction.TELL_DISPATCH_DECISION:
-        currentHero.sendDispatchDecision(currentStep.data);
-        break;
       case HeroAction.ASK_TO_BE_HERO:
         currentHero.sendUpgradeAsHero(currentStep.data);
         break;
+      case HeroAction.TOGGLE_AVAILABILITY:
+        currentHero.toggleStatus(currentStep.data);
+        break;
       case HeroAction.GIVE_HEARTBEAT:
         currentHero.sendHb(currentStep.data);
+        break;
+      case HeroAction.TELL_DISPATCH_DECISION:
+        currentHero.sendDispatchDecision(currentStep.data);
         break;
       default:
         console.log('unknown hero action ', currentStep.action, ' ignored');
@@ -126,11 +126,11 @@ class ScenarioEngine {
 
   executeCitizenStep(currentCitizen, currentStep) {
     switch (currentStep.action) {
+      case CitizenAction.ASK_TO_BE_CITIZEN:
+        currentCitizen.sendAskToBeCitizen(currentStep.data);
+        break;
       case CitizenAction.ASK_FOR_HERO_HELP:
         currentCitizen.sendRequestHelp(currentStep.data);
-        break;
-      case CitizenAction.ASK_TO_BE_CITIZEN:
-        currentCitizen.sendUpgradeAsCitizen(currentStep.data);
         break;
       default:
         console.log('unknown citizen action ', currentStep.action, ' ignored');
