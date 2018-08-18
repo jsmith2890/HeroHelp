@@ -2,14 +2,16 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, View, TextInput } from 'react-native';
 import { Text, Container } from 'native-base';
 import { pushHelp } from '../../socket'
+import { Location, Permissions } from 'expo';
+import { connect } from 'react-redux'
 
 const styles = StyleSheet.create({
- container: {
+  container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#0a4963'
- },
+  },
   button: {
     backgroundColor: '#942422',
     borderRadius: 150,
@@ -23,25 +25,41 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontWeight: 'bold',
     fontSize: 100,
-
-
-
   }
 });
 
-export default class CitzenHome extends React.Component {
+class CitizenHome extends React.Component {
 
-  pressHelpHandler = () => {
-    pushHelp(49,-87);
+  pressHelpHandler = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    //assume they say yes
+    let location = await Location.getCurrentPositionAsync({});
+    pushHelp({ lat: location.coords.latitude, lon: location.coords.longitude });
   }
 
   render() {
     return (
       <Container style={styles.container}>
-        <TouchableOpacity onPress={this.pressHelpHandler} style={styles.button}>
+        <TouchableOpacity onPress={this.pressHelpHandler} style={styles.button} disabled={this.props.status !== 'IDLE'}>
           <Text style={styles.buttonText}>Help!</Text>
         </TouchableOpacity>
+        {this.props.status === 'WAIT_FOR_HERO_DISPATCH' &&
+        <Text>waiting for hero</Text>}
       </Container>
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    status: state.citizen.status
+  };
+};
+
+//const mapDispatchToProps = dispatch => {
+//};
+
+export default connect(
+  mapStateToProps,
+  //mapDispatchToProps,
+)(CitizenHome);
