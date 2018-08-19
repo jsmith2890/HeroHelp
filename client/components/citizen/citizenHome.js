@@ -1,4 +1,5 @@
 import React, { Fragment, Component } from 'react';
+import {Alert} from 'react-native';
 import { pushHelp } from '../../socket';
 import { Location, Permissions } from 'expo';
 import { connect } from 'react-redux';
@@ -59,6 +60,20 @@ class CitizenHome extends Component {
     if (status !== 'KNOWS_HERO_ENROUTE') {
       this.initialHeroCoords = { lat: 0.0, lon: 0.0 }
     }
+
+    //check to see if we just transitioned from hero-on-site to idle, and if so,
+    //advise citizen. 
+    if (status === 'IDLE' && this.lastStatus==='KNOWS_HERO_ON_SITE') {
+      Alert.alert(
+         'Call To Action',
+         'The situation has been resolved and all is well. Please press OK to continue. ',
+         [
+           {text: 'OK', onPress: () => console.log('OK Pressed')},
+         ],
+           { cancelable: false }
+       )
+    }
+
     //save new status in laststatus for next entry into this function
     this.lastStatus = status;
 
@@ -66,7 +81,7 @@ class CitizenHome extends Component {
     return (
       <Fragment>
         {status === 'IDLE' && (
-          <HelpButton pressHelpHandler={this.pressHelpHandler} />
+          <HelpButton renderAllIsWellMessage={this.renderAllIsWellMessage} pressHelpHandler={this.pressHelpHandler} />
         )}
         {status === 'WAIT_FOR_HERO_DISPATCH' && <WaitForDispatch />}
         {status === 'KNOWS_HERO_ENROUTE' && (
