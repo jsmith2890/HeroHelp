@@ -1,5 +1,5 @@
 // const User = require('./user')
-const {User, Hero, Citizen, Incident} = require('../../../server/db/models')
+const {User, Hero, Citizen, Incident} = require('../../../../server/server/db/models')
 
 /**
  * If we had any associations to make, this would be a great place to put them!
