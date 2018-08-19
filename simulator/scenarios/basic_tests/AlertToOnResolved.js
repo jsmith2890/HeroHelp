@@ -4,7 +4,7 @@ const ScenarioEngine = require('../../simulator');
 const { CitizenAction, HeroAction } = require('../../simulator/Actions');
 const { db } = require('../../db');
 const { clearDB, seedOneCitizenOneHero } = require('../../db/setups');
-const { moveHeroToIncident } = require('../ActionCreator');
+const { moveHeroToLocation } = require('../ActionCreator');
 
 const heroLoc = { lat: 80, lon: 80 };
 const incidentLoc = { lat: 20, lon: 20 };
@@ -40,14 +40,32 @@ const createScenario = () => {
       hero: 0,
       action: HeroAction.GIVE_HEARTBEAT,
       data: {
-        lat: 5, //41.895367,
-        lon: 5, //-87.638977,
+        lat: heroLoc.lat,
+        lon: heroLoc.lon,
         availabilityStatus: 'available',
       },
     },
     {
       citizen: 0,
       action: CitizenAction.ASK_FOR_HERO_HELP,
+      data: { lat: incidentLoc.lat, lon: incidentLoc.lon}
+    },
+    {},
+    {}, // Empty to wait for dispatch
+    ...moveHeroToLocation(
+      heroLoc.lat,
+      heroLoc.lon,
+      incidentLoc.lat,
+      incidentLoc.lon,
+      3,
+      { heroNum: 0, status: 'unavailable' }
+    ),
+    {},
+    {}, // Wait a little for hero to defeat the villain
+    {
+      // Ask server to resolve the incident associated with this Hero
+      hero: 0,
+      action: HeroAction.ASK_RESOLVE_INCIDENT,
     }
   ];
 
@@ -64,7 +82,7 @@ const createScenario = () => {
     Database updated with latest heartbeat data
   */
 
-  const tickInterval = 5;
+  const tickInterval = 20;
   return new ScenarioEngine(actions, tickInterval, citizens, heroes);
 };
 

@@ -81,7 +81,7 @@ class Hero {
   }
 
   shutdown() {
-    this.socket.disconnect(true)
+    this.socket.disconnect(true);
   }
 
   // ========= Handle Incoming Messages =========
@@ -91,7 +91,12 @@ class Hero {
   }
 
   recvHbAck(evt) {
-    console.log('hero ', this.socket.id, 'ACK_RECEIVED_HEARTBEAT recvHbAck ', evt);
+    console.log(
+      'hero ',
+      this.socket.id,
+      'ACK_RECEIVED_HEARTBEAT recvHbAck ',
+      evt
+    );
   }
 
   recvDispatch(evt) {
@@ -106,11 +111,21 @@ class Hero {
   }
 
   recvAckDispatchDecision(evt) {
-    console.log('hero ', this.socket.id, 'ACK_DISPATCH_DECISION recvAckDispatchDecision ', evt);
+    console.log(
+      'hero ',
+      this.socket.id,
+      'ACK_DISPATCH_DECISION recvAckDispatchDecision ',
+      evt
+    );
   }
 
   recvAckResolveIncident(evt) {
-    console.log('hero ', this.socket.id, 'ACK_RESOLVE_INCIDENT recvAckResolveIncident ', evt);
+    console.log(
+      'hero ',
+      this.socket.id,
+      'ACK_RESOLVE_INCIDENT recvAckResolveIncident ',
+      evt
+    );
   }
 
   // ========= Outgoing Messages =========
@@ -138,6 +153,11 @@ class Hero {
   sendHb(data = { lat: this.lat, lon: this.lon, status: this.status }) {
     console.log('hero ', this.socket.id, ' sendHb()');
     this.socket.emit(HeroSends.GIVE_HEARTBEAT, data);
+  }
+
+  sendResolveIncident(data = {}) {
+    console.log('hero ', this.socket.id, ' sendResolveIncident()');
+    this.socket.emit(HeroSends.ASK_RESOLVE_INCIDENT, data);
   }
 }
 

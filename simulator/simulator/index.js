@@ -72,7 +72,9 @@ class ScenarioEngine {
       // console.log('Clearing globalTimer handle:', this.globalTimer)
       clearInterval(this.globalTimer);
       // Shutdown clients after some time
-      console.log('*Leaving sockets open b/c disconnecting them will trigger DB updates, giving possibly unexpected results when you check the DB.')
+      console.log(
+        '*Leaving sockets open b/c disconnecting them will trigger DB updates, giving possibly unexpected results when you check the DB.'
+      );
       // *May actually need to leave the socket open for certain tests
       // b/c sockets disconnecting from the server trigger DB updates
       // to the server
@@ -122,6 +124,9 @@ class ScenarioEngine {
         break;
       case HeroAction.TELL_DISPATCH_DECISION:
         currentHero.sendDispatchDecision(currentStep.data);
+        break;
+      case HeroAction.ASK_RESOLVE_INCIDENT:
+        currentHero.sendResolveIncident(currentStep.data);
         break;
       default:
         console.log('unknown hero action ', currentStep.action, ' ignored');

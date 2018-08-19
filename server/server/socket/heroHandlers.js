@@ -139,7 +139,7 @@ module.exports.registerHeroHandlers = socket => {
 
       // Check if hero is ENROUTE and close enough to the incident site
       const isOnSite = await processIfHeroOnSite(socket, hero, lat, lon)
-      console.log('isOnSite:', isOnSite)
+
       if (!isOnSite && hero.state === HeroState.ENROUTE) {
         const [, , citizen] = await getHeroIncidentCitizen(socket.id)
         // ****Does not take into account that citizen may have been disconnected while incident is in progress
@@ -209,14 +209,14 @@ module.exports.registerHeroHandlers = socket => {
   //   }
   // })
 
-  socket.on(HeroSends.ASK_RESOLVE_INCIDENT, async incidentId => {
+  socket.on(HeroSends.ASK_RESOLVE_INCIDENT, async payload => {
     try {
       console.log(
-        'Received ASK_RESOLVE_INCIDENT msg from hero. incidentId:',
-        incidentId
+        'Received ASK_RESOLVE_INCIDENT msg from hero. payload:',
+        payload
       )
       // Update Entities involved with incident (Citizen, Incident, Hero)
-      const [hero, incident, citizen] = getHeroIncidentCitizen(socket.id)
+      const [hero, incident, citizen] = await getHeroIncidentCitizen(socket.id)
       await hero.update({state: HeroState.IDLE})
       await incident.update({state: IncidentState.RESOLVED})
       await citizen.update({state: CitizenState.IDLE})

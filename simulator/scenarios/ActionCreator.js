@@ -39,3 +39,28 @@ module.exports.moveHeroToLocation = (
   }
   return actions;
 };
+
+// Interleaves arrays while keeping their original ordering
+module.exports.mergeArrays = (actions1, actions2) => {
+  const results = []
+  let ptr1 = 0, ptr2 = 0
+  let switchFlag = true
+  while (ptr1 < actions1.length && ptr2 < actions2.length) {
+    if (switchFlag) {
+      results.push(actions1[ptr1])
+      ptr1++
+      switchFlag = !switchFlag
+    } else {
+      results.push(actions2[ptr2])
+      ptr2++
+      switchFlag = !switchFlag
+    }
+  }
+  if (ptr1 < actions1.length) {
+    results.push(...(actions1.slice(ptr1)))
+  }
+  if (ptr2 < actions2.length) {
+    results.push(...(actions2.slice(ptr2)))
+  }
+  return results
+}
