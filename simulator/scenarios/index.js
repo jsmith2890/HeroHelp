@@ -18,7 +18,7 @@ async function scenarioRunner() {
 
   // ====== Up-to-date tests ===========
    //await AskForHeroHelp(); // works
-  // await AskAndDispatchHero() // works
+   //await AskAndDispatchHero() // works
   // await HeroHeartbeat(); // works
   // await HeroEnroute_Far() // works
   // await HeroEnroute_MovesThere() // works
