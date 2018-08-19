@@ -25,7 +25,7 @@ async function scenarioRunner() {
   // await AlertToResolved() // works
 
   // ======== For testing Citizen app =========
-  // await HeroWaiting()
+  await HeroWaiting()
 
   // ====== Tests that need updating to work =========
   // AskToBeHero_Invalid().run()
