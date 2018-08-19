@@ -9,7 +9,7 @@
   "ios": {
     "bundleIdentifier": "com.codingmechanic.mapcuny",
     "config": {
-      "googleMapsApiKey": "AIzaSyDjGLBtfds1o5Dnv95UtKHNiNp45cN13S8"
+      "googleMapsApiKey": "AIzaSyBFyAFFaR0H51IsPR0oEtmsWU1TS_zmv7A"
     }
   }
 }

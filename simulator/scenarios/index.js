@@ -34,7 +34,7 @@ async function scenarioRunner() {
   // AskForHeroHelp().run() // seems to work
   // HeroHeartbeat().run() // mostly works. Need to send status back
   // HeroTellDispatchDecision().run(); // dispatch not working
-  // HeroOnSite().run(); // TODO
+  HeroOnSite().run() // TODO
   // HeroResolveIncident().run();  // TODO
 }
 
