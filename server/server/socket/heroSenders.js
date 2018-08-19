@@ -11,12 +11,10 @@ module.exports.sendAckHeartbeatToHero = (socket, incidents) => {
   sendToClient(socket, ServerSendsToHero.ACK_RECEIVED_HEARTBEAT, {incidents})
 }
 
-module.exports.sendDispatchToHero = (socket, lat, lon, incidentId, timeout) => {
+module.exports.sendDispatchToHero = (socket, lat, lon) => {
   sendToClient(socket, ServerSendsToHero.GIVE_DISPATCH, {
     lat,
-    lon,
-    incidentId,
-    timeout
+    lon
   })
 }
 
@@ -33,7 +31,7 @@ module.exports.sendAckDispatchDecisionToHero = (
   })
 }
 
-module.exports.sendHeroOnSiteToHero = socket => {
+module.exports.sendHeroOnSiteToHero = (socket) => {
   sendToClient(socket, ServerSendsToHero.HERO_ON_SITE, {})
 }
 

@@ -1,8 +1,15 @@
 const { HeroAction, CitizenAction } = require('./Actions');
+const EventEmitter = require('events');
 
 class ScenarioEngine {
   // A scenario is a list of action objects
-  constructor(actions = [], tickInterval = 5, citizens = [], heroes = []) {
+  constructor(
+    actions = [],
+    tickInterval = 5,
+    citizens = [],
+    heroes = []
+    // registerListeners = () => {}
+  ) {
     // Entities
     this.citizens = citizens;
     this.heroes = heroes;
@@ -16,16 +23,23 @@ class ScenarioEngine {
     this.step = -1;
     this.completed = false;
 
+    // this.eventEmitter = new EventEmitter();
+    // registerListeners(this.eventEmitter);
+    // this.eventEmitter.emit('TEST', 'payload');
+
     // Bindings
     this.run = this.run.bind(this);
     this.tick = this.tick.bind(this);
     this.executeStep = this.executeStep.bind(this);
+    this.executeHeroStep = this.executeHeroStep.bind(this);
+    this.executeCitizenStep = this.executeCitizenStep.bind(this);
     this.globalTimerHandler = this.globalTimerHandler.bind(this);
   }
 
   // Run the simulation
   run() {
     this.globalTimer = setInterval(this.globalTimerHandler, 200); //200ms ticks
+    // console.log('globalTimer handle:', this.globalTimer)
   }
 
   // This function gets run on an interval.
@@ -55,7 +69,23 @@ class ScenarioEngine {
     else {
       console.log(' ------- scenario has completed -------');
       this.completed = true;
-      clearInterval(this.globalTimer); //this.timer);
+      // console.log('Clearing globalTimer handle:', this.globalTimer)
+      clearInterval(this.globalTimer);
+      // Shutdown clients after some time
+      console.log(
+        '*Leaving sockets open b/c disconnecting them will trigger DB updates, giving possibly unexpected results when you check the DB.'
+      );
+      // *May actually need to leave the socket open for certain tests
+      // b/c sockets disconnecting from the server trigger DB updates
+      // to the server
+      // setTimeout(() => {
+      //   this.heroes.forEach(hero => {
+      //     hero.shutdown();
+      //   });
+      //   this.citizens.forEach(citizen => {
+      //     citizen.shutdown();
+      //   });
+      // }, 5000);
     }
   }
 
@@ -83,17 +113,20 @@ class ScenarioEngine {
 
   executeHeroStep(currentHero, currentStep) {
     switch (currentStep.action) {
+      case HeroAction.ASK_TO_BE_HERO:
+        currentHero.sendUpgradeAsHero(currentStep.data);
+        break;
       case HeroAction.TOGGLE_AVAILABILITY:
         currentHero.toggleStatus(currentStep.data);
+        break;
+      case HeroAction.GIVE_HEARTBEAT:
+        currentHero.sendHb(currentStep.data);
         break;
       case HeroAction.TELL_DISPATCH_DECISION:
         currentHero.sendDispatchDecision(currentStep.data);
         break;
-      case HeroAction.ASK_TO_BE_HERO:
-        currentHero.sendUpgradeAsHero(currentStep.data);
-        break;
-      case HeroAction.GIVE_HEARTBEAT:
-        currentHero.sendHb(currentStep.data)
+      case HeroAction.ASK_RESOLVE_INCIDENT:
+        currentHero.sendResolveIncident(currentStep.data);
         break;
       default:
         console.log('unknown hero action ', currentStep.action, ' ignored');
@@ -102,11 +135,11 @@ class ScenarioEngine {
 
   executeCitizenStep(currentCitizen, currentStep) {
     switch (currentStep.action) {
+      case CitizenAction.ASK_TO_BE_CITIZEN:
+        currentCitizen.sendAskToBeCitizen(currentStep.data);
+        break;
       case CitizenAction.ASK_FOR_HERO_HELP:
         currentCitizen.sendRequestHelp(currentStep.data);
-        break;
-      case CitizenAction.ASK_TO_BE_CITIZEN:
-        currentCitizen.sendUpgradeAsCitizen(currentStep.data);
         break;
       default:
         console.log('unknown citizen action ', currentStep.action, ' ignored');

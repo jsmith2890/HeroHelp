@@ -1,47 +1,52 @@
-import React from 'react';
-import { StyleSheet, TouchableOpacity, View, TextInput } from 'react-native';
-import { Text, Container } from 'native-base';
-import { pushHelp } from '../../socket'
+import React, { Fragment, Component } from 'react';
+import { pushHelp } from '../../socket';
+import { Location, Permissions } from 'expo';
+import { connect } from 'react-redux';
+import HeroEnroute from './heroEnroute';
+import HelpButton from './helpButton';
+import WaitForDispatch from './waitForDispatch';
+import HeroOnSite from './heroOnSite';
 
-const styles = StyleSheet.create({
- container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#0a4963'
- },
-  button: {
-    backgroundColor: '#942422',
-    borderRadius: 150,
-    height: 300,
-    width: 300,
-    flex: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonText: {
-    color: '#FFF',
-    fontWeight: 'bold',
-    fontSize: 100,
+class CitizenHome extends Component {
+  state = { incidentCoords: { lat: '', lon: '' } };
 
-
-
-  }
-});
-
-export default class CitzenHome extends React.Component {
-
-  pressHelpHandler = () => {
-    pushHelp(49,-87);
-  }
+  pressHelpHandler = async () => {
+    await Permissions.askAsync(Permissions.LOCATION);
+    //assume they say yes
+    let location = await Location.getCurrentPositionAsync({});
+    let lat = location.coords.latitude;
+    let lon = location.coords.longitude;
+    this.setState({ incidentCoords: { lat, lon } });
+    pushHelp({ lat, lon });
+  };
 
   render() {
+    const { status, hero } = this.props;
+    const { incidentCoords } = this.state;
+    //console.log(incidentCoords);
     return (
-      <Container style={styles.container}>
-        <TouchableOpacity onPress={this.pressHelpHandler} style={styles.button}>
-          <Text style={styles.buttonText}>Help!</Text>
-        </TouchableOpacity>
-      </Container>
+      <Fragment>
+        {status === 'IDLE' && (
+          <HelpButton pressHelpHandler={this.pressHelpHandler} />
+        )}
+        {status === 'WAIT_FOR_HERO_DISPATCH' && <WaitForDispatch />}
+        {status === 'KNOWS_HERO_ENROUTE' && (
+          <HeroEnroute hero={hero} incidentCoords={incidentCoords} />
+        )}
+        {status === 'KNOWS_HERO_ON_SITE' && <HeroOnSite hero={hero} />}
+      </Fragment>
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    status: 'KNOWS_HERO_ENROUTE', //state.citizen.status,
+    hero: state.citizen.hero,
+  };
+};
+
+//const mapDispatchToProps = dispatch => {
+//};
+
+export default connect(mapStateToProps)(CitizenHome);

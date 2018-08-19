@@ -61,7 +61,11 @@ module.exports.registerNewConnectionHandlers = socket => {
     if (!needNewCitizen) {
       try {
         citizen = await Citizen.findById(citizenId)
-        //could be reconnecting so if citizen already dealing with incident, leave state
+        //note -- could be reconnecting so if citizen already dealing with incident, leave state alone through this function
+        //null can also come back if not found
+        if (citizen === null) {
+          needNewCitizen=true;
+        }
       } catch (err) {
         needNewCitizen = true
       }
@@ -69,6 +73,7 @@ module.exports.registerNewConnectionHandlers = socket => {
 
     try {
       if (needNewCitizen) {
+        console.log('creating new citizen')
         citizen = await Citizen.create({state: CitizenState.IDLE})
       }
     } catch (err) {

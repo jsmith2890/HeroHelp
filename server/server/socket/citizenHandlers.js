@@ -49,7 +49,7 @@ module.exports.registerCitizenHandlers = socket => {
           state: IncidentState.WAITING_FOR_DISPATCH
         })
       }
-      queueIncidentDispatch(incident.id)
+      queueIncidentDispatch(incident.id,0)
 
       // Update entities in DB
       const citizen = await Citizen.findById(citizenId)

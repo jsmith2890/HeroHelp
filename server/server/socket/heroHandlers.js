@@ -23,16 +23,16 @@ const {setIncidentDistance, distanceTwoPoints} = require('./util')
 // Utility function
 async function getHeroIncidentCitizen(heroSocketId) {
   const heroId = getHeroIdFromSocket(heroSocketId)
-  console.log('heroId from map:', heroId)
+  // console.log('heroId from map:', heroId)
   const hero = await Hero.findById(heroId)
-  console.log('hero from DB:', hero)
+  // console.log('hero from DB:', hero)
   const incident = await Incident.findOne({
     where: {
       state: {[Op.ne]: IncidentState.RESOLVED},
       heroId: hero.id
     }
   })
-  console.log('incident from DB:', incident)
+  // console.log('incident from DB:', incident)
   if (!incident) {
     throw new Error('No open incident with heroId:', heroId)
   }
@@ -94,17 +94,19 @@ async function processIfHeroOnSite(socket, hero, lat, lon) {
   })
   const dist = distanceTwoPoints(lat, lon, incident.lat, incident.lon)
   console.log(
-    `Hero on site? Hero Pos: [${lat}, ${lon}]. Incident Pos [${incident.lat}, ${
+    `Hero is ENROUTE. Hero Pos: [${lat}, ${lon}]. Incident Pos [${incident.lat}, ${
       incident.lon
     }]`
   )
   if (dist <= distanceForOnSite) {
+    console.log('Hero is on site. Updating DB.')
     // Update entities to reflect Hero is on site
     await hero.update({state: HeroState.ON_SITE})
     await incident.update({state: IncidentState.HERO_ON_SITE})
     const citizen = await Citizen.findById(incident.citizenId)
     await citizen.update({state: CitizenState.KNOWS_HERO_ON_SITE})
 
+    console.log('Hero is on site. Notifying hero and citizen.')
     // Notify hero and citizen
     sendHeroOnSiteToHero(socket)
     const citizenSocket = getSocketFromCitizenId(incident.citizenId)
@@ -117,7 +119,7 @@ async function processIfHeroOnSite(socket, hero, lat, lon) {
 module.exports.registerHeroHandlers = socket => {
   socket.on(HeroSends.GIVE_HEARTBEAT, async msgBody => {
     console.log('GIVE_HEARTBEAT received. ', msgBody)
-    const {lat, lon, availabilityStatus} = msgBody
+    const {lat, lon, status} = msgBody
 
     let heroIncidentList = []
     try {
@@ -129,7 +131,7 @@ module.exports.registerHeroHandlers = socket => {
       await hero.update({
         presenceLat: lat,
         presenceLon: lon,
-        presenceStatus: availabilityStatus
+        presenceStatus: status
       })
 
       //find incidents nearby not assigned to hero and not closed
@@ -139,7 +141,8 @@ module.exports.registerHeroHandlers = socket => {
       const isOnSite = await processIfHeroOnSite(socket, hero, lat, lon)
 
       if (!isOnSite && hero.state === HeroState.ENROUTE) {
-        const [, , citizen] = getHeroIncidentCitizen(socket.id)
+        const [, , citizen] = await getHeroIncidentCitizen(socket.id)
+        // ****Does not take into account that citizen may have been disconnected while incident is in progress
         const citizenSocket = getSocketFromCitizenId(citizen.id)
         sendHeroEnrouteToCitizen(
           citizenSocket,
@@ -149,6 +152,7 @@ module.exports.registerHeroHandlers = socket => {
           hero.name
         )
       }
+      // process.exit(1);
     } catch (err) {
       console.log(' Error processing GIVE_HEARTBEAT', err)
     }
@@ -205,14 +209,14 @@ module.exports.registerHeroHandlers = socket => {
   //   }
   // })
 
-  socket.on(HeroSends.ASK_RESOLVE_INCIDENT, async incidentId => {
+  socket.on(HeroSends.ASK_RESOLVE_INCIDENT, async payload => {
     try {
       console.log(
-        'Received ASK_RESOLVE_INCIDENT msg from hero. incidentId:',
-        incidentId
+        'Received ASK_RESOLVE_INCIDENT msg from hero. payload:',
+        payload
       )
       // Update Entities involved with incident (Citizen, Incident, Hero)
-      const [hero, incident, citizen] = getHeroIncidentCitizen(socket.id)
+      const [hero, incident, citizen] = await getHeroIncidentCitizen(socket.id)
       await hero.update({state: HeroState.IDLE})
       await incident.update({state: IncidentState.RESOLVED})
       await citizen.update({state: CitizenState.IDLE})

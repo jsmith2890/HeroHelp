@@ -7,10 +7,11 @@ const {
 } = require('./MsgType');
 
 class Hero {
-  constructor(tickInterval) {
+  constructor(tickInterval = 5) {
     // Bindings
     this.toggleStatus = this.toggleStatus.bind(this);
     this.tick = this.tick.bind(this);
+    this.shutdown = this.shutdown.bind(this);
     this.recvHbAck = this.recvHbAck.bind(this);
     this.recvDispatch = this.recvDispatch.bind(this);
     this.recvHeroOnSite = this.recvHeroOnSite.bind(this);
@@ -79,6 +80,10 @@ class Hero {
     this.sendHb();
   }
 
+  shutdown() {
+    this.socket.disconnect(true);
+  }
+
   // ========= Handle Incoming Messages =========
 
   recvUpgradeAck(evt) {
@@ -86,7 +91,12 @@ class Hero {
   }
 
   recvHbAck(evt) {
-    console.log('hero ', this.socket.id, 'ACK_RECEIVED_HEARTBEAT recvHbAck ', evt);
+    console.log(
+      'hero ',
+      this.socket.id,
+      'ACK_RECEIVED_HEARTBEAT recvHbAck ',
+      evt
+    );
   }
 
   recvDispatch(evt) {
@@ -101,11 +111,21 @@ class Hero {
   }
 
   recvAckDispatchDecision(evt) {
-    console.log('hero ', this.socket.id, 'ACK_DISPATCH_DECISION recvAckDispatchDecision ', evt);
+    console.log(
+      'hero ',
+      this.socket.id,
+      'ACK_DISPATCH_DECISION recvAckDispatchDecision ',
+      evt
+    );
   }
 
   recvAckResolveIncident(evt) {
-    console.log('hero ', this.socket.id, 'ACK_RESOLVE_INCIDENT recvAckResolveIncident ', evt);
+    console.log(
+      'hero ',
+      this.socket.id,
+      'ACK_RESOLVE_INCIDENT recvAckResolveIncident ',
+      evt
+    );
   }
 
   // ========= Outgoing Messages =========
@@ -118,7 +138,7 @@ class Hero {
   sendDispatchDecision(
     data = {
       incidentId: this.incidentId,
-      decision: 'accepted',
+      decision: 'accept',
     }
   ) {
     console.log('hero ', this.socket.id, ' sendDispatchDecision ');
@@ -133,6 +153,11 @@ class Hero {
   sendHb(data = { lat: this.lat, lon: this.lon, status: this.status }) {
     console.log('hero ', this.socket.id, ' sendHb()');
     this.socket.emit(HeroSends.GIVE_HEARTBEAT, data);
+  }
+
+  sendResolveIncident(data = {}) {
+    console.log('hero ', this.socket.id, ' sendResolveIncident()');
+    this.socket.emit(HeroSends.ASK_RESOLVE_INCIDENT, data);
   }
 }
 

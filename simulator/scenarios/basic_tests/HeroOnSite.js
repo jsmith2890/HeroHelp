@@ -16,7 +16,7 @@ function createScenario() {
       // Must register as a Hero first for server to listen for Hero msgs
       hero: 0,
       action: HeroAction.ASK_TO_BE_HERO,
-      data: { emailAddr: 'cody@email.com' },
+      data: { emailAddr: 'cody0@email.com' },
     },
     {
       // Hero indicates they're available

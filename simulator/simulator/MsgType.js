@@ -40,16 +40,12 @@ module.exports.ServerSendsToHero = {
   ACK_RECEIVED_HEARTBEAT: "ACK_RECEIVED_HEARTBEAT", // incidentsArr[{lat, lon}]
   GIVE_DISPATCH: "GIVE_DISPATCH", // lat, lon, incidentId, timeout(sec), incidentInfo
   HERO_ON_SITE: "HERO_ON_SITE", // lat, lon
-  CANCEL_DISPATCH: "CANCEL_DISPATCH", // incidentId
-  ACK_DISPATCH_DECISION: "ACK_DISPATCH_DECISION", // lat, lon, incidentId
   ACK_RESOLVE_INCIDENT: "ACK_RESOLVE_INCIDENT", // No payload
-  // GIVE_ERROR: "GIVE_ERROR",
 };
 
 // ========= Incident States =========
 module.exports.IncidentState = {
-  CREATED: 'CREATED', // (citizen requested help)
-  WAITING_FOR_HERO_DECISION: 'WAITING_FOR_HERO_DECISION', // (ask hero to accept or reject)
+  WAITING_FOR_DISPATCH: 'WAITING_FOR_DISPATCH', // (citizen requested help)
   HERO_ENROUTE: 'HERO_ENROUTE', // (hero has accepted and is on the way)
   HERO_ON_SITE: 'HERO_ON_SITE', // (hero has made it on site)
   RESOLVED: 'RESOLVED', // (hero has resolved the incident)
@@ -57,7 +53,6 @@ module.exports.IncidentState = {
 
 module.exports.HeroState = {
   IDLE: 'IDLE', // (will not receive a dispatch)
-  DECIDING_ON_DISPATCH: 'DECIDING_ON_DISPATCH', // (can accept or reject)
   ENROUTE: 'ENROUTE', // (accepted dispatch and on the way)
   ON_SITE: 'ON_SITE', // (made it on site)
 }

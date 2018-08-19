@@ -1,0 +1,6 @@
+[
+  { "state": "IDLE" },
+  { "state": "WAIT_FOR_HERO_DISPATCH" },
+  { "state": "KNOWS_HERO_ENROUTE" },
+  { "state": "KNOWS_HERO_ON_SITE" }
+]
