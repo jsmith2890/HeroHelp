@@ -11,7 +11,7 @@ const HeroOnSite = require('./basic_tests/HeroOnSite')
 const HeroResolveIncident = require('./basic_tests/HeroResolveIncident')
 const HeroEnroute_Far = require('./basic_tests/HeroEnroute_Far')
 const HeroEnroute_MovesThere = require('./basic_tests/HeroEnroute_MovesThere')
-const AlertToOnSite = require('./basic_tests/AlertToOnSite')
+const AlertToResolved = require('./basic_tests/AlertToResolved')
 const HeroWaiting = require('./basic_tests/HeroWaiting')
 
 async function scenarioRunner() {
@@ -22,10 +22,10 @@ async function scenarioRunner() {
   // await HeroHeartbeat(); // works
   // await HeroEnroute_Far() // works
   // await HeroEnroute_MovesThere() // works
-  // await AlertToOnSite()
+  // await AlertToResolved() // works
 
   // ======== For testing Citizen app =========
-  await HeroWaiting()
+  // await HeroWaiting()
 
   // ====== Tests that need updating to work =========
   // AskToBeHero_Invalid().run()
