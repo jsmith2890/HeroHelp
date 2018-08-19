@@ -14,13 +14,7 @@ const GOOGLE_MAPS_API_KEY = 'AIzaSyBFyAFFaR0H51IsPR0oEtmsWU1TS_zmv7A'
 class HeroDuty extends React.Component {
   state = {
     isOnToggleSwitch: false,
-    initialLocation: null,
-    marker: {
-      latitude: 41.8,
-      longitude: -87.6
-    },
-    dispatchAlertReceived: false,
-    flyingOrDriving: null
+    initialLocation: null
   }
 
   componentDidMount() {
@@ -44,17 +38,18 @@ class HeroDuty extends React.Component {
   }
 
   showAlert = () => {
+    let flyingOrDriving = null
     Alert.alert('Dispatch Alert!', 'You have been dispatched for duty', [
       {
         text: 'Driving Directions',
-        onPress: () => this.setState({flyingOrDriving: 'driving'})
+        onPress: () => (flyingOrDriving = 'driving')
       },
       {
         text: 'Flying Directions',
-        onPress: () => this.setState({flyingOrDriving: 'flying'})
+        onPress: () => (flyingOrDriving = 'flying')
       }
     ])
-    this.setState({dispatchAlertReceived: true})
+    return flyingOrDriving
   }
 
   getInitialLocation = async () => {
@@ -74,6 +69,9 @@ class HeroDuty extends React.Component {
   }
 
   render() {
+    let dispatchAlertReceived = false
+    let flyingOrDriving = null
+
     if (!this.state.initialLocation) {
       return (
         <View>
@@ -115,8 +113,9 @@ class HeroDuty extends React.Component {
           </View>
         )
       } else if (this.props.status === 'ENROUTE') {
-        if (!this.state.dispatchAlertReceived) {
-          this.showAlert()
+        if (!dispatchAlertReceived) {
+          flyingOrDriving = this.showAlert()
+          dispatchAlertReceived = true
         }
         return (
           <View style={styles.container}>
@@ -145,21 +144,27 @@ class HeroDuty extends React.Component {
                 longitudeDelta: 0.025
               }}
             >
-              {this.state.flyingOrDriving === 'driving' && (
+              {flyingOrDriving === 'driving' && (
                 <MapViewDirections
-                  origin={this.state.initialLocation.coords}
-                  destination={this.props.incident}
+                  origin={{
+                    latitude: this.state.initialLocation.coords.latitude,
+                    longitude: this.state.initialLocation.coords.longitude
+                  }}
+                  destination={{
+                    latitude: this.props.incident.lat,
+                    longitude: this.props.incident.lon
+                  }}
                   apikey={GOOGLE_MAPS_API_KEY}
                   strokeWidth={5}
                   strokeColor="hotpink"
                 />
               )}
-              {this.state.flyingOrDriving === 'flying' && (
+              {flyingOrDriving === 'flying' && (
                 <Polyline
                   coordinates={[
                     {
-                      latitude: this.state.initialLocation.latitude,
-                      longitude: this.state.initialLocation.longitude
+                      latitude: this.state.initialLocation.coords.latitude,
+                      longitude: this.state.initialLocation.coords.longitude
                     },
                     {
                       latitude: this.props.incident.lat,
@@ -180,8 +185,8 @@ class HeroDuty extends React.Component {
           </View>
         )
       } else if (this.props.status === 'ON_SITE') {
-        this.setState({dispatchAlertReceived: false})
-        this.setState({flyingOrDriving: null})
+        dispatchAlertReceived = false
+        flyingOrDriving = null
         return (
           <View style={styles.container}>
             <View style={styles.switch}>
@@ -273,7 +278,7 @@ const styles = StyleSheet.create({
     width: 200
   },
   alert: {
-    backgroundColor: '#4ba37b',
+    backgroundColor: '#000',
     width: 100,
     borderRadius: 50,
     alignItems: 'center',
