@@ -37,9 +37,25 @@ class CitizenHome extends Component {
       this.initialHeroCoords = {lat: hero.lat, lon: hero.lon}
     }
 
+    //if we already know hero is enroute and has been previously rendered
+    //based on current and last status being 'enroute', check to see if
+    //hero has crossed 60% of screen distance to incident.  If so, zoom in.
+    //check both lat and lon deltas and ensure both are at least 60% to
+    //deal with direct east-west or north-south movements 
+    if (status=== 'KNOWS_HERO_ENROUTE' && this.lastStatus==='KNOWS_HERO_ENROUTE') {
+      let deltaMapLat = Math.abs(this.initialHeroCoords.lat-incidentCoords.lat);
+      let deltaMapLon = Math.abs(this.initialHeroCoords.lon-incidentCoords.lon);
+      let deltaHeroLat = Math.abs(hero.lat-incidentCoords.lat);
+      let deltaHeroLon = Math.abs(hero.lon-incidentCoords.lon);
+      let deltaDeltaLat = deltaHeroLat/deltaMapLat;
+      let deltaDeltaLon = deltaHeroLon/deltaMapLon;
+      if (deltaDeltaLat<0.40 && deltaDeltaLon<0.40) { //100-60=>40%
+        this.initialHeroCoords = {lat: hero.lat, lon:hero.lon}
+      }
+    }
+
     //check to see if we're transitioning out of 'hero-enroute' so
-    //we can clear map rendering info -- keep a simple if statement
-    //that will clear this out more than needed, but does't hurt ;-)
+    //we can clear map rendering info
     if (status !== 'KNOWS_HERO_ENROUTE') {
       this.initialHeroCoords = { lat: 0.0, lon: 0.0 }
     }

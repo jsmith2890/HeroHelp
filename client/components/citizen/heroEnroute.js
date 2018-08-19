@@ -31,7 +31,6 @@ const HeroEnroute = ({ hero, incidentCoords, initialHeroCoords }) => {
       image: require('../assets/marker.png'),
     },
   ];
-  //console.log(markers);
   return (
     <View style={styles.container}>
       <MapView
@@ -41,9 +40,16 @@ const HeroEnroute = ({ hero, incidentCoords, initialHeroCoords }) => {
         initialRegion={{
           latitude: incidentCoords.lat, //41.89,
           longitude: incidentCoords.lon, //-87.64,
-          latitudeDelta: Math.abs(initialHeroCoords.lat - incidentCoords.lat) * 1.1, //0.1,
-          longitudeDelta: Math.abs(initialHeroCoords.lon - incidentCoords.lon) * 1.1, //0.05,
+          latitudeDelta: Math.abs(initialHeroCoords.lat - incidentCoords.lat)*2 * 1.1, //0.1,
+          longitudeDelta: Math.abs(initialHeroCoords.lon - incidentCoords.lon)*2 * 1.1, //0.05,
         }}
+        region={{
+          latitude: incidentCoords.lat, //41.89,
+          longitude: incidentCoords.lon, //-87.64,
+          latitudeDelta: Math.abs(initialHeroCoords.lat - incidentCoords.lat)*2 * 1.1, //0.1,
+          longitudeDelta: Math.abs(initialHeroCoords.lon - incidentCoords.lon)*2 * 1.1, //0.05,
+        }}
+
       >
         {markers.map((marker, id) => (
           <Marker
