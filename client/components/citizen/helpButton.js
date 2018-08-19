@@ -1,7 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Text, Container } from 'native-base';
-import { Location, Permissions } from 'expo';
+import { StyleSheet, TouchableOpacity, Text, View } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -27,11 +25,11 @@ const styles = StyleSheet.create({
 });
 
 const HelpButton = ({ pressHelpHandler }) => (
-  <Container style={styles.container}>
+  <View style={styles.container}>
     <TouchableOpacity onPress={pressHelpHandler} style={styles.button}>
       <Text style={styles.buttonText}>Help!</Text>
     </TouchableOpacity>
-  </Container>
+  </View>
 );
 
 export default HelpButton;
