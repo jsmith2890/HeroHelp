@@ -17,7 +17,7 @@ const HeroWaiting = require('./basic_tests/HeroWaiting')
 async function scenarioRunner() {
 
   // ====== Up-to-date tests ===========
-  // await AskForHeroHelp(); // works
+   //await AskForHeroHelp(); // works
   // await AskAndDispatchHero() // works
   // await HeroHeartbeat(); // works
   // await HeroEnroute_Far() // works
