@@ -8,6 +8,8 @@
     "start-dev": "NODE_ENV='development' npm run start-simulator",
     "start-simulator": "nodemon simulator -e html,js,scss --ignore public --ignore client",
     "start-scenario": "node scenarios",
+    "start-citizen": "node scenarios/citizen.js",
+    "start-hero": "node scenarios/hero.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
