@@ -21,7 +21,7 @@ async function scenarioRunner() {
   // await HeroHeartbeat(); // works
   // await HeroEnroute_Far() // works
   // await HeroEnroute_MovesThere() // works
-  // await AlertToResolved() // works
+  await AlertToResolved() // works
 
   // ======== For testing Citizen app =========
   // await HeroWaiting()
