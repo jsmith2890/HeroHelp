@@ -15,17 +15,16 @@ const AlertToResolved = require('./basic_tests/AlertToResolved')
 const HeroWaiting = require('./basic_tests/HeroWaiting')
 
 async function scenarioRunner() {
-
   // ====== Up-to-date tests ===========
-   //await AskForHeroHelp(); // works
-   //await AskAndDispatchHero() // works
+  await AskForHeroHelp() // works
+  //await AskAndDispatchHero() // works
   // await HeroHeartbeat(); // works
   // await HeroEnroute_Far() // works
   // await HeroEnroute_MovesThere() // works
   // await AlertToResolved() // works
 
   // ======== For testing Citizen app =========
-  await HeroWaiting()
+  // await HeroWaiting()
 
   // ====== Tests that need updating to work =========
   // AskToBeHero_Invalid().run()
@@ -34,7 +33,7 @@ async function scenarioRunner() {
   // AskForHeroHelp().run() // seems to work
   // HeroHeartbeat().run() // mostly works. Need to send status back
   // HeroTellDispatchDecision().run(); // dispatch not working
-  HeroOnSite().run() // TODO
+  // HeroOnSite().run() // TODO
   // HeroResolveIncident().run();  // TODO
 }
 

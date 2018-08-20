@@ -1,44 +1,45 @@
-import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
-import LandingPage from './landingPage';
-import HeroLogin from './hero/heroLogin';
-import HeroSignUp from './hero/hero-signup';
-import HeroDuty from './hero/heroDuty';
-import CitizenHome from './citizen/citizenHome';
+import {createStackNavigator, createSwitchNavigator} from 'react-navigation'
+import LandingPage from './landingPage'
+import HeroLogin from './hero/heroLogin'
+import HeroSignUp from './hero/hero-signup'
+import HeroDuty from './hero/heroDuty'
+import CitizenHome from './citizen/citizenHome'
+import HeroDuty1 from './hero/heroDuty1'
 
 export const SignedOut = createStackNavigator({
   LandingPage: {
     screen: LandingPage,
     navigationOptions: {
-      title: 'LandingPage',
-    },
+      title: 'LandingPage'
+    }
   },
   HeroLogin,
   HeroSignUp,
-  CitizenHome,
-});
+  CitizenHome
+})
 
 const Hero = createStackNavigator({
-  HeroDuty,
-});
+  HeroDuty1
+})
 
 export const createRootNavigator = (signedIn = false) => {
-  let initialRouteName = 'SignedOut';
-  if (signedIn ) initialRouteName = 'HeroSignedIn';
+  let initialRouteName = 'SignedOut'
+  if (signedIn) initialRouteName = 'HeroSignedIn'
 
   return createSwitchNavigator(
     {
       HeroSignedIn: {
-        screen: Hero,
+        screen: Hero
       },
       Citizen: {
-        screen: CitizenHome,
+        screen: CitizenHome
       },
       SignedOut: {
-        screen: SignedOut,
-      },
+        screen: SignedOut
+      }
     },
     {
-      initialRouteName,
-    },
-  );
-};
+      initialRouteName
+    }
+  )
+}
