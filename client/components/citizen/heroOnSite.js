@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Image, View, Text } from 'react-native';
+import { ENV_PATH } from '../../secrets';
 
 const styles = StyleSheet.create({
   container: {
@@ -10,6 +11,8 @@ const styles = StyleSheet.create({
   },
   image: {
     alignSelf: 'center',
+    width: 300,
+    height: 300
   },
   text: {
     color: 'white',
@@ -18,11 +21,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const HeroOnSite = () => (
-  <View style={styles.container}>
-    <Image source={require('../assets/spiderman.png')} style={styles.image} />
-    <Text style={styles.text}>Hero on site</Text>
-  </View>
-);
+const HeroOnSite = ({ hero }) => {
+  let imageUri = {}
+  imageUri.uri = ENV_PATH + '/' + hero.heroImage
+  console.log(imageUri);
+  return (
+    <View style={styles.container}>
+      <Image source={imageUri} style={styles.image} />
+      <Text style={styles.text}>Hero on site</Text>
+    </View>
+  )
+}
 
 export default HeroOnSite;
