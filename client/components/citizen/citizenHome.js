@@ -95,7 +95,7 @@ class CitizenHome extends Component {
 
 const mapStateToProps = state => {
   return {
-    status: state.citizen.status,
+    status: 'KNOWS_HERO_ON_SITE',//state.citizen.status,
     hero: state.citizen.hero,
   };
 };

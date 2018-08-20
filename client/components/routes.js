@@ -5,17 +5,25 @@ import HeroSignUp from './hero/hero-signup';
 import HeroDuty from './hero/heroDuty';
 import CitizenHome from './citizen/citizenHome';
 
-export const SignedOut = createStackNavigator({
-  LandingPage: {
-    screen: LandingPage,
-    navigationOptions: {
-      title: 'LandingPage',
+export const SignedOut = createStackNavigator(
+  {
+    LandingPage: {
+      screen: LandingPage,
+      navigationOptions: {
+        title: 'LandingPage',
+      },
     },
+    HeroLogin,
+    HeroSignUp,
+    CitizenHome,
   },
-  HeroLogin,
-  HeroSignUp,
-  CitizenHome,
-});
+  // {
+  //   headerMode: 'none',
+  //   navigationOptions: {
+  //     headerVisible: false,
+  //   },
+  // },
+);
 
 const Hero = createStackNavigator({
   HeroDuty,
@@ -23,15 +31,12 @@ const Hero = createStackNavigator({
 
 export const createRootNavigator = (signedIn = false) => {
   let initialRouteName = 'SignedOut';
-  if (signedIn ) initialRouteName = 'HeroSignedIn';
+  if (signedIn) initialRouteName = 'HeroSignedIn';
 
   return createSwitchNavigator(
     {
       HeroSignedIn: {
         screen: Hero,
-      },
-      Citizen: {
-        screen: CitizenHome,
       },
       SignedOut: {
         screen: SignedOut,

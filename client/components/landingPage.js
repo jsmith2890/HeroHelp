@@ -29,11 +29,11 @@ export default class LandingPage extends React.Component {
     return (
       <Container style={{ flex: 1 }}>
         <Grid>
-          <Row size={3} style={{ paddingTop: 80, paddingLeft: 10 }}>
+          <Row size={3} style={{ paddingTop: 100, paddingLeft: 30 }}>
             <Image source={require('./assets/logo.png')} />
           </Row>
           <Row size={1}>
-            <Col style={{ paddingLeft: 50 }}>
+            <Col style={{ paddingLeft: 80 }}>
               <Button
                 onPress={this.pressCitizen}
                 style={{ backgroundColor: '#002239' }}
