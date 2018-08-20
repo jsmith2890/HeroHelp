@@ -1,59 +1,48 @@
-import React from 'react'
-import {StyleSheet, View, Text, Alert, TouchableOpacity} from 'react-native'
-import {connect} from 'react-redux'
-import {Container, Header, Content, Button, Icon} from 'native-base'
-import MapView, {PROVIDER_GOOGLE, Marker, Polyline} from 'react-native-maps'
-import ToggleSwitch from 'toggle-switch-react-native'
-import {isAvailable} from '../../socket'
-import {Constants, Location, Permissions} from 'expo'
-import {resolveIncident} from '../../socket/index'
-import MapViewDirections from 'react-native-maps-directions'
-import RetroMapStyles from '../assets/mapStyle.json'
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import { Button, Icon } from 'native-base';
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import ToggleSwitch from 'toggle-switch-react-native';
 
-const GOOGLE_MAPS_API_KEY = 'AIzaSyBFyAFFaR0H51IsPR0oEtmsWU1TS_zmv7A'
+import RetroMapStyles from '../assets/mapStyle.json';
+
+const GOOGLE_MAPS_API_KEY = 'AIzaSyBFyAFFaR0H51IsPR0oEtmsWU1TS_zmv7A';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'center'
-  },
-  switch: {
-    marginTop: 10,
-    marginBottom: 10
+    alignItems: 'center',
   },
   mapOnSite: {
-    height: '81%',
-    width: '100%'
+    height: '100%',
+    width: '100%',
   },
   buttonContainer: {
-    marginTop: 10
+    marginTop: 10,
+    marginBottom: 10,
   },
   buttonText: {
     fontSize: 18,
     color: 'white',
-    marginLeft: 10,
     textAlign: 'center',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   button: {
-    width: 200
-  }
-})
+    width: 200,
+    flex: 1,
+    alignItems: 'center'
+  },
+});
 
-const HeroOnSite = ({handleResolve, incident}) => {
+const HeroOnSite = ({ handleResolve, incident }) => {
   return (
     <View style={styles.container}>
-      <View style={styles.switch}>
-        <ToggleSwitch
-          isOn={true}
-          onColor="gray"
-          offColor="gray"
-          // label="On Duty"
-          labelStyle={{color: 'black', fontWeight: '2000'}}
-          size="large"
-          onToggle={isOn => (isOn = true)}
-        />
+      <View style={styles.buttonContainer}>
+        <Button danger style={styles.button} onPress={handleResolve}>
+          <Icon name="ios-close-circle" />
+          <Text style={styles.buttonText}>Resolve Incident</Text>
+        </Button>
       </View>
       <MapView
         provider={PROVIDER_GOOGLE}
@@ -66,24 +55,18 @@ const HeroOnSite = ({handleResolve, incident}) => {
           latitude: incident.lat,
           longitude: incident.lon,
           latitudeDelta: 0.025,
-          longitudeDelta: 0.012
+          longitudeDelta: 0.012,
         }}
       >
         <Marker
           coordinate={{
             latitude: incident.lat,
-            longitude: incident.lon
+            longitude: incident.lon,
           }}
         />
       </MapView>
-      <View style={styles.buttonContainer}>
-        <Button danger style={styles.button} onPress={handleResolve}>
-          <Text style={styles.buttonText}>Resolve Incident</Text>
-          <Icon name="ios-close-circle" />
-        </Button>
-      </View>
     </View>
-  )
-}
+  );
+};
 
-export default HeroOnSite
+export default HeroOnSite;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { auth } from '../../store';
 import { connect } from 'react-redux';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import {
   Container,
   Content,
@@ -12,6 +12,19 @@ import {
   Button,
   Text,
 } from 'native-base';
+
+const styles = StyleSheet.create({
+  button: {
+    width: '80%',
+    marginTop: 15,
+    alignSelf: 'center',
+    backgroundColor: '#002239'
+  },
+  image: {
+    marginTop: 20,
+    alignSelf: 'center',
+  },
+});
 
 class HeroLogin extends Component {
   constructor() {
@@ -38,6 +51,7 @@ class HeroLogin extends Component {
       <Container>
         <Content>
           <View>
+            <Image source={require('../assets/logo.png')} style={styles.image} />
             <Form>
               <Item stackedLabel>
                 <Label>Email</Label>
@@ -73,14 +87,6 @@ class HeroLogin extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  button: {
-    width: '80%',
-    marginTop: 10,
-    alignSelf: 'center',
-  },
-});
 
 const mapDispatchToProps = dispatch => {
   return {

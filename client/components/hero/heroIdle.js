@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import {StyleSheet, View, Text} from 'react-native'
-import MapView, {PROVIDER_GOOGLE, Marker, Polyline} from 'react-native-maps'
+import {StyleSheet, View} from 'react-native'
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps'
 import ToggleSwitch from 'toggle-switch-react-native'
 import {isAvailable} from '../../socket'
 import RetroMapStyles from '../assets/mapStyle.json'
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   mapIdle: {
-    height: '80%',
+    height: '100%',
     width: '100%'
   }
 })
@@ -33,8 +33,8 @@ export default class HeroIdle extends Component {
         <View style={styles.switch}>
           <ToggleSwitch
             isOn={this.state.isOnToggleSwitch}
-            onColor="green"
-            offColor="red"
+            onColor='#002239'
+            offColor="#848587"
             // label="On Duty"
             labelStyle={{color: 'black', fontWeight: '900'}}
             size="large"
