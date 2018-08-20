@@ -15,7 +15,7 @@ const {
 
 const setupDB = async () => {
   // Clear the db
-  await clearDB();
+  //await clearDB();
 };
 
 // const registerListeners = () => {
@@ -49,6 +49,7 @@ const createScenario = () => {
     {
       citizen: 0,
       action: CitizenAction.ASK_FOR_HERO_HELP,
+      data: { lat: 41.954114, lon: -87.669101 }
     },
   ];
   /*

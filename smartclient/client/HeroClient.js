@@ -1,4 +1,4 @@
-const { createSocket } = require('./helper');
+const { createSocket, oneStepToLocation } = require('./helper');
 const {
   NewSocketSends,
   ServerSendsToHero,
@@ -12,15 +12,15 @@ const { User, Hero } = require('../db');
 const fullstackLat = 41.895367;
 const fullstackLon = -87.638977;
 
-// Bounds (within chicago)
-const minLat = 41.719105;
-const maxLat = 41.99626;
-const minLon = -87.65867;
-const maxLon = -88.036554;
+// // Bounds (within chicago)
+// const minLat = 41.719105;
+// const maxLat = 41.99626;
+// const minLon = -87.65867;
+// const maxLon = -88.036554;
 
-const isWithinBounds = (lat, lon) => {
-  return lat >= minLat && lat <= maxLat && lon >= minLon && lon <= maxLon;
-};
+// const isWithinBounds = (lat, lon) => {
+//   return lat >= minLat && lat <= maxLat && lon >= minLon && lon <= maxLon;
+// };
 
 class HeroClient {
   constructor(jsonHeroData = {}, ticksPerSec = 2) {
@@ -113,10 +113,21 @@ class HeroClient {
     // *May be some race conditions with checks and incoming data
     if (this.state === HeroState.ENROUTE && this.incidentLoc) {
       // Move closer to the incident
+      // 100 mph => 160 kmh
+      // Compute distance between current loc and incidentLoc
+      const speedKmh = 700 //160
+      const [newLat, newLon] = oneStepToLocation(this.lat, this.lon, this.incidentLoc.lat, this.incidentLoc.lon, speedKmh)
+      // console.log(`newLatLon:[${newLat},${newLon}]`)
+      this.lat = newLat
+      this.lon = newLon
     } else if (this.state === HeroState.ON_SITE) {
       // Wait up to 4 sec to resolve the incident
       this.hasBeenSecs(4) && this.sendResolveIncident();
+    } else {
+      // Move in a random direction
+      // TODO
     }
+
     // Send heartbeat every 1 second
     this.hasBeenSecs(1) && this.sendHb();
   }

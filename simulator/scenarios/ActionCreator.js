@@ -41,6 +41,7 @@ module.exports.moveHeroToLocation = (
 };
 
 // Interleaves arrays while keeping their original ordering
+// *Not used or tested atm*. Prob doesn't work
 module.exports.mergeArrays = (actions1, actions2) => {
   const results = []
   let ptr1 = 0, ptr2 = 0

@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const HeroClient = require('./simulator/HeroClient')
+const HeroClient = require('./client/HeroClient')
 
 // Reads a directory of json files and creates an array of objects:
 // [{ name: <filename>, data: <json data>}, ...]
@@ -25,7 +25,7 @@ async function run() {
 
   const heroClient = new HeroClient(inputFiles[0].data)
   await heroClient.run()
-  console.log('Finished running HeroClient')
+  console.log('HeroClient is running')
   // Create a new hero client with each hero
   // inputFiles.forEach(inputFile => {
   //   console.log('file:', inputFile.name)
