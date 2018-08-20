@@ -1,13 +1,13 @@
-const Hero = require('../../simulator/Hero');
-const Citizen = require('../../simulator/Citizen');
-const ScenarioEngine = require('../../simulator');
-const { HeroAction, CitizenAction } = require('../../simulator/Actions');
-const { clearDB } = require('../../db/setups');
-const { db } = require('../../db');
+const Hero = require('../../simulator/Hero')
+const Citizen = require('../../simulator/Citizen')
+const ScenarioEngine = require('../../simulator')
+const {HeroAction, CitizenAction} = require('../../simulator/Actions')
+const {clearDB} = require('../../db/setups')
+const {db} = require('../../db')
 const {
   ServerSendsToNewSocket,
-  ServerSendsToCitizen,
-} = require('../../simulator/MsgType');
+  ServerSendsToCitizen
+} = require('../../simulator/MsgType')
 // const EventEmitter = require('events')
 
 // const eventEmitter = new EventEmitter()
@@ -15,8 +15,8 @@ const {
 
 const setupDB = async () => {
   // Clear the db
-  await clearDB();
-};
+  // await clearDB();
+}
 
 // const registerListeners = () => {
 
@@ -29,28 +29,28 @@ const setupDB = async () => {
 // };
 
 const createScenario = () => {
-
   // registerListeners()
 
-  const heroes = [];
-  console.log(`==== Created ${heroes.length} Hero Client(s) ====`);
+  const heroes = []
+  console.log(`==== Created ${heroes.length} Hero Client(s) ====`)
 
   // Create a citizen client
   // const citizens = [new Citizen(1023, eventEmitter)];
-  const citizens = [new Citizen(1023)];
-  console.log(`==== Created ${citizens.length} Citizen Client(s) ====`);
+  const citizens = [new Citizen(1023)]
+  console.log(`==== Created ${citizens.length} Citizen Client(s) ====`)
 
   const actions = [
     {
       // Need to ask to be a citizen for server to register citizen msg handlers
       citizen: 0,
-      action: CitizenAction.ASK_TO_BE_CITIZEN,
+      action: CitizenAction.ASK_TO_BE_CITIZEN
     },
     {
       citizen: 0,
       action: CitizenAction.ASK_FOR_HERO_HELP,
-    },
-  ];
+      data: {lat: 41, lon: -89}
+    }
+  ]
   /*
   Expected Results
 
@@ -66,18 +66,18 @@ const createScenario = () => {
 
   // Maybe pass in an event subscriber fn (accepts an event emitter and
   // subscribes to events. Events will put their result in single results // object. Tests can check if all results match or are correct)
-  const tickInterval = 5;
-  return new ScenarioEngine(actions, tickInterval, citizens, heroes);
-};
+  const tickInterval = 5
+  return new ScenarioEngine(actions, tickInterval, citizens, heroes)
+}
 
 const runScenario = async () => {
   try {
-    await setupDB();
-    createScenario().run();
+    await setupDB()
+    createScenario().run()
   } finally {
-    db.close();
+    db.close()
   }
-};
+}
 
 // const runScenarioAndTest = async () => {
 //   await (await createScenario()).run()
@@ -88,4 +88,4 @@ const runScenario = async () => {
 // }
 
 // module.exports = {createScenario, runScenarioAndTest};
-module.exports = runScenario;
+module.exports = runScenario
