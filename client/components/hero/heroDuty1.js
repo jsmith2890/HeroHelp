@@ -56,8 +56,7 @@ class HeroDuty1 extends React.Component {
         {status === 'ON_SITE' && (
           <HeroOnSite
             incident={incident}
-            hero={hero}
-            handleResult={this.handleResolve}
+             handleResolve={this.handleResolve}
           />
         )}
       </Fragment>
