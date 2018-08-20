@@ -51,8 +51,8 @@ class HeroEnroute extends React.Component {
     const {hero, incident} = this.props
     return (
       <View style={styles.container}>
-        <View style={styles.switch}>
-        <Text>Message</Text>
+        <View style={styles.message}>
+        <Text style={styles.messageText}>Message</Text>
         </View>
         <MapView
           provider={PROVIDER_GOOGLE}
@@ -139,12 +139,16 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center'
   },
-  switch: {
+  message: {
     marginTop: 10,
-    marginBottom: 10
+    marginBottom: 10,
+    backgroundColor: '#fff'
+  },
+  messageText:{
+    color: '#000'
   },
   mapEnroute: {
-    height: '91%',
+    height: '100%',
     width: '100%'
   }
 })
