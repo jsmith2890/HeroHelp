@@ -87,6 +87,7 @@ socket.on('connect', () => {
 
   //=>state: ON_SITE
   socket.on(ServerSendsToHero.HERO_ON_SITE, () => {
+    availability = false;
     store.dispatch(statusHero(HeroState.ON_SITE))
   })
 
