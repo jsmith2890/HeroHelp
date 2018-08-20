@@ -82,7 +82,7 @@ const createScenario = () => {
     Database updated with latest heartbeat data
   */
 
-  const tickInterval = 20;
+  const tickInterval = 5;
   return new ScenarioEngine(actions, tickInterval, citizens, heroes);
 };
 

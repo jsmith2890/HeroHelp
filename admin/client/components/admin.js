@@ -3,6 +3,8 @@ import {connect} from 'react-redux'
 import Heroes from './heroes'
 import Citizens from './citizens'
 import Incidents from './incidents'
+import CustomTable from './customtable'
+
 
 const Admin = ({data}) => {
   return (
