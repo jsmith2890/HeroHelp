@@ -25,12 +25,13 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     color: 'white',
-    marginLeft: 10,
     textAlign: 'center',
     fontWeight: 'bold',
   },
   button: {
     width: 200,
+    flex: 1,
+    alignItems: 'center'
   },
 });
 
