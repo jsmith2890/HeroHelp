@@ -27,27 +27,26 @@ class HeroEnroute extends React.Component {
   }
 
   showAlert = () => {
-    let flyingOrDriving = null
     Alert.alert(
       'Dispatch Alert!',
       'You have been dispatched for duty. Please choose your mode of transportation',
       [
         {
           text: 'Driving',
-          onPress: () => (flyingOrDriving = 'driving')
+          onPress: () => this.props.heroResponse('driving')
         },
         {
           text: 'Flying',
-          onPress: () => (flyingOrDriving = 'flying')
+          onPress: () => this.props.heroResponse('flying')
         }
       ]
     )
-    return flyingOrDriving
   }
 
   componentDidMount() {
-    let modeOfTrans = this.showAlert()
-    this.props.heroResponse(modeOfTrans)
+    this.showAlert()
+    // let modeOfTrans = this.showAlert()
+    // this.props.heroResponse(modeOfTrans)
   }
 
   render() {
