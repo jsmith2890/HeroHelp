@@ -1,10 +1,7 @@
-import React, {Fragment} from 'react'
-import {StyleSheet, View, Text, Alert, TouchableOpacity} from 'react-native'
+import React from 'react'
+import {StyleSheet, View, Text, Alert} from 'react-native'
 import {connect} from 'react-redux'
-import {Container, Header, Content, Button, Icon} from 'native-base'
 import MapView, {PROVIDER_GOOGLE, Marker, Polyline} from 'react-native-maps'
-import ToggleSwitch from 'toggle-switch-react-native'
-import {Constants, Location, Permissions} from 'expo'
 import MapViewDirections from 'react-native-maps-directions'
 import {heroEnrouteResponse} from '../../store/heroes'
 import RetroMapStyles from '../assets/mapStyle.json'
@@ -55,15 +52,7 @@ class HeroEnroute extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.switch}>
-          <ToggleSwitch
-            isOn={true}
-            onColor="gray"
-            offColor="gray"
-            // label="On Duty"
-            labelStyle={{color: 'black', fontWeight: '2000'}}
-            size="large"
-            onToggle={isOn => (isOn = true)}
-          />
+        <Text>Message</Text>
         </View>
         <MapView
           provider={PROVIDER_GOOGLE}
