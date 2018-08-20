@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker, Polyline } from 'react-native-maps';
+import RetroMapStyles from '../assets/mapStyle.json'
 import { ENV_PATH } from '../../secrets';
 
 const styles = StyleSheet.create({
@@ -37,8 +38,10 @@ const HeroEnroute = ({ hero, incidentCoords, initialHeroCoords }) => {
     <View style={styles.container}>
       <MapView
         provider={PROVIDER_GOOGLE}
+        customMapStyle={RetroMapStyles}
         style={styles.map}
         showsUserLocation={true}
+        followsUserLocation={true}
         initialRegion={{
           latitude: incidentCoords.lat, //41.89,
           longitude: incidentCoords.lon, //-87.64,

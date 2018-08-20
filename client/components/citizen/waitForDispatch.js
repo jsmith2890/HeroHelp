@@ -1,29 +1,36 @@
 import React from 'react';
-import { StyleSheet, Image, View, Text } from 'react-native';
+import { StyleSheet, Image, Text } from 'react-native';
+import { Spinner, Grid, Row } from 'native-base';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
-    paddingTop: 50,
     backgroundColor: '#0a4963',
   },
   image: {
-    alignSelf: 'center',
-    paddingBottom: 200,
+    paddingTop: 50,
   },
   text: {
     color: 'white',
-    fontSize: 20,
+    fontSize: 28,
     fontWeight: 'bold',
+  },
+  textContainer: {
+    paddingTop: 140,
+    flexDirection: 'column',
   },
 });
 
 const WaitForDispatch = () => (
-  <View style={styles.container}>
-    <Image source={require('../assets/logo.png')} style={styles.image} />
-    <Text style={styles.text}>Waiting to connect with nearby hero...</Text>
-  </View>
+  <Grid style={styles.container}>
+    <Row style={styles.image}>
+      <Image source={require('../assets/logo.png')} />
+    </Row>
+    <Row style={styles.textContainer}>
+      <Text style={styles.text}>Connecting with nearby hero</Text>
+      <Spinner color="white" />
+    </Row>
+  </Grid>
 );
 
 export default WaitForDispatch;

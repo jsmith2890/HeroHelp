@@ -85,8 +85,8 @@ class HeroDuty extends React.Component {
             <View style={styles.switch}>
               <ToggleSwitch
                 isOn={this.state.isOnToggleSwitch}
-                onColor="green"
-                offColor="red"
+                onColor='#002239'
+                //offColor="#942422"
                 // label="On Duty"
                 labelStyle={{color: 'black', fontWeight: '900'}}
                 size="large"

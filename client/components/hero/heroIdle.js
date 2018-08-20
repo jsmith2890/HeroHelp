@@ -33,8 +33,8 @@ export default class HeroIdle extends Component {
         <View style={styles.switch}>
           <ToggleSwitch
             isOn={this.state.isOnToggleSwitch}
-            onColor="green"
-            offColor="red"
+            onColor='#002239'
+            offColor="#848587"
             // label="On Duty"
             labelStyle={{color: 'black', fontWeight: '900'}}
             size="large"
