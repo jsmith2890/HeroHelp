@@ -18,20 +18,19 @@ const styles = StyleSheet.create({
   },
 });
 
-const HeroEnroute = ({ hero, incidentCoords }) => {
+const HeroEnroute = ({ hero, incidentCoords, initialHeroCoords }) => {
   const markers = [
     {
-      lat: 41.89, //hero.lat
-      lon: -87.64, //hero.lon
+      lat: hero.lat,
+      lon: hero.lon,
       image: require('../assets/spiderman.png'), //hero.heroImage
     },
     {
-      lat: 41.934323, //incidentCoords.lat,
-      lon: -87.727745, //incidentCoords.lon,
+      lat: incidentCoords.lat,
+      lon: incidentCoords.lon,
       image: require('../assets/marker.png'),
     },
   ];
-  //console.log(markers);
   return (
     <View style={styles.container}>
       <MapView
@@ -39,11 +38,18 @@ const HeroEnroute = ({ hero, incidentCoords }) => {
         style={styles.map}
         showsUserLocation={true}
         initialRegion={{
-          latitude: 41.89,
-          longitude: -87.64,
-          latitudeDelta: 0.1,
-          longitudeDelta: 0.05,
+          latitude: incidentCoords.lat, //41.89,
+          longitude: incidentCoords.lon, //-87.64,
+          latitudeDelta: Math.abs(initialHeroCoords.lat - incidentCoords.lat)*2 * 1.1, //0.1,
+          longitudeDelta: Math.abs(initialHeroCoords.lon - incidentCoords.lon)*2 * 1.1, //0.05,
         }}
+        region={{
+          latitude: incidentCoords.lat, //41.89,
+          longitude: incidentCoords.lon, //-87.64,
+          latitudeDelta: Math.abs(initialHeroCoords.lat - incidentCoords.lat)*2 * 1.1, //0.1,
+          longitudeDelta: Math.abs(initialHeroCoords.lon - incidentCoords.lon)*2 * 1.1, //0.05,
+        }}
+
       >
         {markers.map((marker, id) => (
           <Marker

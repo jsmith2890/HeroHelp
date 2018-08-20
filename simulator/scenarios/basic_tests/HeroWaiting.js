@@ -6,8 +6,8 @@ const { db } = require('../../db');
 const { clearDB, seedOneCitizenOneHero } = require('../../db/setups');
 const { moveHeroToLocation } = require('../ActionCreator');
 
-const heroLoc = { lat: 80, lon: 80 };
-const incidentLoc = { lat: 20, lon: 20 };
+const heroLoc = { lat: 50, lon: -86 };
+const incidentLoc = { lat: 37.785834, lon: -122.406417 };
 
 const setupDB = async () => {
   // Clear the db
@@ -44,9 +44,31 @@ const createScenario = () => {
       heroLoc.lon,
       incidentLoc.lat,
       incidentLoc.lon,
-      300,
+      10,
       { heroNum: 0, status: 'available' }
-    )
+    ),
+    {},
+    {},
+    {},
+    {
+      // Ask server to resolve the incident associated with this Hero
+      hero: 0,
+      action: HeroAction.ASK_RESOLVE_INCIDENT,
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    ...moveHeroToLocation(
+      heroLoc.lat,
+      heroLoc.lon,
+      incidentLoc.lat,
+      incidentLoc.lon,
+      10,
+      { heroNum: 0, status: 'available' }
+    ),
   ];
 
   /*
