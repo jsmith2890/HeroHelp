@@ -1,9 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import { Button, Icon } from 'native-base';
+import { StyleSheet, View } from 'react-native';
+import { Button, Icon, Text } from 'native-base';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import ToggleSwitch from 'toggle-switch-react-native';
-
 import RetroMapStyles from '../assets/mapStyle.json';
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyBFyAFFaR0H51IsPR0oEtmsWU1TS_zmv7A';
@@ -11,11 +9,11 @@ const GOOGLE_MAPS_API_KEY = 'AIzaSyBFyAFFaR0H51IsPR0oEtmsWU1TS_zmv7A';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
     alignItems: 'center',
+    backgroundColor: '#fff',
   },
   mapOnSite: {
-    height: '100%',
+    height: '90.5%',
     width: '100%',
   },
   buttonContainer: {
@@ -25,13 +23,8 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     color: 'white',
-    textAlign: 'center',
     fontWeight: 'bold',
-  },
-  button: {
-    width: 200,
-    flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
   },
 });
 
@@ -39,7 +32,7 @@ const HeroOnSite = ({ handleResolve, incident }) => {
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
-        <Button danger style={styles.button} onPress={handleResolve}>
+        <Button block danger style={styles.button} onPress={handleResolve}>
           <Icon name="ios-close-circle" />
           <Text style={styles.buttonText}>Resolve Incident</Text>
         </Button>

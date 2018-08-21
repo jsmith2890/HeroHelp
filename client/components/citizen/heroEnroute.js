@@ -33,7 +33,7 @@ const HeroEnroute = ({ hero, incidentCoords, initialHeroCoords }) => {
       image: require('../assets/marker.png'),
     },
   ];
-  console.log('marker:',markers[0].image);
+
   return (
     <View style={styles.container}>
       <MapView
