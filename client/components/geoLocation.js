@@ -52,7 +52,7 @@ async function getRealGeoLocation() {
 export async function getGeoLocation() {
 
   if (!initialized) {
-    if (ENV_SIM_GEO.lat) {
+    if (ENV_SIM_GEO) {
       simulation = true;
       simLat = ENV_SIM_GEO.lat;
       simLon = ENV_SIM_GEO.lon;
