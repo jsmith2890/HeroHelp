@@ -27,7 +27,9 @@ export default class HeroIdle extends Component {
     isOnToggleSwitch: false,
   };
   render() {
-    const { initialLocation } = this.props;
+
+    const { initialLocation, heroLat, heroLon } = this.props
+
     return (
       <View style={styles.container}>
         <View style={styles.switch}>
@@ -39,8 +41,10 @@ export default class HeroIdle extends Component {
             labelStyle={{ color: 'black', fontWeight: '900' }}
             size="large"
             onToggle={isOnToggleSwitch => {
+
               isAvailable(isOnToggleSwitch);
               this.setState({ isOnToggleSwitch });
+
             }}
           />
         </View>
@@ -55,9 +59,17 @@ export default class HeroIdle extends Component {
           initialRegion={{
             latitude: initialLocation.coords.latitude,
             longitude: initialLocation.coords.longitude,
-            latitudeDelta: 0.05,
-            longitudeDelta: 0.025,
+            latitudeDelta: 0.1,
+            longitudeDelta: 0.1
+
           }}
+          region={{
+            latitude: heroLat,
+            longitude: heroLon,
+            latitudeDelta: 0.1,
+            longitudeDelta: 0.1
+          }}
+
         />
       </View>
     );
