@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker, Polyline } from 'react-native-maps';
-import RetroMapStyles from '../assets/mapStyle.json'
+import RetroMapStyles from '../assets/mapStyle.json';
 import { ENV_PATH } from '../../secrets';
 
 const styles = StyleSheet.create({
@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
   imageMarker: {
     width: 30,
     height: 30,
+    borderRadius: 17.5,
   },
 });
 
@@ -25,7 +26,7 @@ const HeroEnroute = ({ hero, incidentCoords, initialHeroCoords }) => {
     {
       lat: hero.lat,
       lon: hero.lon,
-      image: { uri: ENV_PATH + '/' + hero.heroImage } //require('../assets/spiderman.png'), //hero.heroImage
+      image: { uri: ENV_PATH + '/' + hero.heroImage },
     },
     {
       lat: incidentCoords.lat,
@@ -45,16 +46,19 @@ const HeroEnroute = ({ hero, incidentCoords, initialHeroCoords }) => {
         initialRegion={{
           latitude: incidentCoords.lat, //41.89,
           longitude: incidentCoords.lon, //-87.64,
-          latitudeDelta: Math.abs(initialHeroCoords.lat - incidentCoords.lat) * 2 * 1.1, //0.1,
-          longitudeDelta: Math.abs(initialHeroCoords.lon - incidentCoords.lon) * 2 * 1.1, //0.05,
+          latitudeDelta:
+            Math.abs(initialHeroCoords.lat - incidentCoords.lat) * 2 * 1.1, //0.1,
+          longitudeDelta:
+            Math.abs(initialHeroCoords.lon - incidentCoords.lon) * 2 * 1.1, //0.05,
         }}
         region={{
           latitude: incidentCoords.lat, //41.89,
           longitude: incidentCoords.lon, //-87.64,
-          latitudeDelta: Math.abs(initialHeroCoords.lat - incidentCoords.lat) * 2 * 1.1, //0.1,
-          longitudeDelta: Math.abs(initialHeroCoords.lon - incidentCoords.lon) * 2 * 1.1, //0.05,
+          latitudeDelta:
+            Math.abs(initialHeroCoords.lat - incidentCoords.lat) * 2 * 1.1, //0.1,
+          longitudeDelta:
+            Math.abs(initialHeroCoords.lon - incidentCoords.lon) * 2 * 1.1, //0.05,
         }}
-
       >
         {markers.map((marker, id) => (
           <Marker
@@ -75,10 +79,3 @@ const HeroEnroute = ({ hero, incidentCoords, initialHeroCoords }) => {
 };
 
 export default HeroEnroute;
-
-// <Polyline
-// coordinates={[
-//   { latitude: markers[0].lat, longitude: markers[0].lon },
-//   { latitude: markers[1].lat, longitude: markers[1].lon},
-// ]}
-// />

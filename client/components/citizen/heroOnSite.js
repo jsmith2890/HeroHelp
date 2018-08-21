@@ -32,13 +32,10 @@ const styles = StyleSheet.create({
 const HeroOnSite = ({ hero }) => {
   let imageUri = {};
   imageUri.uri = ENV_PATH + '/' + hero.heroImage;
-  console.log(imageUri);
+
   return (
     <View style={styles.container}>
-      <Image
-        source={require('../assets/batman-square.jpg')}
-        style={styles.image}
-      />
+      <Image source={imageUri} style={styles.image} />
       <Text style={styles.text}>Hero on site</Text>
       <Text style={styles.text2}>
         When things happen - enjoy them. They're little gifts. Anything you want
@@ -57,6 +54,3 @@ const HeroOnSite = ({ hero }) => {
 };
 
 export default HeroOnSite;
-
-//source={imageUri}
-require('../assets/batman-square.jpg');
