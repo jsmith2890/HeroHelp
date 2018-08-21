@@ -20,7 +20,7 @@ import {
   updatedHeroLocation
 } from '../store/heroes'
 import {heroEnroute, heroArrived, statusCitizen} from '../store/citizens'
-import {getGeoLocation, startMotion} from '../components/geoLocation'
+import {getGeoLocation } from '../components/geoLocation'
 
 // Verify that the Server websocket address is defined
 if (!ENV_PATH) {
@@ -59,7 +59,7 @@ socket.on('connect', () => {
   socket.on(ServerSendsToNewSocket.TELL_HERO, () => {
     console.log('received tell_hero')
 
-    heartbeatTimer = setInterval(giveHeartbeat, 5000)
+    heartbeatTimer = setInterval(giveHeartbeat, 500)
   })
 
   //New Socket establish connection
@@ -81,7 +81,6 @@ socket.on('connect', () => {
 
   //hero is taking this, MVP has no accept or reject=> state: ENROUTE
   socket.on(ServerSendsToHero.GIVE_DISPATCH, ({lat, lon}) => {
-    startMotion(lat, lon)
     store.dispatch(gotNewIncident(lat, lon, HeroState.ENROUTE))
   })
 

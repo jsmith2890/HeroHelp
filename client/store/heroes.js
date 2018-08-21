@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {ENV_PATH} from '../secrets'
+import { ENV_PATH } from '../secrets'
 
 // ACTION TYPES
 const GOT_NEW_HERO = 'GOT_NEW_HERO' //after login
@@ -25,7 +25,7 @@ const defaultState = {
 }
 
 // ACTION CREATORS
-const gotNewHero = hero => ({type: GOT_NEW_HERO, hero})
+const gotNewHero = hero => ({ type: GOT_NEW_HERO, hero })
 export const updatedHeroLocation = location => ({
   type: UPDATED_HERO_LOCATION,
   location
@@ -40,7 +40,7 @@ export const incidentsInArea = incidents => ({
   type: SURROUNDING_INCIDENTS,
   incidents
 })
-export const statusHero = status => ({type: STATUS_HERO, status})
+export const statusHero = status => ({ type: STATUS_HERO, status })
 export const heroEnrouteResponse = heroResponse => ({
   type: HERO_ENROUTE,
   heroResponse
@@ -49,7 +49,7 @@ export const heroEnrouteResponse = heroResponse => ({
 // THUNK CREATOR
 export const addNewHero = hero => async dispatch => {
   try {
-    const res = await axios.post(`${ENV_PATH}/api/heroes/add`, {name: hero})
+    const res = await axios.post(`${ENV_PATH}/api/heroes/add`, { name: hero })
     dispatch(gotNewHero(res.data))
   } catch (err) {
     console.error(err)
@@ -57,7 +57,7 @@ export const addNewHero = hero => async dispatch => {
 }
 
 // REDUCER
-export default function(state = defaultState, action) {
+export default function (state = defaultState, action) {
   switch (action.type) {
     case GOT_NEW_HERO:
       return {
@@ -67,7 +67,7 @@ export default function(state = defaultState, action) {
     case GOT_INCIDENT:
       return {
         ...state,
-        incident: {lat: action.lat, lon: action.lon},
+        incident: { lat: action.lat, lon: action.lon },
         status: action.status
       }
     case SURROUNDING_INCIDENTS: //no status update needed
