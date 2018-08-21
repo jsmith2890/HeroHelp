@@ -5,13 +5,13 @@ import { Spinner, Grid, Row } from 'native-base';
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    backgroundColor: '#0a4963',
+    backgroundColor: '#fff',
   },
   image: {
     paddingTop: 50,
   },
   text: {
-    color: 'white',
+    color: '#002239',
     fontSize: 28,
     fontWeight: 'bold',
   },
@@ -28,7 +28,7 @@ const WaitForDispatch = () => (
     </Row>
     <Row style={styles.textContainer}>
       <Text style={styles.text}>Connecting with nearby hero</Text>
-      <Spinner color="white" />
+      <Spinner color="#002239" />
     </Row>
   </Grid>
 );
