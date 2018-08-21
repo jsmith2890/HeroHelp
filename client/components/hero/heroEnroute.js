@@ -6,45 +6,46 @@ import MapViewDirections from 'react-native-maps-directions'
 import {heroEnrouteResponse} from '../../store/heroes'
 import RetroMapStyles from '../assets/mapStyle.json'
 
+const GOOGLE_MAPS_API_KEY = 'AIzaSyBFyAFFaR0H51IsPR0oEtmsWU1TS_zmv7A'
+
 class HeroEnroute extends React.Component {
-  mapViewAdjust = (heroLat, heroLon, markerLat, markerLon) => {
-    let deltaCushion = 0.005
-    let midpointLat = (heroLat + markerLat) / 2
-    let midpointLon = (heroLon + markerLat) / 2
-    let deltaLat =
-      Math.abs(Math.abs(heroLat) - Math.abs(markerLat)) + deltaCushion
-    let deltaLon =
-      Math.abs(Math.abs(heroLon) - Math.abs(markerLon)) + deltaCushion
-    return {
-      latitude: midpointLat,
-      longitude: midpointLon,
-      latitudeDelta: deltaLat,
-      longitudeDelta: deltaLon
-    }
-  }
+  // mapViewAdjust = (heroLat, heroLon, markerLat, markerLon) => {
+  //   let deltaCushion = 0.005
+  //   let midpointLat = (heroLat + markerLat) / 2
+  //   let midpointLon = (heroLon + markerLat) / 2
+  //   let deltaLat =
+  //     Math.abs(Math.abs(heroLat) - Math.abs(markerLat)) + deltaCushion
+  //   let deltaLon =
+  //     Math.abs(Math.abs(heroLon) - Math.abs(markerLon)) + deltaCushion
+  //   return {
+  //     latitude: midpointLat,
+  //     longitude: midpointLon,
+  //     latitudeDelta: deltaLat,
+  //     longitudeDelta: deltaLon
+  //   }
+  // }
 
   showAlert = () => {
-    let flyingOrDriving = null
     Alert.alert(
       'Dispatch Alert!',
       'You have been dispatched for duty. Please choose your mode of transportation',
       [
         {
           text: 'Driving',
-          onPress: () => (flyingOrDriving = 'driving')
+          onPress: () => this.props.heroResponse('driving')
         },
         {
           text: 'Flying',
-          onPress: () => (flyingOrDriving = 'flying')
+          onPress: () => this.props.heroResponse('flying')
         }
       ]
     )
-    return flyingOrDriving
   }
 
   componentDidMount() {
-    let modeOfTrans = this.showAlert()
-    this.props.heroResponse(modeOfTrans)
+    this.showAlert()
+    // let modeOfTrans = this.showAlert()
+    // this.props.heroResponse(modeOfTrans)
   }
 
   render() {
@@ -52,7 +53,7 @@ class HeroEnroute extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.message}>
-        <Text style={styles.messageText}>Message</Text>
+          <Text style={styles.messageText}>Message</Text>
         </View>
         <MapView
           provider={PROVIDER_GOOGLE}
@@ -72,9 +73,9 @@ class HeroEnroute extends React.Component {
             latitude: (hero.latitude + incident.lat) / 2,
             longitude: (hero.longitude + incident.lon) / 2,
             latitudeDelta:
-              Math.abs(Math.abs(hero.latitude) - Math.abs(incident.lat)) * 1.1,
+              Math.abs(Math.abs(hero.latitude) - Math.abs(incident.lat)) * 1.2,
             longitudeDelta:
-              Math.abs(Math.abs(hero.longitude) - Math.abs(incident.lon)) * 1.1
+              Math.abs(Math.abs(hero.longitude) - Math.abs(incident.lon)) * 1.2
           }}
         >
           {this.props.flyingOrDriving === 'driving' && (
@@ -144,11 +145,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: '#fff'
   },
-  messageText:{
+  messageText: {
     color: '#000'
   },
   mapEnroute: {
-    height: '100%',
+    height: '91.5%',
     width: '100%'
   }
 })

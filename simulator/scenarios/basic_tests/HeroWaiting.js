@@ -7,7 +7,7 @@ const { clearDB, seedOneCitizenOneHero } = require('../../db/setups');
 const { moveHeroToLocation } = require('../ActionCreator');
 
 const heroLoc = { lat: 50, lon: -86 };
-const incidentLoc = { lat: 37.785834, lon: -122.406417 };
+const incidentLoc = {lat:40, lon: -87} //{ lat: 37.785834, lon: -122.406417 };
 
 const setupDB = async () => {
   // Clear the db
