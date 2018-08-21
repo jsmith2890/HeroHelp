@@ -1,10 +1,11 @@
 import React from 'react'
-import {StyleSheet, View, Text, Alert} from 'react-native'
-import {connect} from 'react-redux'
-import MapView, {PROVIDER_GOOGLE, Marker, Polyline} from 'react-native-maps'
+import { StyleSheet, View, Text, Alert } from 'react-native'
+import { connect } from 'react-redux'
+import MapView, { PROVIDER_GOOGLE, Marker, Polyline } from 'react-native-maps'
 import MapViewDirections from 'react-native-maps-directions'
-import {heroEnrouteResponse} from '../../store/heroes'
+import { heroEnrouteResponse } from '../../store/heroes'
 import RetroMapStyles from '../assets/mapStyle.json'
+import { startMotion } from '../geoLocation'
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyBFyAFFaR0H51IsPR0oEtmsWU1TS_zmv7A'
 
@@ -25,31 +26,31 @@ class HeroEnroute extends React.Component {
   //   }
   // }
 
-  showAlert = () => {
+  showAlert = (incident) => {
     Alert.alert(
       'Dispatch Alert!',
       'You have been dispatched for duty. Please choose your mode of transportation',
       [
         {
           text: 'Driving',
-          onPress: () => this.props.heroResponse('driving')
+          onPress: () => this.props.heroResponse('driving', incident)
         },
         {
           text: 'Flying',
-          onPress: () => this.props.heroResponse('flying')
+          onPress: () => this.props.heroResponse('flying', incident)
         }
       ]
     )
   }
 
   componentDidMount() {
-    this.showAlert()
+    this.showAlert(this.props.incident)
     // let modeOfTrans = this.showAlert()
     // this.props.heroResponse(modeOfTrans)
   }
 
   render() {
-    const {hero, incident} = this.props
+    const { hero, incident } = this.props
     return (
       <View style={styles.container}>
         <View style={styles.message}>
@@ -128,8 +129,11 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  heroResponse: flyingOrDriving =>
+  heroResponse: (flyingOrDriving, incident) => {
+    console.log('incident is: ',incident);
+    startMotion(incident.lat, incident.lon)
     dispatch(heroEnrouteResponse(flyingOrDriving))
+  }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(HeroEnroute)
