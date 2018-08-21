@@ -1,4 +1,4 @@
-const { createSocket, oneStepToLocation } = require('./helper');
+const { createSocket, oneStepToLocation, oneStepInRandomDirection } = require('./helper');
 const {
   NewSocketSends,
   ServerSendsToHero,
@@ -11,16 +11,6 @@ const { User, Hero } = require('../db');
 // Location of fullstack
 const fullstackLat = 41.895367;
 const fullstackLon = -87.638977;
-
-// // Bounds (within chicago)
-// const minLat = 41.719105;
-// const maxLat = 41.99626;
-// const minLon = -87.65867;
-// const maxLon = -88.036554;
-
-// const isWithinBounds = (lat, lon) => {
-//   return lat >= minLat && lat <= maxLat && lon >= minLon && lon <= maxLon;
-// };
 
 class HeroClient {
   constructor(jsonHeroData = {}, ticksPerSec = 2) {
@@ -49,6 +39,8 @@ class HeroClient {
     this.status = 'available';
     this.lat = fullstackLat;
     this.lon = fullstackLon;
+    this.randTargetLat = fullstackLat;
+    this.randTargetLon = fullstackLon;
     this.incidentLoc = null; // {lat, lon}
     this.state = HeroState.IDLE;
     this.isLoggedIn = false;
@@ -124,8 +116,15 @@ class HeroClient {
       // Wait up to 4 sec to resolve the incident
       this.hasBeenSecs(4) && this.sendResolveIncident();
     } else {
+      const speedKmh = 700
       // Move in a random direction
       // TODO
+      const [newLat, newLon, destLat, destLon] = oneStepInRandomDirection(this.lat, this.lon, this.randTargetLat, this.randTargetLon, speedKmh)
+      console.log(`[${newLat}, ${newLon}] => [${destLat}, ${destLon}]`)
+      this.lat = newLat
+      this.lon = newLon
+      this.randTargetLat = destLat
+      this.randTargetLon = destLon
     }
 
     // Send heartbeat every 1 second

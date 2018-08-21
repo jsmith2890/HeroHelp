@@ -116,7 +116,8 @@ module.exports.oneStepInRandomDirection = (
     const newDestLat = newLat + randLat
     const newDestLon = newLon + randLon
     // Check if within Chicago bounds
-    // TODO may need some tweaks
+    // TODO may need some tweaks. If it's not within bounds, will
+    // try to generate a location again
     if (isWithinChicagoBounds(newDestLat, newDestLon)) {
       return [newLat, newLon, newDestLat, newDestLon]
     }
