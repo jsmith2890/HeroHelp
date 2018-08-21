@@ -1,8 +1,31 @@
 import React from 'react';
-import { AsyncStorage, Image } from 'react-native';
+import { AsyncStorage, Image, StyleSheet } from 'react-native';
 import { Button, Text, Container } from 'native-base';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import { askToBeCitizen } from '../socket';
+
+const styles = StyleSheet.create({
+  citizenButton: {
+    backgroundColor: '#002239',
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 2,
+      height: 3,
+    },
+    shadowRadius: 2,
+    shadowOpacity: 3.0,
+  },
+  heroButton: {
+    backgroundColor: '#942422',
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 2,
+      height: 3,
+    },
+    shadowRadius: 2,
+    shadowOpacity: 3.0,
+  },
+});
 
 export default class LandingPage extends React.Component {
   pressHero = () => {
@@ -10,19 +33,19 @@ export default class LandingPage extends React.Component {
   };
 
   pressCitizen = async () => {
-    const body = {}
+    const body = {};
     try {
       let citizenId = await AsyncStorage.getItem('CITIZENID');
-      console.log("got citizenId of", citizenId);
+      console.log('got citizenId of', citizenId);
       if (citizenId !== null) {
-        body.citizenId = +citizenId
+        body.citizenId = +citizenId;
       }
     } catch (err) {
-      console.error("error fetching citizenid from storage", err)
+      console.error('error fetching citizenid from storage', err);
     }
     askToBeCitizen(body);
 
-    this.props.navigation.navigate('CitizenHome')
+    this.props.navigation.navigate('CitizenHome');
   };
 
   render() {
@@ -33,10 +56,10 @@ export default class LandingPage extends React.Component {
             <Image source={require('./assets/logo.png')} />
           </Row>
           <Row size={1}>
-            <Col style={{ paddingLeft: 80 }}>
+            <Col style={{ paddingLeft: 65 }}>
               <Button
                 onPress={this.pressCitizen}
-                style={{ backgroundColor: '#002239' }}
+                style={styles.citizenButton}
                 large
               >
                 <Text>Citizen</Text>
@@ -44,11 +67,7 @@ export default class LandingPage extends React.Component {
             </Col>
 
             <Col style={{ paddingLeft: 50 }}>
-              <Button
-                onPress={this.pressHero}
-                style={{ backgroundColor: '#942422' }}
-                large
-              >
+              <Button onPress={this.pressHero} style={styles.heroButton} large>
                 <Text>Hero</Text>
               </Button>
             </Col>
@@ -58,4 +77,3 @@ export default class LandingPage extends React.Component {
     );
   }
 }
-

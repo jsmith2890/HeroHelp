@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { StyleSheet, Image, View, Text } from 'react-native';
 import { ENV_PATH } from '../../secrets';
 
@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
     color: '#942422',
     fontSize: 30,
     fontWeight: 'bold',
-    //paddingBottom: 40,
     paddingTop: 10,
   },
   text2: {
@@ -46,13 +45,13 @@ const HeroOnSite = ({ hero }) => {
         to do you can do here.
       </Text>
       <Text style={styles.text2}>
-      When things happen - enjoy them. They're little gifts. Anything you want
-      to do you can do here.
-    </Text>
-    <Text style={styles.text2}>
-    When things happen - enjoy them. They're little gifts. Anything you want
-    to do you can do here.
-  </Text>
+        When things happen - enjoy them. They're little gifts. Anything you want
+        to do you can do here.
+      </Text>
+      <Text style={styles.text2}>
+        When things happen - enjoy them. They're little gifts. Anything you want
+        to do you can do here.
+      </Text>
     </View>
   );
 };

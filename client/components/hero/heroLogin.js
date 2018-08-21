@@ -18,9 +18,16 @@ const styles = StyleSheet.create({
     width: '80%',
     marginTop: 15,
     alignSelf: 'center',
-    backgroundColor: '#002239'
+    backgroundColor: '#002239',
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 1,
+      height: 3,
+    },
+    shadowRadius: 2,
+    shadowOpacity: 1.0,
   },
-  image: {
+    image: {
     marginTop: 20,
     alignSelf: 'center',
   },
@@ -51,7 +58,10 @@ class HeroLogin extends Component {
       <Container>
         <Content>
           <View>
-            <Image source={require('../assets/logo.png')} style={styles.image} />
+            <Image
+              source={require('../assets/logo.png')}
+              style={styles.image}
+            />
             <Form>
               <Item stackedLabel>
                 <Label>Email</Label>
