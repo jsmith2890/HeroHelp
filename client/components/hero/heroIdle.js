@@ -1,46 +1,50 @@
-import React, { Component } from 'react'
-import { StyleSheet, View } from 'react-native'
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
-import ToggleSwitch from 'toggle-switch-react-native'
-import { isAvailable } from '../../socket'
-import RetroMapStyles from '../assets/mapStyle.json'
+import React, { Component } from 'react';
+import { StyleSheet, View } from 'react-native';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import ToggleSwitch from 'toggle-switch-react-native';
+import { isAvailable } from '../../socket';
+import RetroMapStyles from '../assets/mapStyle.json';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   switch: {
     marginTop: 10,
-    marginBottom: 10
+    marginBottom: 10,
   },
   mapIdle: {
-    height: '100%',
-    width: '100%'
-  }
-})
+    height: '91.5%',
+    width: '100%',
+  },
+});
 
 export default class HeroIdle extends Component {
   state = {
-    isOnToggleSwitch: false
-  }
+    isOnToggleSwitch: false,
+  };
   render() {
+
     const { initialLocation, heroLat, heroLon } = this.props
+
     return (
       <View style={styles.container}>
         <View style={styles.switch}>
           <ToggleSwitch
             isOn={this.state.isOnToggleSwitch}
-            onColor='#002239'
+            onColor="#002239"
             offColor="#848587"
             // label="On Duty"
             labelStyle={{ color: 'black', fontWeight: '900' }}
             size="large"
             onToggle={isOnToggleSwitch => {
-              isAvailable(isOnToggleSwitch)
-              this.setState({ isOnToggleSwitch })
+
+              isAvailable(isOnToggleSwitch);
+              this.setState({ isOnToggleSwitch });
+
             }}
           />
         </View>
@@ -57,6 +61,7 @@ export default class HeroIdle extends Component {
             longitude: initialLocation.coords.longitude,
             latitudeDelta: 0.1,
             longitudeDelta: 0.1
+
           }}
           region={{
             latitude: heroLat,
@@ -67,6 +72,6 @@ export default class HeroIdle extends Component {
 
         />
       </View>
-    )
+    );
   }
 }

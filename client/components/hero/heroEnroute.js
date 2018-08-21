@@ -90,7 +90,7 @@ class HeroEnroute extends React.Component {
               }}
               apikey={GOOGLE_MAPS_API_KEY}
               strokeWidth={5}
-              strokeColor="hotpink"
+              strokeColor='#942422'
             />
           )}
           {this.props.flyingOrDriving === 'flying' && (
@@ -105,7 +105,7 @@ class HeroEnroute extends React.Component {
                   longitude: incident.lon
                 }
               ]}
-              strokeColor="hotpink"
+              strokeColor='#942422'
               strokeWidth={5}
             />
           )}
