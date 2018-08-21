@@ -8,6 +8,7 @@ import HelpButton from './helpButton';
 import WaitForDispatch from './waitForDispatch';
 import HeroOnSite from './heroOnSite';
 import { CitizenState } from '../../socket/MsgType.js'
+import { getGeoLocation } from '../geoLocation'
 
 class CitizenHome extends Component {
   state = {
@@ -19,9 +20,7 @@ class CitizenHome extends Component {
   lastStatus = CitizenState.IDLE;
 
   pressHelpHandler = async () => {
-    await Permissions.askAsync(Permissions.LOCATION);
-    //assume they say yes
-    let location = await Location.getCurrentPositionAsync({});
+    const location = await getGeoLocation()
     let lat = location.coords.latitude;
     let lon = location.coords.longitude;
     this.setState({ incidentCoords: { lat, lon } });

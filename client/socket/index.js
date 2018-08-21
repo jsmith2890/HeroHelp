@@ -20,6 +20,7 @@ import {
   updatedHeroLocation
 } from '../store/heroes'
 import {heroEnroute, heroArrived, statusCitizen} from '../store/citizens'
+import {getGeoLocation, startMotion} from '../components/geoLocation'
 
 // Verify that the Server websocket address is defined
 if (!ENV_PATH) {
@@ -39,9 +40,7 @@ let availability = false //button to set available/unavailable
 let heartbeatTimer = {}
 export const giveHeartbeat = async () => {
   try {
-    let {status} = await Permissions.askAsync(Permissions.LOCATION)
-    //assume they say yes
-    let location = await Location.getCurrentPositionAsync({})
+    let location = await getGeoLocation();
     socket.emit(HeroSends.GIVE_HEARTBEAT, {
       lat: location.coords.latitude,
       lon: location.coords.longitude,
@@ -82,6 +81,7 @@ socket.on('connect', () => {
 
   //hero is taking this, MVP has no accept or reject=> state: ENROUTE
   socket.on(ServerSendsToHero.GIVE_DISPATCH, ({lat, lon}) => {
+    startMotion(lat, lon)
     store.dispatch(gotNewIncident(lat, lon, HeroState.ENROUTE))
   })
 

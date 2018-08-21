@@ -10,6 +10,7 @@ import MapViewDirections from 'react-native-maps-directions'
 import HeroIdle from './heroIdle'
 import HeroEnroute from './heroEnroute'
 import HeroOnSite from './heroOnSite'
+import { getGeoLocation } from '../geoLocation';
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyBFyAFFaR0H51IsPR0oEtmsWU1TS_zmv7A'
 
@@ -24,13 +25,14 @@ class HeroDuty1 extends React.Component {
   }
 
   getInitialLocation = async () => {
-    let {status} = await Permissions.askAsync(Permissions.LOCATION)
-    if (status !== 'granted') {
-      this.setState({
-        locationLocation: 'Permission to access location was denied'
-      })
-    }
-    let location = await Location.getCurrentPositionAsync({})
+    // let {status} = await Permissions.askAsync(Permissions.LOCATION)
+    // if (status !== 'granted') {
+    //   this.setState({
+    //     locationLocation: 'Permission to access location was denied'
+    //   })
+    // }
+    // let location = await Location.getCurrentPositionAsync({})
+    const location = await getGeoLocation()
     console.log('location', location)
     this.setState({initialLocation: location})
   }
@@ -40,9 +42,9 @@ class HeroDuty1 extends React.Component {
   }
 
   render() {
-    const {status, incident} = this.props
+    const {status, incident, hero} = this.props
     const {initialLocation} = this.state
-    if (!initialLocation) {
+    if (!(initialLocation && hero.latitude)) {
       return (
         <View>
           <Text>Loading...</Text>
@@ -51,7 +53,7 @@ class HeroDuty1 extends React.Component {
     }
     return (
       <Fragment>
-        {status === 'IDLE' && <HeroIdle initialLocation={initialLocation} />}
+        {status === 'IDLE' && <HeroIdle initialLocation={initialLocation} heroLat={hero.latitude} heroLon={hero.longitude}/>}
         {status === 'ENROUTE' && <HeroEnroute />}
         {status === 'ON_SITE' && (
           <HeroOnSite
