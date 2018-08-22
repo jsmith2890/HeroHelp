@@ -60,7 +60,7 @@ function Heroes(props) {
                 <CustomTableCell>{hero.presenceStatus}</CustomTableCell>
                 <CustomTableCell>{hero.presenceLat}</CustomTableCell>
                 <CustomTableCell>{hero.presenceLon}</CustomTableCell>
-                <StatusCell state={hero.state} key={hero.id}  />
+                <StatusCell state={hero.state} />
               </TableRow>
             )
           })}
