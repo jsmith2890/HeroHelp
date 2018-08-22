@@ -13,7 +13,7 @@ const pollDBForData = async () => {
   try {
     heroes = await Hero.findAll()
     citizens = await Citizen.findAll()
-    incidents = await Incident.findAll()
+    incidents = await Incident.findAll({ include: [{all: true, nested: true}]})
     console.log(`Polled DB for data. Got ${heroes.length} heroes, ${citizens.length} citizens, ${incidents.length} incidents`)
 
     // Send to all clients
