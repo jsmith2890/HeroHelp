@@ -72,7 +72,7 @@ class HeroEnroute extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.message}>
-          <Text style={styles.messageText}>Message</Text>
+          <Text style={styles.messageText}>Dispatched - follow to incident site</Text>
         </View>
         <MapView
           provider={PROVIDER_GOOGLE}
