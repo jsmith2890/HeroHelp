@@ -11,10 +11,9 @@ const Admin = ({data}) => {
     <div>
       <h1>Heroes:</h1>
       {data && data.heroes && <Heroes heroes={data.heroes}/>}
-      <h1>Citizens:</h1>
-      {data && data.citizens && <Citizens citizens={data.citizens}/>}
       <h1>Incidents:</h1>
       {data && data.incidents && <Incidents incidents={data.incidents}/>}
+      
     </div>
   )
 }
@@ -22,3 +21,5 @@ const Admin = ({data}) => {
 const mapStateToProps = ({data}) => ({data})
 
 export default connect(mapStateToProps, null)(Admin)
+// <h1>Citizens:</h1>
+//       {data && data.citizens && <Citizens citizens={data.citizens}/>} 

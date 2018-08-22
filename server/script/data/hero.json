@@ -3,33 +3,34 @@
     "userId": "1",
     "loginStatus": "online",
     "name": "Batman",
-    "imageUrl": "img/batman.jpeg",
+    "imageUrl": "img/heroes/square/batman-square.jpg",
     "description": "The Dark Knight instills fear in the hearts of evil men.",
     "presenceLat": "41.895367",
     "presenceLon": "-87.638977",
-    "presenceStatus": "unavailable",
+    "presenceStatus": "available",
     "state": "IDLE"
   },
   {
     "userId": "2",
     "loginStatus": "online",
     "name": "Superman",
-    "imageUrl": "img/superman.jpeg",
+    "imageUrl": "img/heroes/square/superman-square.jpg",
     "description": "The Man of Steel hails from the planet of Krypton.",
     "presenceLat": "41.9062499",
     "presenceLon": "-87.6515864",
-    "presenceStatus": "unavailable",
+    "presenceStatus": "available",
     "state": "IDLE"
   },
   {
     "userId": "3",
     "loginStatus": "online",
     "name": "Iron Man",
-    "imageUrl": "img/iron_man2.jpeg",
+    "imageUrl": "img/heroes/square/iron-man-square.jpg",
     "description": "Tony Stark is an amazing, charitable, and handsome human specimen.",
     "presenceLat": "41.9062499",
     "presenceLon": "-87.6515864",
-    "presenceStatus": "unavailable",
+    "presenceStatus": "available",
     "state": "ENROUTE"
   }
 ]
+
