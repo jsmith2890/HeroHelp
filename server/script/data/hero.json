@@ -2,9 +2,9 @@
   {
     "userId": "1",
     "loginStatus": "online",
-    "name": "Batman",
-    "imageUrl": "img/heroes/square/batman-square.jpg",
-    "description": "The Dark Knight instills fear in the hearts of evil men.",
+    "name": "Captain America",
+    "imageUrl": "img/heroes/square/captain-america-square.jpg",
+    "description": "desc",
     "presenceLat": "41.895367",
     "presenceLon": "-87.638977",
     "presenceStatus": "unavailable",
