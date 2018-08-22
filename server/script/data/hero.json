@@ -7,7 +7,7 @@
     "description": "The Dark Knight instills fear in the hearts of evil men.",
     "presenceLat": "41.895367",
     "presenceLon": "-87.638977",
-    "presenceStatus": "available",
+    "presenceStatus": "unavailable",
     "state": "IDLE"
   },
   {
@@ -18,7 +18,7 @@
     "description": "The Man of Steel hails from the planet of Krypton.",
     "presenceLat": "41.9062499",
     "presenceLon": "-87.6515864",
-    "presenceStatus": "available",
+    "presenceStatus": "unavailable",
     "state": "IDLE"
   },
   {
@@ -29,7 +29,7 @@
     "description": "Tony Stark is an amazing, charitable, and handsome human specimen.",
     "presenceLat": "41.9062499",
     "presenceLon": "-87.6515864",
-    "presenceStatus": "available",
+    "presenceStatus": "unavailable",
     "state": "ENROUTE"
   }
 ]

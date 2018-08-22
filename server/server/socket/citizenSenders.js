@@ -30,5 +30,6 @@ module.exports.sendHeroOnSiteToCitizen = (socket, lat, lon) => {
 }
 
 module.exports.sendIncidentResolvedToCitizen = (socket) => {
+  console.log('send incident resolve to citizen')
   sendToClient(socket, ServerSendsToCitizen.INCIDENT_RESOLVED, {})
 }

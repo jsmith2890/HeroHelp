@@ -1,0 +1,11 @@
+{
+  "userId": "1",
+  "loginStatus": "offline",
+  "name": "Batman",
+  "imageUrl": "img/batman.jpeg",
+  "description": "The Dark Knight instills fear in the hearts of evil men.",
+  "presenceLat": "41.8949045",
+  "presenceLon": "-87.6414422",
+  "presenceStatus": "unavailable",
+  "state": "IDLE"
+}

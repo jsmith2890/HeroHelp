@@ -38,16 +38,13 @@ const HeroOnSite = ({ hero }) => {
       <Image source={imageUri} style={styles.image} />
       <Text style={styles.text}>Hero on site</Text>
       <Text style={styles.text2}>
-        When things happen - enjoy them. They're little gifts. Anything you want
-        to do you can do here.
+        Please remain in a safe location.
       </Text>
       <Text style={styles.text2}>
-        When things happen - enjoy them. They're little gifts. Anything you want
-        to do you can do here.
+        The situation is being handled.
       </Text>
       <Text style={styles.text2}>
-        When things happen - enjoy them. They're little gifts. Anything you want
-        to do you can do here.
+        You will be notified when the incident has been resolved.
       </Text>
     </View>
   );
