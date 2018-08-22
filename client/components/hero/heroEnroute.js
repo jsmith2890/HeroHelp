@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Text, Alert } from 'react-native'
+import { StyleSheet, View, Image, Text, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import MapView, { PROVIDER_GOOGLE, Marker, Polyline } from 'react-native-maps'
 import MapViewDirections from 'react-native-maps-directions'
@@ -8,6 +8,9 @@ import RetroMapStyles from '../assets/mapStyle.json'
 import { startMotion } from '../geoLocation'
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyBFyAFFaR0H51IsPR0oEtmsWU1TS_zmv7A'
+
+
+
 
 class HeroEnroute extends React.Component {
   // mapViewAdjust = (heroLat, heroLon, markerLat, markerLon) => {
@@ -51,6 +54,21 @@ class HeroEnroute extends React.Component {
 
   render() {
     const { hero, incident } = this.props
+
+    const markers = [
+       {
+         lat: incident.lat,
+         lon: incident.lon,
+         image: require('../assets/marker.png'),
+         style: styles.imageMarkerIncident
+       },
+      {
+        lat: hero.latitude,
+        lon: hero.longitude,
+        image: require('../assets/geolocation.png'),
+        style: styles.imageMarkerHero
+      },
+    ];
     return (
       <View style={styles.container}>
         <View style={styles.message}>
@@ -110,12 +128,26 @@ class HeroEnroute extends React.Component {
               strokeWidth={5}
             />
           )}
+         {markers.map((marker, id) => (
           <Marker
+            key={id}
+            coordinate={{
+              latitude: marker.lat, //hero.lat
+              longitude: marker.lon, //hero.lon
+            }}
+          >
+            <View>
+              <Image source={marker.image} style={marker.style} />
+            </View>
+          </Marker>
+        ))}
+
+          {/* <Marker
             coordinate={{
               latitude: incident.lat,
               longitude: incident.lon
             }}
-          />
+          /> */}
         </MapView>
       </View>
     )
@@ -155,5 +187,15 @@ const styles = StyleSheet.create({
   mapEnroute: {
     height: '91.5%',
     width: '100%'
-  }
+  },
+  imageMarkerHero: {
+     width: 20,
+     height: 20,
+     borderRadius: 17.5,
+   },
+  imageMarkerIncident: {
+    width: 40,
+    height: 40,
+    borderRadius: 27.5,
+  },
 })

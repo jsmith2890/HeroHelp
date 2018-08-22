@@ -59,7 +59,7 @@ socket.on('connect', () => {
   socket.on(ServerSendsToNewSocket.TELL_HERO, () => {
     console.log('received tell_hero')
 
-    heartbeatTimer = setInterval(giveHeartbeat, 500)
+    heartbeatTimer = setInterval(giveHeartbeat, 175)
   })
 
   //New Socket establish connection
