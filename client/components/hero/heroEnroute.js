@@ -69,6 +69,16 @@ class HeroEnroute extends React.Component {
         style: styles.imageMarkerHero
       },
     ];
+
+    //set minimum span to match HeroOnSite:
+    let latitudeDelta =
+      Math.abs(hero.latitude - incident.lat) * 2 * 1.1
+    if (latitudeDelta < 0.02) latitudeDelta = 0.02
+
+    let longitudeDelta =
+      Math.abs(hero.longitude - incident.lon) * 2 * 1.1
+    if (longitudeDelta < 0.01) longitudeDelta = 0.01;
+
     return (
       <View style={styles.container}>
         <View style={styles.message}>
@@ -83,18 +93,18 @@ class HeroEnroute extends React.Component {
           showsMyLocationButton={true}
           showsCompass={true}
           initialRegion={{
-            latitude: hero.latitude,
-            longitude: hero.longitude,
-            latitudeDelta: 0.05,
-            longitudeDelta: 0.025
+            // latitude: hero.latitude,
+            // longitude: hero.longitude,
+            latitude: (hero.latitude + incident.lat) / 2,
+            longitude: (hero.longitude + incident.lon) / 2,
+            latitudeDelta,
+            longitudeDelta,
           }}
           region={{
             latitude: (hero.latitude + incident.lat) / 2,
             longitude: (hero.longitude + incident.lon) / 2,
-            latitudeDelta:
-              Math.abs(Math.abs(hero.latitude) - Math.abs(incident.lat)) * 1.2,
-            longitudeDelta:
-              Math.abs(Math.abs(hero.longitude) - Math.abs(incident.lon)) * 1.2
+            latitudeDelta,
+            longitudeDelta,
           }}
         >
           {this.props.flyingOrDriving === 'driving' && (

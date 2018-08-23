@@ -1,0 +1,5 @@
+fullstack/manhattan: 40.7050798,-74.0113544
+
+tillary and flatbush: 40.696045, -73.984497
+
+

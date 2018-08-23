@@ -6,8 +6,13 @@ const { db } = require('../../db');
 const { clearDB, seedOneCitizenOneHero } = require('../../db/setups');
 const { moveHeroToLocation } = require('../ActionCreator');
 
-const heroLoc = { lat: 41.8949045, lon: -87.6414422 };
-const incidentLoc = {lat:41.961025, lon: -87.743337} //{ lat: 37.785834, lon: -122.406417 };
+//const heroLoc = { lat: 41.8949045, lon: -87.6414422 }; //FSA chicago
+//const incidentLoc = {lat:41.961025, lon: -87.743337}; //montrose/knox
+//apple hq { lat: 37.785834, lon: -122.406417 };
+
+const heroLoc = { lat: 40.7050798, lon: -74.0113544 }; //FSA manhattan
+const incidentLoc = {lat: 40.696045, lon: -73.984497}; //tillary and flatbush
+
 
 const setupDB = async () => {
   // Clear the db
