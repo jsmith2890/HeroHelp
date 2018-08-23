@@ -72,7 +72,7 @@ class HeroEnroute extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.message}>
-          <Text style={styles.messageText}>Dispatched - follow to incident site</Text>
+          <Text style={styles.messageText}>Dispatched - proceed to incident site</Text>
         </View>
         <MapView
           provider={PROVIDER_GOOGLE}
@@ -174,7 +174,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: '#fff'
   },
   message: {
     marginTop: 10,
@@ -182,7 +183,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   messageText: {
-    color: '#000'
+    color: '#002239',
+    fontWeight: 'bold',
+    fontSize: 20,
   },
   mapEnroute: {
     height: '91.5%',

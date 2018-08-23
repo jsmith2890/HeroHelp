@@ -86,7 +86,7 @@ class CitizenHome extends Component {
       this.lastStatus === CitizenState.KNOWS_HERO_ON_SITE
     ) {
       Alert.alert(
-        'Call To Action',
+        'Incident Resolved!',
         'The situation has been resolved and all is well. Please press OK to continue. ',
         [{ text: 'OK', onPress: () => console.log('OK Pressed') }],
         { cancelable: false },
