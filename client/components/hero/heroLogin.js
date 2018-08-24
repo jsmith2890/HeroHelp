@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 1.0,
   },
     image: {
-    marginTop: 20,
+    marginTop: 100,
     alignSelf: 'center',
   },
 });
