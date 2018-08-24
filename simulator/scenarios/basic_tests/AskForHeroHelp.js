@@ -48,7 +48,8 @@ const createScenario = () => {
     {
       citizen: 0,
       action: CitizenAction.ASK_FOR_HERO_HELP,
-      data: {lat: 41.961025, lon: -87.743337}
+      //data: {lat: 41.961025, lon: -87.743337} //montorse/knox
+      data: {lat: 40.696045, lon: -73.984497} //tillary and flatbush
     }
   ]
   /*

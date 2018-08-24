@@ -32,7 +32,7 @@ export default class HeroEnroute extends React.Component {
   }
 
   componentDidMount() {
-    console.log('componentDidMount:',this.props.hero)
+    console.log('componentDidMount:', this.props.hero)
     this.showAlert(this.props.hero)
   }
 
@@ -53,6 +53,12 @@ export default class HeroEnroute extends React.Component {
       },
     ];
 
+    let latitudeDelta =
+      Math.abs(initialHeroCoords.lat - incidentCoords.lat) * 2 * 1.1
+
+    let longitudeDelta =
+      Math.abs(initialHeroCoords.lon - incidentCoords.lon) * 2 * 1.1
+
     return (
       <View style={styles.container}>
         <MapView
@@ -64,18 +70,14 @@ export default class HeroEnroute extends React.Component {
           initialRegion={{
             latitude: incidentCoords.lat, //41.89,
             longitude: incidentCoords.lon, //-87.64,
-            latitudeDelta:
-              Math.abs(initialHeroCoords.lat - incidentCoords.lat) * 2 * 1.1, //0.1,
-            longitudeDelta:
-              Math.abs(initialHeroCoords.lon - incidentCoords.lon) * 2 * 1.1, //0.05,
+            latitudeDelta,
+            longitudeDelta,
           }}
           region={{
             latitude: incidentCoords.lat, //41.89,
             longitude: incidentCoords.lon, //-87.64,
-            latitudeDelta:
-              Math.abs(initialHeroCoords.lat - incidentCoords.lat) * 2 * 1.1, //0.1,
-            longitudeDelta:
-              Math.abs(initialHeroCoords.lon - incidentCoords.lon) * 2 * 1.1, //0.05,
+            latitudeDelta,
+            longitudeDelta,
           }}
         >
           {markers.map((marker, id) => (

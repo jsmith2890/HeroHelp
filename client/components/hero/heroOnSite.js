@@ -47,8 +47,8 @@ const HeroOnSite = ({ handleResolve, incident }) => {
         initialRegion={{
           latitude: incident.lat,
           longitude: incident.lon,
-          latitudeDelta: 0.025,
-          longitudeDelta: 0.012,
+          latitudeDelta: 0.020,
+          longitudeDelta: 0.010,
         }}
       >
         <Marker
