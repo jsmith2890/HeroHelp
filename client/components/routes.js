@@ -18,12 +18,12 @@ export const SignedOut = createStackNavigator(
     HeroSignUp,
     CitizenHome,
   },
-  // {
-  //   headerMode: 'none',
-  //   navigationOptions: {
-  //     headerVisible: false,
-  //   },
-  // },
+  {
+    headerMode: 'none',
+    navigationOptions: {
+      headerVisible: false,
+    },
+  },
 );
 
 const Hero = createStackNavigator({
