@@ -4,8 +4,6 @@ import { Button, Icon, Text } from 'native-base';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import RetroMapStyles from '../assets/mapStyle.json';
 
-const GOOGLE_MAPS_API_KEY = 'AIzaSyBFyAFFaR0H51IsPR0oEtmsWU1TS_zmv7A';
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

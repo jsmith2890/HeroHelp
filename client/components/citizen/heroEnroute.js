@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Image, Alert } from 'react-native';
-import MapView, { PROVIDER_GOOGLE, Marker, Polyline } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import RetroMapStyles from '../assets/mapStyle.json';
 import { ENV_PATH } from '../../secrets';
 
@@ -68,14 +68,14 @@ export default class HeroEnroute extends React.Component {
           showsUserLocation={true}
           followsUserLocation={true}
           initialRegion={{
-            latitude: incidentCoords.lat, //41.89,
-            longitude: incidentCoords.lon, //-87.64,
+            latitude: incidentCoords.lat,
+            longitude: incidentCoords.lon,
             latitudeDelta,
             longitudeDelta,
           }}
           region={{
-            latitude: incidentCoords.lat, //41.89,
-            longitude: incidentCoords.lon, //-87.64,
+            latitude: incidentCoords.lat,
+            longitude: incidentCoords.lon,
             latitudeDelta,
             longitudeDelta,
           }}
@@ -84,8 +84,8 @@ export default class HeroEnroute extends React.Component {
             <Marker
               key={id}
               coordinate={{
-                latitude: marker.lat, //hero.lat
-                longitude: marker.lon, //hero.lon
+                latitude: marker.lat,
+                longitude: marker.lon,
               }}
             >
               <View>

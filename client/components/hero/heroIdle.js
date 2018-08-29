@@ -35,11 +35,6 @@ export default class HeroIdle extends Component {
 
     const { initialLocation, heroLat, heroLon } = this.props
     const markers = [
-      // {
-      //   lat: hero.lat,
-      //   lon: hero.lon,
-      //   image: { uri: ENV_PATH + '/' + hero.heroImage },
-      // },
       {
         lat: heroLat,
         lon: heroLon,
@@ -53,7 +48,6 @@ export default class HeroIdle extends Component {
             isOn={this.state.isOnToggleSwitch}
             onColor="#002239"
             offColor="#848587"
-            // label={'Duty Status'}
             labelStyle={{ color: 'black', fontWeight: '900' }}
             size="large"
             onToggle={isOnToggleSwitch => {
@@ -88,8 +82,8 @@ export default class HeroIdle extends Component {
         >
           <Marker
             coordinate={{
-              latitude: markers[0].lat, //hero.lat
-              longitude: markers[0].lon, //hero.lon
+              latitude: markers[0].lat,
+              longitude: markers[0].lon,
             }}
           >
             <View>

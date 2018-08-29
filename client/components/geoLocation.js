@@ -16,7 +16,6 @@ let destLat = 0;
 let destLon = 0;
 
 function doMotionStep() {
-  console.log('doMotionStep')
   const maxLat = Math.max(originLat, destLat);
   const minLat = Math.min(originLat, destLat);
   const maxLon = Math.max(originLon, destLon);
@@ -31,7 +30,6 @@ function doMotionStep() {
   }
   simLat = simLat + stepLat;
   simLon = simLon + stepLon;
-  console.log('--after calculation:',simLat,simLon)
   ++motionStep;
   if (motionStep === heroTicks) {
     //arrived at destination
@@ -71,7 +69,6 @@ export async function getGeoLocation() {
     if (inMotion) {
       doMotionStep() //simLat and simLon are updated as side-effect
     }
-    console.log('sim motion to be returned')
     location = { coords: { latitude: simLat, longitude: simLon } }
   } else {
     location = await getRealGeoLocation()
@@ -80,7 +77,6 @@ export async function getGeoLocation() {
 }
 
 export function startMotion(lat, lon) {
-  console.log('startMotion:',lat,lon)
   inMotion = true;
   originLat = simLat;
   originLon = simLon;

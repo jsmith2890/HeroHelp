@@ -1,7 +1,6 @@
 import React, { Fragment, Component } from 'react';
 import { Alert } from 'react-native';
 import { pushHelp } from '../../socket';
-import { Location, Permissions } from 'expo';
 import { connect } from 'react-redux';
 import HeroEnroute from './heroEnroute';
 import HelpButton from './helpButton';
