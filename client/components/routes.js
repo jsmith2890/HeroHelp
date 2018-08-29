@@ -4,7 +4,6 @@ import HeroLogin from './hero/heroLogin'
 import HeroSignUp from './hero/hero-signup'
 import HeroDuty from './hero/heroDuty'
 import CitizenHome from './citizen/citizenHome'
-import HeroDuty1 from './hero/heroDuty1'
 
 export const SignedOut = createStackNavigator(
   {
@@ -27,7 +26,7 @@ export const SignedOut = createStackNavigator(
 );
 
 const Hero = createStackNavigator({
-  HeroDuty1
+  HeroDuty
 })
 
 export const createRootNavigator = (signedIn = false) => {

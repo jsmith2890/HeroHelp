@@ -1,5 +1,3 @@
-const socketio = require('socket.io')
-
 const {ServerSendsToCitizen} = require('./MsgType')
 
 const {sendToClient} = require('./util')

@@ -9,25 +9,7 @@ import { startMotion } from '../geoLocation'
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyBFyAFFaR0H51IsPR0oEtmsWU1TS_zmv7A'
 
-
-
-
 class HeroEnroute extends React.Component {
-  // mapViewAdjust = (heroLat, heroLon, markerLat, markerLon) => {
-  //   let deltaCushion = 0.005
-  //   let midpointLat = (heroLat + markerLat) / 2
-  //   let midpointLon = (heroLon + markerLat) / 2
-  //   let deltaLat =
-  //     Math.abs(Math.abs(heroLat) - Math.abs(markerLat)) + deltaCushion
-  //   let deltaLon =
-  //     Math.abs(Math.abs(heroLon) - Math.abs(markerLon)) + deltaCushion
-  //   return {
-  //     latitude: midpointLat,
-  //     longitude: midpointLon,
-  //     latitudeDelta: deltaLat,
-  //     longitudeDelta: deltaLon
-  //   }
-  // }
 
   showAlert = (incident) => {
     Alert.alert(
@@ -48,20 +30,18 @@ class HeroEnroute extends React.Component {
 
   componentDidMount() {
     this.showAlert(this.props.incident)
-    // let modeOfTrans = this.showAlert()
-    // this.props.heroResponse(modeOfTrans)
   }
 
   render() {
     const { hero, incident } = this.props
 
     const markers = [
-       {
-         lat: incident.lat,
-         lon: incident.lon,
-         image: require('../assets/marker.png'),
-         style: styles.imageMarkerIncident
-       },
+      {
+        lat: incident.lat,
+        lon: incident.lon,
+        image: require('../assets/marker.png'),
+        style: styles.imageMarkerIncident
+      },
       {
         lat: hero.latitude,
         lon: hero.longitude,
@@ -93,8 +73,6 @@ class HeroEnroute extends React.Component {
           showsMyLocationButton={true}
           showsCompass={true}
           initialRegion={{
-            // latitude: hero.latitude,
-            // longitude: hero.longitude,
             latitude: (hero.latitude + incident.lat) / 2,
             longitude: (hero.longitude + incident.lon) / 2,
             latitudeDelta,
@@ -138,26 +116,19 @@ class HeroEnroute extends React.Component {
               strokeWidth={5}
             />
           )}
-         {markers.map((marker, id) => (
-          <Marker
-            key={id}
-            coordinate={{
-              latitude: marker.lat, //hero.lat
-              longitude: marker.lon, //hero.lon
-            }}
-          >
-            <View>
-              <Image source={marker.image} style={marker.style} />
-            </View>
-          </Marker>
-        ))}
-
-          {/* <Marker
-            coordinate={{
-              latitude: incident.lat,
-              longitude: incident.lon
-            }}
-          /> */}
+          {markers.map((marker, id) => (
+            <Marker
+              key={id}
+              coordinate={{
+                latitude: marker.lat,
+                longitude: marker.lon,
+              }}
+            >
+              <View>
+                <Image source={marker.image} style={marker.style} />
+              </View>
+            </Marker>
+          ))}
         </MapView>
       </View>
     )
@@ -172,7 +143,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   heroResponse: (flyingOrDriving, incident) => {
-    console.log('incident is: ',incident);
+    console.log('incident is: ', incident);
     startMotion(incident.lat, incident.lon)
     dispatch(heroEnrouteResponse(flyingOrDriving))
   }
@@ -202,10 +173,10 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   imageMarkerHero: {
-     width: 20,
-     height: 20,
-     borderRadius: 17.5,
-   },
+    width: 20,
+    height: 20,
+    borderRadius: 17.5,
+  },
   imageMarkerIncident: {
     width: 40,
     height: 40,
